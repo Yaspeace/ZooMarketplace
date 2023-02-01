@@ -1,12 +1,25 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view />
+    <Hat />
+    <div id="content">
+      <nav>
+        <router-link to="/">Home</router-link> |
+        <router-link to="/about">About</router-link>
+      </nav>
+      <router-view />
+    </div>
   </div>
 </template>
+
+<script>
+import Hat from './components/Hat.vue';
+
+export default {
+  components: {
+    Hat
+  }
+}
+</script>
 
 <style lang="scss">
 #app {
@@ -15,6 +28,12 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  position: relative;
+}
+
+#content {
+  min-height: 100vh;
+  margin-top: 200px;
 }
 
 nav {
