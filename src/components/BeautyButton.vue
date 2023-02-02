@@ -27,6 +27,7 @@ export default {
   cursor: pointer;
   display: block;
   text-align: center;
+  width: fit-content;
 }
 
 .btn-primary {

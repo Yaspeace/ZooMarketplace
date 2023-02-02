@@ -1,7 +1,7 @@
 <template>
   <div :class="'nav' + (scrolling ? '' : ' nav-header-visible')">
         <div class="nav-header">
-            <img src="assets/images/mmlogo.png" class="nav-logo-img" />
+            <img src="@/assets/staticimages/mmlogo.png" class="nav-logo-img" />
             <div class="nav-title">
                 МЫШЬ-МАРКЕТ
             </div>
@@ -10,7 +10,7 @@
             <span class="nav-header-title-txt">От кота до бегемота &mdash; каждому нужна забота! Инвестируй в пушистое счастье!</span>
         </div>
         <div class="nav-city">
-            <img class="nav-pin" src="assets/images/pin.png"/> <span class="nav-city-name">Белгород</span>
+            <img class="nav-pin" src="@/assets/staticimages/pin.png"/> <span class="nav-city-name">Белгород</span>
         </div>
 
         <div class="nav-search">
