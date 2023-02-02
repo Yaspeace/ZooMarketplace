@@ -37,6 +37,6 @@ export default {
 
 <style scoped>
 .tmp {
-  width: 320px;
+  width: 20%;
 }
 </style>

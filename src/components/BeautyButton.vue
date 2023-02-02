@@ -28,6 +28,7 @@ export default {
   display: block;
   text-align: center;
   width: fit-content;
+  user-select: none;
 }
 
 .btn-primary {

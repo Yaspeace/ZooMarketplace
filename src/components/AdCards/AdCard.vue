@@ -151,8 +151,17 @@ export default {
 }
 
 @keyframes liked {
-    0% {font-size: 50px;}
-    50% {font-size: 60px;}
-    100% {font-size: 50px;}
+    0% {
+        width: 50px;
+        height: 50px;
+    }
+    50% {
+        width: 60px;
+        height: 60px;
+    }
+    100% {
+        width: 50px;
+        height: 50px;
+    }
 }
 </style>
