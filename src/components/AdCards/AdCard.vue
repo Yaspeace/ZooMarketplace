@@ -1,7 +1,7 @@
 <template>
 <div class="ad-card-wrapper">
     <div class="ad-img-wrapper">
-        <img class="ad-img" src="@/assets/staticimages/image1.jpg"/>
+        <img class="ad-img" :src="this.$http.defaults.baseURL + 'assets/images/image' + ad.imgId + '.jpg'"/>
         <div class="ad-date">
             {{ ad.date }}
         </div>
@@ -61,6 +61,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-content: space-around;
+    background: white;
 }
 
 .ad-img {

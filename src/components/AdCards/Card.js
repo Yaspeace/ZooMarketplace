@@ -5,7 +5,8 @@ export default class Card {
         description,
         price,
         date,
-        address
+        address,
+        imgId
     ) {
         this.id = id;
         this.title = title;
@@ -13,5 +14,6 @@ export default class Card {
         this.price = price;
         this.date = date;
         this.address = address;
+        this.imgId = imgId;
     }
 }

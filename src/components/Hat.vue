@@ -81,7 +81,7 @@ export default {
         window.removeEventListener('scroll', this.handleScroll);
     },
     methods: {
-        handleScroll(event) {
+        handleScroll() {
             this.scrolling = window.scrollY != 0;
         }
     }
