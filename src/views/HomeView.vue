@@ -1,20 +1,16 @@
 <template>
   <div class="home">
-    <VueSlickCarousel v-bind="carouselSettings" class="carousel">
-      <div v-for="i in 7" :key="i" class="one-more-tmp">
-        <AdCard :ad="ad" :liked="false" class="tmp"/>
-      </div>
-      
-      
-      
-      <template #prevArrow>
-        <div class="custom-arrow-prev"></div>
-      </template>
-      <template #nextArrow>
-        <div class="custom-arrow-next"></div>
-      </template>
-    </VueSlickCarousel>
-    <BeautyButton text="Test" :type="1" />
+    <Hat />
+
+    <div id="content">
+      <AdCardCarousel :ads="[ad, ad, ad, ad, ad, ad, ad]" class="carousel" />
+      <BeautyButton text="Test" :type="1" />
+    </div>
+
+    <CustomFooter />
+    <div class="footer-img-wrapper">
+        <img class="footer-img" src="@/assets/staticimages/footerimg.jpg"/>
+    </div>
   </div>
 </template>
 
@@ -22,11 +18,9 @@
 // @ is an alias to /src
 import HelloWorld from "@/components/HelloWorld.vue";
 import BeautyButton from "@/components/BeautyButton.vue";
-import AdCard from "@/components/AdCards/AdCard.vue";
-import VueSlickCarousel from 'vue-slick-carousel'
-import 'vue-slick-carousel/dist/vue-slick-carousel.css'
-  // optional style for arrows & dots
-import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
+import Hat from '@/components/Hat.vue';
+import CustomFooter from '@/components/CustomFooter.vue';
+import AdCardCarousel from '@/components/AdCards/AdCardCarousel.vue';
 
 export default {
   name: "HomeView",
@@ -41,40 +35,32 @@ export default {
         date: new Date().toLocaleDateString('ru-RU'),
         imgId: 1
       },
-      carouselSettings: {
-        "focusOnSelect": true,
-        "infinite": false,
-        "speed": 500,
-        "slidesToShow": 4,
-        "slidesToScroll": 3,
-        "touchThreshold": 5,
-        "arrows": true,
-      }
     }
   },
   components: {
     HelloWorld,
     BeautyButton,
-    AdCard,
-    VueSlickCarousel,
+    Hat,
+    CustomFooter,
+    AdCardCarousel,
   },
 };
 </script>
 
 <style scoped>
-.home {
+#content {
+  min-height: 100vh;
+  margin-top: 200px;
+  background: white;
+  padding: 8px;
+
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
 }
-.tmp {
-  width: 80%;
-}
-
-.one-more-tmp {
-  display: flex !important;
-  justify-content: center;
+.home {
+  position: relative;
 }
 
 .carousel {
@@ -85,24 +71,20 @@ export default {
   box-shadow: inset rgba(189, 189, 189, 0.8) 0px 0px 20px 0px;
 }
 
-.custom-arrow-prev, .custom-arrow-next {
-  color: black;
-  font-size: 50px;
+.footer-img-wrapper {
+    width: 100%;
+    height: 300px;
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    z-index: -1;
+    text-align: center;
+    background: black;
 }
 
-.custom-arrow-prev {
-  left: -1px;
-  z-index: 100;
-}
-
-.custom-arrow-next {
-  right: 29px;
-  z-index: 100;
-}
-
-.custom-arrow-prev:before, .custom-arrow-next:before {
-  color: black;
-  /*font-size: 50px;*/
-  font-size: 100%;
+.footer-img {
+    width: 50%;
+    max-width: 600px;
+    height: 100%;
 }
 </style>

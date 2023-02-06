@@ -51,6 +51,7 @@ export default {
 
 <style scoped>
 .ad-card-wrapper {
+    max-width: 400px;
     border: 5px solid rgb(167, 26, 248);
     border-radius: 14px;
     box-shadow: 0px 6px 10px rgba(126, 126, 126, 0.719);
@@ -66,6 +67,7 @@ export default {
 
 .ad-img {
     width: 100%;
+    max-width: 400px;
     aspect-ratio: 1/1;
     border: 3px solid gray;
     border-radius: 10px;
