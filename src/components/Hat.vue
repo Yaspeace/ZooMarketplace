@@ -60,7 +60,7 @@
                 <path d="M57.345528,125C56.978522,182.683088,150,240.366176,150,240.366176s92.654472-57.683088,92.654472-115.366176" fill="currentColor" stroke="#3f5787" stroke-width="0.6"/>
             </svg>
         </div>
-        <div class="nav-avatar">
+        <div class="nav-avatar" v-on:click="getAccInfo">
             <img class="nav-avatar-img" src="@/assets/logo.png"/>
         </div>
     </div>
@@ -71,7 +71,11 @@ export default {
     name: "Hat",
     data() {
         return {
-            scrolling: Boolean = false
+            scrolling: Boolean = false,
+            account: {
+                id: Number,
+                img: String,
+            },
         }
     },
     created () {
@@ -83,6 +87,19 @@ export default {
     methods: {
         handleScroll() {
             this.scrolling = window.scrollY != 0;
+        },
+        getAccInfo() {
+            this.$http.get('/api/Authorize')
+                .then((responce) => {
+                    this.account = responce.object;
+                    console.log(this.account);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    if(error.response.status == 401) {
+                        this.$router.push({ name: 'login', params: { register: 'false' } });
+                    }
+                });
         }
     }
 }
@@ -251,6 +268,7 @@ export default {
     align-items: center;
     justify-content: center;
     grid-area: C;
+    cursor: pointer;
 }
 
 .nav-avatar-img {

@@ -1,7 +1,7 @@
 <template>
-  <div :class="'btn ' + (type == 1 ? 'btn-primary' : type == 2 ? 'btn-secondaty' : 'btn-warning')">
+  <button :class="'btn btn-primary btn-' + look">
     {{ text }}
-  </div>
+  </button>
 </template>
 
 <script>
@@ -9,7 +9,7 @@ export default {
   name: "BeautyButton",
   props: {
     text: String,
-    type: Number,
+    look: String,
   },
 };
 </script>
@@ -29,6 +29,7 @@ export default {
   text-align: center;
   width: fit-content;
   user-select: none;
+  border: none;
 }
 
 .btn-primary {

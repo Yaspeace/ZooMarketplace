@@ -4,7 +4,7 @@
 
     <div id="content">
       <AdCardCarousel :ads="[ad, ad, ad, ad, ad, ad, ad]" class="carousel" />
-      <BeautyButton text="Test" :type="1" />
+      <AdCardGrid :ads="[ad, ad, ad, ad, ad, ad, ad]" />
     </div>
 
     <CustomFooter />
@@ -21,6 +21,7 @@ import BeautyButton from "@/components/BeautyButton.vue";
 import Hat from '@/components/Hat.vue';
 import CustomFooter from '@/components/CustomFooter.vue';
 import AdCardCarousel from '@/components/AdCards/AdCardCarousel.vue';
+import AdCardGrid from "@/components/AdCards/AdCardGrid.vue";
 
 export default {
   name: "HomeView",
@@ -43,6 +44,7 @@ export default {
     Hat,
     CustomFooter,
     AdCardCarousel,
+    AdCardGrid,
   },
 };
 </script>

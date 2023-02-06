@@ -1,6 +1,6 @@
 <template>
     <VueSlickCarousel v-bind="carouselSettings">
-        <div v-for="ad in ads" :key="ad" class="carousel-ad-wrapper">
+        <div v-for="ad in ads" :key="ad.id" class="carousel-ad-wrapper">
           <AdCard :ad="ad" :liked="false" class="carousel-ad"/>
         </div>
         <template #prevArrow>
