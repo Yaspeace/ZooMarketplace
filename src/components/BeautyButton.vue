@@ -1,5 +1,5 @@
 <template>
-  <button :class="'btn btn-primary btn-' + look">
+  <button :class="'btn btn-primary btn-' + look" v-on:click="$emit('click')">
     {{ text }}
   </button>
 </template>

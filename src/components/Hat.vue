@@ -93,12 +93,6 @@ export default {
                 .then((responce) => {
                     this.account = responce.object;
                     console.log(this.account);
-                })
-                .catch((error) => {
-                    console.log(error);
-                    if(error.response.status == 401) {
-                        this.$router.push({ name: 'login', params: { register: 'false' } });
-                    }
                 });
         }
     }

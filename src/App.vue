@@ -6,7 +6,19 @@
 
 <script>
 export default {
-  components: {
+  created() {
+    this.$http.interceptors.response.use(
+      (response) => {
+        return response;
+      }, 
+      (error) => {
+        if(error && error.response && error.response.status == 401) {
+          console.log(error);
+          this.$router.push({ name: 'login', params: { register: 'false' } });
+        }
+        return Promise.reject(error);
+      }
+    );
   }
 }
 </script>
