@@ -7,6 +7,8 @@
 <script>
 export default {
   created() {
+    this.$store.dispatch('checkLogin');
+
     this.$http.interceptors.response.use(
       (response) => {
         return response;

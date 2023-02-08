@@ -83,18 +83,16 @@ export default {
     },
     methods: {
         getBool(value) {
-            return value == 'true';
+            return value === 'true';
         },
-        logIn() {
+        async logIn() {
             this.covered = true;
-            this.$http.put('/api/Authorize', {
+            await this.$store.dispatch('login', {
                 phone: this.phone,
                 password: this.password
-            })
-            .then(() => {
-                this.$router.push({ name: 'home' });
-            })
-            .finally(() => this.covered = false);
+            });
+            this.covered = false;
+            this.$router.push({ name: 'home' });
         },
         registerUser() {
             if(this.password == this.passwordCheck) {

@@ -61,7 +61,8 @@
             </svg>
         </div>
         <div class="nav-avatar" v-on:click="getAccInfo">
-            <img class="nav-avatar-img" src="@/assets/logo.png"/>
+            <img v-if="$store.state.authorized" class="nav-avatar-img" :src="$store.state.avatar"/>
+            <a v-else>Войти</a>
         </div>
     </div>
 </template>
