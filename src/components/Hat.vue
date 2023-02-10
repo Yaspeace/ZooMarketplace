@@ -60,9 +60,9 @@
                 <path d="M57.345528,125C56.978522,182.683088,150,240.366176,150,240.366176s92.654472-57.683088,92.654472-115.366176" fill="currentColor" stroke="#3f5787" stroke-width="0.6"/>
             </svg>
         </div>
-        <div class="nav-avatar" v-on:click="getAccInfo">
-            <img v-if="$store.state.authorized" class="nav-avatar-img" :src="$store.state.avatar"/>
-            <a v-else>Войти</a>
+        <div class="nav-avatar">
+            <img v-if="$store.state.authorized" class="nav-avatar-img" :src="$store.state.avatar" v-on:click="getAccInfo"/>
+            <router-link v-else :to="{ name: 'login', params: { register: 'false' } }" class="text-main underline enter-text">Войти</router-link>
         </div>
     </div>
 </template>
@@ -101,6 +101,9 @@ export default {
 </script>
 
 <style scoped>
+.enter-text {
+    font-size: 24px;
+}
 .nav {
     position: fixed;
     top: -100px;
@@ -263,7 +266,6 @@ export default {
     align-items: center;
     justify-content: center;
     grid-area: C;
-    cursor: pointer;
 }
 
 .nav-avatar-img {
@@ -272,6 +274,7 @@ export default {
     border-radius: 200px;
     border: 7px solid #d2dbed;
     object-fit: cover;
+    cursor: pointer;
 }
 
 @media screen and (max-width: 425px) {

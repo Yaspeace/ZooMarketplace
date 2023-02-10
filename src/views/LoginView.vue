@@ -6,43 +6,43 @@
         <h1 v-else>Вход</h1>
         <div class="login">
             <input 
+                v-model="phone" 
+                v-mask="'+7(###) ###-##-##'" 
+                class="login-input" 
+                type="text" 
+                :placeholder="(getBool(register) ? 'Введите ваш т' : 'Т') + 'елефон'"
+            />
+            <input 
                 v-if="getBool(register)"
                 v-model="name"
                 class="login-input" 
                 type="text" 
                 placeholder="Ваше имя"
-            /><br>
+            />
             <input 
                 v-if="getBool(register)"
                 v-model="family"
                 class="login-input" 
                 type="text" 
                 placeholder="Ваша фамилия"
-            /><br>
-            <input 
-                v-model="phone" 
-                v-mask="'+7(###) ###-##-##'" 
-                class="login-input" 
-                type="text" 
-                :placeholder="(getBool(register) ? 'Введите ваш т' : 'Т') + 'елефон'"
-            /><br>
+            />
             <input 
                 v-model="password" 
                 class="login-input" 
                 type="password" 
                 :placeholder="(getBool(register) ? 'Придумайте п' : 'П') + 'ароль'"
-            /><br>
+            />
             <input 
                 v-if="getBool(register)"
                 v-model="passwordCheck"  
                 class="login-input" 
                 type="password" 
                 placeholder="Повторите пароль"
-            /><br>
+            />
             <BeautyButton 
                 :text="getBool(register) ? 'Зарегистрироваться!' : 'Войти!'" 
                 look="primary" 
-                style="width: 100%;max-width: 300px;" 
+                style="width: 100%;max-width: 300px;margin-top: 10px;" 
                 @click="loginOrRegister"
             />
             <p v-if="!getBool(register)" class="mt-3">
@@ -105,7 +105,7 @@ export default {
                     passwordCheck: this.passwordCheck
                 })
                 .then(() => {
-                    this.$router.push({ name: 'home' });
+                    this.$router.push({ name: 'login', params: { register: 'false' } });
                 })
                 .finally(() => this.covered = false);
             }
@@ -148,14 +148,7 @@ export default {
   align-items: center;
   width: 40%;
   align-content: center;
-}
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
+  gap: 15px;
 }
 
 .inner-wrapper {

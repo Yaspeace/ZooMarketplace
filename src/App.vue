@@ -37,6 +37,16 @@ body {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+  /*color: #2c3e50;*/
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.text-main {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
 }
 </style>
