@@ -61,8 +61,12 @@
             </svg>
         </div>
         <div class="nav-avatar">
-            <img v-if="$store.state.authorized" class="nav-avatar-img" :src="$store.state.avatar" v-on:click="getAccInfo"/>
-            <router-link v-else :to="{ name: 'login', params: { register: 'false' } }" class="text-main underline enter-text">Войти</router-link>
+            <router-link v-if="$store.state.authorized" :to="{ name: 'account', params: { accId: $store.state.aid } }">
+                <img class="nav-avatar-img" :src="$store.state.avatar" />
+            </router-link>
+            <router-link v-else :to="{ name: 'login', params: { register: 'false' } }" class="text-main underline enter-text">
+                Войти
+            </router-link>
         </div>
     </div>
 </template>
@@ -74,8 +78,8 @@ export default {
         return {
             scrolling: Boolean = false,
             account: {
-                id: Number,
-                img: String,
+                id: this.$store.state.id,
+                img: this.$store.state.avatar,
             },
         }
     },

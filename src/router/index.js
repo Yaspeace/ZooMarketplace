@@ -25,6 +25,12 @@ const routes = [
     component: () => import('../views/LoginView.vue'),
     props: true
   },
+  {
+    path: '/account/:accId',
+    name: 'account',
+    component: () => import('../views/AccountView.vue'),
+    props: true
+  },
 ];
 
 const router = new VueRouter({

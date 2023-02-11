@@ -7,16 +7,19 @@ export default new Vuex.Store({
   state: {
     authorized: false,
     avatar: "",
+    aid: 0,
   },
   getters: {},
   mutations: {
-    login(state, avatar) {
+    login(state, payload) {
       state.authorized = true;
-      state.avatar = avatar;
+      state.avatar = payload.avatar;
+      state.aid = payload.aid;
     },
     logout(state) {
       state.authorized = false;
       state.avatar = "";
+      state.aid = 0;
     },
   },
   actions: {
@@ -27,7 +30,7 @@ export default new Vuex.Store({
           Vue.prototype.$http.get('/api/Images/' + acc.data.object.image)
             .then((img) => image = 'https://' + img.data.object.host + img.data.object.route)
             .catch(() => image = '@/assets/staticimages/image1.jpg')
-            .finally(() => commit('login', image));
+            .finally(() => commit('login', { avatar: image, aid: acc.data.object.id }));
         })
         .catch((err) => {
           if(err.response && err.response.status == 401) {
@@ -42,9 +45,9 @@ export default new Vuex.Store({
           Vue.prototype.$http.get('/api/Session/Account')
             .then((acc) => {
               Vue.prototype.$http.get('/api/Images/' + acc.data.object.image)
-              .then((img) => image = 'https://' + img.data.object.host + img.data.object.route)
-              .catch(() => image = '@/assets/staticimages/image1.jpg')
-              .finally(() => commit('login', image));
+                .then((img) => image = 'https://' + img.data.object.host + img.data.object.route)
+                .catch(() => image = '@/assets/staticimages/image1.jpg')
+                .finally(() => commit('login', { avatar: image, aid: acc.data.object.id }));
             });
         });
     }

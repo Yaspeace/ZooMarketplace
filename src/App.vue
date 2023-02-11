@@ -49,4 +49,8 @@ body {
     font-size: 18px;
     font-weight: bold;
 }
+
+.shadow {
+  box-shadow: 0px 6px 10px rgba(126, 126, 126, 0.719);
+}
 </style>

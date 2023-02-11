@@ -1,5 +1,5 @@
 <template>
-<div class="ad-card-wrapper">
+<div class="ad-card-wrapper shadow">
     <div class="ad-img-wrapper">
         <img class="ad-img" :src="this.$http.defaults.baseURL + 'assets/images/image' + ad.imgId + '.jpg'"/>
         <div class="ad-date">
@@ -54,7 +54,6 @@ export default {
     max-width: 400px;
     border: 5px solid rgb(167, 26, 248);
     border-radius: 14px;
-    box-shadow: 0px 6px 10px rgba(126, 126, 126, 0.719);
     padding: 20px;
     box-sizing: border-box;
     width: 100%;
