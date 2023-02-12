@@ -9,13 +9,15 @@
         <img src="@/assets/staticimages/free-icon-statistics-7147801.png" />
         Моя статистика
     </div>
-    <div>Мои объявления</div>
+    
+    <AccountAds class="ads" />
   </div>
 </template>
 
 <script>
 import AccountList from './AccountList.vue';
 import Offer from './Offer.vue';
+import AccountAds from './AccountAds.vue';
 
 export default {
     name: 'UserInfo',
@@ -23,6 +25,7 @@ export default {
     components: {
         AccountList,
         Offer,
+        AccountAds,
     },
     data() {
         return {
@@ -45,6 +48,7 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: flex-start;
 }
 
 .acc-list {
@@ -71,6 +75,10 @@ export default {
 }
 
 .my-stats:hover {
-    background: var(--color-info);
+    background: var(--color-info-dark);
+}
+
+.ads {
+    margin-top: 20px;
 }
 </style>

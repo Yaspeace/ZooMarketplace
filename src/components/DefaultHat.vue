@@ -17,7 +17,7 @@
         <div class="sub-nav">
 
             <div class="nav-title">
-                <router-link to="/"> МЫШЬ-МАРКЕТ</router-link>
+                <router-link to="/" style="text-decoration: none;">МЫШЬ-МАРКЕТ</router-link>
             </div>
 
             <div class="nav-icons">

@@ -189,6 +189,7 @@ export default {
     font-family: 'Comfortaa', cursive;
     flex-grow: 1;
     white-space: nowrap;
+    text-decoration: none;
 }
 
 .nav-search {

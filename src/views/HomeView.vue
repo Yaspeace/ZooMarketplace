@@ -3,7 +3,7 @@
     <Hat />
 
     <div id="content">
-      <AdCardCarousel :ads="[ad, ad, ad, ad, ad, ad, ad]" class="carousel" />
+      <AdCardCarousel :ads="[ad, ad, ad, ad, ad, ad, ad]" :toShow="4" class="carousel" />
       <AdCardGrid :ads="[ad, ad, ad, ad, ad, ad, ad]" />
     </div>
 
@@ -67,7 +67,8 @@ export default {
 
 .carousel {
   width: 100%;
-  background: rgb(233, 233, 93);
+  /* background: rgb(233, 233, 93); */
+  background: var(--color-secondary);
   padding: 15px;
   border-radius: 14px;
   box-shadow: inset rgba(189, 189, 189, 0.8) 0px 0px 20px 0px;

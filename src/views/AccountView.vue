@@ -54,10 +54,10 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    gap: 20px;
+    align-items: flex-start;
 }
 
 .user-info {
-    flex-grow: 1;
+    width: 75%;
 }
 </style>

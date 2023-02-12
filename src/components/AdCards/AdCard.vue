@@ -62,6 +62,7 @@ export default {
     flex-direction: column;
     align-content: space-around;
     background: white;
+    text-align: left;
 }
 
 .ad-img {

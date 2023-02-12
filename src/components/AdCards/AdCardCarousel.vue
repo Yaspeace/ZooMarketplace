@@ -20,7 +20,7 @@ import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 
 export default {
     name: "AdCardCarousel",
-    props: ["ads"],
+    props: ["ads", "toShow"],
     components: {
         AdCard,
         VueSlickCarousel,
@@ -31,13 +31,18 @@ export default {
                 "focusOnSelect": true,
                 "infinite": false,
                 "speed": 500,
-                "slidesToShow": 4,
+                "slidesToShow": this.toShow,
                 "slidesToScroll": 3,
                 "touchThreshold": 5,
                 "arrows": true,
             }
         }
     },
+    watch: {
+      toShow: function(newVal, oldVal) {
+        this.carouselSettings.slidesToShow = newVal;
+      }
+    }
 }
 </script>
 

@@ -42,15 +42,19 @@ body {
   --color-secondary-light: #ebdfe5;
   --color-secondary-dark: #9b8791;
 
-  --secondary-grad: linear-gradient(to bottom left, white, rgb(216, 185, 185) );
-
+  
   --color-info-light: #d2dbed;
-  --color-info: #96a1b8;
+  --color-info: #b1c1e2;
+  --color-info-dark: #96a1b8;
+
+  --secondary-grad: linear-gradient(to bottom left, var(--color-secondary-light), var(--color-info-light) );
+
+  --nyashnie-letters: #f80657;
 }
 
 a {
   color: unset;
-  text-decoration: none;
+  // text-decoration: none;
 }
 
 #app {

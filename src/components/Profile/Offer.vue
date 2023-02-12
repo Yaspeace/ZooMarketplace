@@ -1,20 +1,27 @@
 <template>
-  <div class="offer">
-    <div class="offer-text">Вы владелец питомника, приюта или фермерского подворья?</div>
-    <div class="offer-lower">
-      Вам однозначно сюда: <br />
-      <a href="#"> Перейти в бизнес-аккаунт </a>
+  <div class="main-wrapper">
+    <div>Мои предложения</div>
+    <div class="offer-wrap">
+      <div class="offer-text">Вы владелец питомника, приюта или фермерского подворья?</div>
+      <div class="offer-lower">
+        Вам однозначно сюда:
+        <a href="#"> Перейти в бизнес-аккаунт </a>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.offer {
+.main-wrapper {
   background: var(--secondary-grad);
+  border-radius: 14px;
+}
+
+.offer-wrap {
+  padding: 9px;
   font-weight: bold;
   font-size: 18px;
   text-align: left;
-  padding: 9px;
 }
 .offer-text{
   font-size: 18px;
@@ -28,6 +35,6 @@
 a {
   text-decoration: underline;
   font-size: 17px;
-  color:#f80657;
+  color: var(--nyashnie-letters);
 }
 </style>

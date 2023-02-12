@@ -88,7 +88,7 @@ export default {
 }
 
 .acc-list-item:hover {
-    background: var(--color-secondary-dark);
+    background: var(--color-info-dark);
 }
 
 .acc-round {
