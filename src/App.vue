@@ -42,7 +42,8 @@ body {
   --color-secondary-light: #ebdfe5;
   --color-secondary-dark: #9b8791;
 
-  --color-border-light: #d2dbed;
+  --color-info-light: #d2dbed;
+  --color-info: #96a1b8;
 }
 
 a {

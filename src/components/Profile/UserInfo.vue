@@ -5,8 +5,8 @@
         <Offer class="offer" />
     </div>
     
-    <div>
-        <img src="@/assets/staticimages/free-icon-statistics-7147801.png" width="50" />
+    <div class="my-stats">
+        <img src="@/assets/staticimages/free-icon-statistics-7147801.png" />
         Моя статистика
     </div>
     <div>Мои объявления</div>
@@ -37,14 +37,14 @@ export default {
     background-color: #b2b6d2;
     border-radius: 14px;
     text-align: center;
-    padding: 20px;
+    padding: 30px 7% 30px 7%;
     box-sizing: border-box;
 }
 
 .upper {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
 .acc-list {
@@ -53,5 +53,24 @@ export default {
 
 .offer {
     width: 40%;
+}
+
+.my-stats {
+    background: var(--color-info-light);
+    padding: 10px 0px 10px 0px;
+    border: 1px solid var(--color-primary);
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 24px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.my-stats img {
+    height: 1.5em;
+}
+
+.my-stats:hover {
+    background: var(--color-info);
 }
 </style>
