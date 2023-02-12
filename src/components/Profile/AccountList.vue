@@ -55,7 +55,7 @@ export default {
 
 <style scoped>
 .acc-list-root {
-    background-color: var(--color-secondary-light);
+    background: var(--secondary-grad);
     border-radius: 14px;
 }
 

@@ -42,6 +42,8 @@ body {
   --color-secondary-light: #ebdfe5;
   --color-secondary-dark: #9b8791;
 
+  --secondary-grad: linear-gradient(to bottom left, white, rgb(216, 185, 185) );
+
   --color-info-light: #d2dbed;
   --color-info: #96a1b8;
 }

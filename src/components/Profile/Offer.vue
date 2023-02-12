@@ -1,9 +1,11 @@
 <template>
-  <div class="main">
-    Продвижение объявлений
+  <div class="offer">
+    Продвижение объявлений 
   </div>
 </template>
 
-<style>
-
+<style scoped>
+.offer {
+  background: var(--secondary-grad);
+}
 </style>
