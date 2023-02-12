@@ -31,13 +31,29 @@ export default {
 body {
   padding: 0px;
   margin: 0px;
+
+  /*----COLORMAP----*/
+  --color-primary: rgb(77, 110, 192);
+  --color-primary-light: rgb(114, 149, 202);
+  --color-primary-dark: #3f5787;
+  --color-primary-contrast: rgb(147, 181, 233);
+
+  --color-secondary: #b2b6d2;
+  --color-secondary-light: #ebdfe5;
+  --color-secondary-dark: #9b8791;
+
+  --color-border-light: #d2dbed;
+}
+
+a {
+  color: unset;
+  text-decoration: none;
 }
 
 #app {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /*color: #2c3e50;*/
 }
 
 .underline {
@@ -52,5 +68,11 @@ body {
 
 .shadow {
   box-shadow: 0px 6px 10px rgba(126, 126, 126, 0.719);
+}
+
+.text-cut {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

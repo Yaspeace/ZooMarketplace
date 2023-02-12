@@ -2,7 +2,7 @@
 <div>
     <DefaultHat />
 
-    <div class="content">
+    <div v-if="loaded" class="content">
         <Profile :account="this.account" class="profile" />
         <UserInfo :account="this.account" class="user-info" />
     </div>
@@ -17,7 +17,7 @@ import UserInfo from '@/components/Profile/UserInfo.vue';
 export default {
     name: "AccountView",
     props: {
-        accId: String,
+        accId: Number,
     },
     components: {
         DefaultHat,
@@ -32,13 +32,15 @@ export default {
                 family: "",
                 rate: 0,
                 image: this.$store.state.avatar,
-            }
+            },
+            loaded: false,
         }
     },
-    async created() {
-        await this.$http.get('/api/Account/' + this.accId)
+    created() {
+        this.$http.get('/api/Account/' + this.accId)
             .then((resp) => {
                 this.account = resp.data.object;
+                this.loaded = true;
             })
             .catch((err) => console.log(err));
     }
@@ -52,11 +54,10 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    gap: 20px;
 }
-.profile {
-    width: 35%;
-}
+
 .user-info {
-    width: 50%;
+    flex-grow: 1;
 }
 </style>

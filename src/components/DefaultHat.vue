@@ -2,7 +2,9 @@
     <div :class="'nav' + (scrolling ? '' : ' nav-header-visible')">
         <div class="sub-nav">
             <div class="nav-header">
-                <img src="@/assets/staticimages/mmlogo.png" class="nav-logo-img" />
+                <router-link to="/">
+                    <img src="@/assets/staticimages/mmlogo.png" class="nav-logo-img" />
+                </router-link>
             </div>
 
             <div class="nav-header-title">
@@ -13,8 +15,9 @@
         </div>
 
         <div class="sub-nav">
+
             <div class="nav-title">
-                МЫШЬ-МАРКЕТ
+                <router-link to="/"> МЫШЬ-МАРКЕТ</router-link>
             </div>
 
             <div class="nav-icons">
@@ -174,7 +177,7 @@ flex-direction: column;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    width: 75%;
+    width: 50%;
 }
 
 .nav-icon-wrapper {

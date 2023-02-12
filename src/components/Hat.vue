@@ -1,7 +1,9 @@
 <template>
   <div :class="'nav' + (scrolling ? '' : ' nav-header-visible')">
         <div class="nav-header">
-            <img src="@/assets/staticimages/mmlogo.png" class="nav-logo-img" />
+            <router-link to="/">
+                <img src="@/assets/staticimages/mmlogo.png" class="nav-logo-img" />
+            </router-link>
             <div class="nav-title">
                 МЫШЬ-МАРКЕТ
             </div>
@@ -152,7 +154,7 @@ export default {
 }
 
 .nav-header-title-txt {
-    background: rgb(147, 181, 233);
+    background: var(--color-primary-contrast);
     border-radius: 7px;
     padding: 10px;
 }

@@ -33,7 +33,7 @@ export default {
     created() {
         this.$http.get('/api/Images/' + this.account.image)
             .then((resp) => {
-                this.image = 'https://' + resp.data.results[0].host + resp.data.results[0].route
+                this.image = 'https://' + resp.data.object.host + resp.data.object.route
             })
             .catch((err) => console.log(err));
     }
@@ -54,6 +54,7 @@ export default {
     border: 7px solid #d2dbed;
     object-fit: cover;
     width: 100%;
+    max-width: 300px;
     box-sizing: border-box;
 }
 
