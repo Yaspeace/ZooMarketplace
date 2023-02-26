@@ -34,7 +34,9 @@ export default {
         description: "Тут должно быть описание, но мы с котом пили (вылерьяночку)",
         address: "г. Талдом, ул. Мышная, д. 11",
         date: new Date().toLocaleDateString('ru-RU'),
-        imgId: 1
+        imgId: 1,
+        state: 2,
+        account: 1,
       },
     }
   },

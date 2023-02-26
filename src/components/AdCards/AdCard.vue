@@ -2,14 +2,25 @@
 <div class="ad-card-wrapper shadow">
     <div class="ad-img-wrapper">
         <img class="ad-img" :src="this.$http.defaults.baseURL + 'assets/images/image' + ad.imgId + '.jpg'"/>
-        <div class="ad-date">
+        <div class="ad-date" v-if="this.ad.state != 4">
             {{ ad.date }}
         </div>
-        <svg v-on:click="heartClick" :class="'ad-heart' + (isLiked ? ' pressed' : '')" id="e8BIuW2R4E61" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+        <svg 
+        v-on:click="heartClick" :class="'ad-heart' + (isLiked ? ' pressed' : '')" 
+        v-if="showHeart" xmlns="http://www.w3.org/2000/svg" 
+        xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
             <ellipse rx="31.7696" ry="27.3061" transform="matrix(1.888041 0 0 1.969489 105 112.796487)" stroke-width="0" fill="currentColor"/>
             <ellipse rx="31.7696" ry="27.3061" transform="matrix(1.888041 0 0 1.969489 195 112.796487)" stroke-width="0" fill="currentColor"/>
             <path d="M66.941277,138.750701C66.574271,196.433789,150,240.366176,150,240.366176s83.043854-43.932383,83.043854-101.615471" transform="matrix(1.258692 0 0 1.312997-38.80366-69.382772)" stroke-width="0.6" fill="currentColor"/>
         </svg>
+        <div class="ad-rightbar" v-if="showEdit">
+            <img class="ad-helpmepls" src="@/assets/staticimages/edit.png" />
+            <img class="ad-helpmepls" src="@/assets/staticimages/arrback.png" />
+            <img class="ad-helpmepls" src="@/assets/staticimages/urn.png" />
+        </div>
+        <div class="ad-mainbar" v-if="this.ad.state == 4">
+            Продано
+        </div>
     </div>
     
     <div class="ad-main-txt">
@@ -38,7 +49,9 @@ export default {
     },
     data() {
         return {
-            isLiked: this.liked
+            isLiked: this.liked,
+            showHeart: this.ad.state == 2 && this.ad.account != this.$store.state.aid,
+            showEdit: this.ad.account == this.$store.state.aid && this.ad.state != 4,
         }
     },
     methods: {
@@ -110,6 +123,19 @@ export default {
     transition: .3s;
 }
 
+.ad-rightbar {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    border-top-right-radius: 14px;
+    background: rgba(126, 126, 126, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 101;
+    padding: 5px;
+}
+
 .ad-heart:hover {
     color: #666;
 }
@@ -121,6 +147,24 @@ export default {
 
 .pressed:hover {
     color: rgb(172, 45, 45);
+}
+
+.ad-helpmepls {
+    width: 30px;
+    height: 30px;
+}
+
+.ad-mainbar {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    background-color: rgba(126, 126, 126, 0.8);
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
 }
 
 .ad-main-txt {
