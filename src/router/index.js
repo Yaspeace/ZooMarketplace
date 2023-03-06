@@ -31,6 +31,12 @@ const routes = [
     component: () => import('../views/AccountView.vue'),
     props: true
   },
+  {
+    path: '/ad/:mode/:adId',
+    name: 'ad',
+    component: () => import('../views/Card.vue'),
+    props: true
+  },
 ];
 
 const router = new VueRouter({

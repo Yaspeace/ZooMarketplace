@@ -1,21 +1,13 @@
 export default class Card {
-    constructor(
-        id,
-        title,
-        description,
-        price,
-        date,
-        address,
-        imgId,
-        account
-    ) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.price = price;
-        this.date = date;
-        this.address = address;
-        this.imgId = imgId;
-        this.account = account;
+    constructor() {
+        this.id = 0;
+        this.title = '';
+        this.description = '';
+        this.price = 0;
+        this.date = new Date();
+        this.address = '';
+        this.imgId = 0;
+        this.account = 0;
+        this.sex = 0;
     }
 }
