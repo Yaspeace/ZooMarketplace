@@ -51,7 +51,7 @@
 
                 <model-list-select v-if="!this.isView"
                     :list="this.breeds"
-                    v-model="this.curBreed"
+                    v-model="this.ad.breed"
                     option-value="id"
                     :custom-text="(item) => item.name"
                     placeholder="Порода..."
@@ -66,6 +66,11 @@
                     placeholder="Пол...">
                 </model-list-select>
 
+                <div class="card-btns-bot" v-if="!isView">
+                    <BeautyButton look="primary" text="Сохранить" @click="saveAd" />
+                    <BeautyButton look="secondary" text="Отмена" @click="cardCancel"/>
+                </div>
+                
             </div>
             <div class="btns-right">
                 <BeautyButton look="primary" text="Оставить отзыв" />
@@ -132,6 +137,7 @@ export default {
                     name: 'Самка'
                 }
             ],
+            isImageChanged: false,
         }
     },
     created() {
@@ -172,6 +178,7 @@ export default {
             if (image) {
                 this.image = image;
             }
+            this.isImageChanged = true;
         },
         setSubcategories(catId) {
             this.$http.get('/api/Categories', { params: { parentId: catId } })
@@ -189,6 +196,18 @@ export default {
                 .then((resp) => this.breeds = resp.data.results)
                 .catch((err) => console.log(err));
         },
+        cardCancel() {
+            this.$router.back();
+        },
+        saveAd() {
+
+        },
+        addOrUpdateAd(data) {
+            let func = isCreate ? this.$http.post : this.$http.put;
+            func('/api/Ads', data)
+                .then(this.$router.back())
+                .catch((err) => console.log(err));
+        }
     },
     watch: {
         currentCategory: function(newVal, oldVal) {
@@ -269,6 +288,14 @@ export default {
     border: 1px solid gray;
     border-radius: 5px;
     resize: none;
+}
+
+.card-btns-bot {
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 15%;
 }
 
 .footer-img-wrapper {

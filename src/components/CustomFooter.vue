@@ -5,7 +5,7 @@
         </div>
         <div class="footer-upper">
             <div class="footer-left">
-                <a href="#"> Правила публикации и использования нашего сервиса. </a>
+                <router-link to="landing"> Правила публикации и использования нашего сервиса. </router-link>
             </div>
             <div class="footer-right">
                 <span class="text-lined">Возникли трудности? <br> Свяжитесь с нами:</span><br>
@@ -30,9 +30,12 @@ export default {
     width: 100%;
     height: 300px;
     background:rgba(9, 0, 131, 0.548);
-    z-index: 101;
+    z-index: 5;
     color: white;
     position: relative;
+    padding-left: 30px;
+    padding-right: 30px;
+    box-sizing: border-box;
 }
 
 .footer-center{

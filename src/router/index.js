@@ -32,10 +32,21 @@ const routes = [
     props: true
   },
   {
+    path: '/ad/:mode',
+    name: 'ad',
+    component: () => import('../views/Card.vue'),
+    props: true
+  },
+  {
     path: '/ad/:mode/:adId',
     name: 'ad',
     component: () => import('../views/Card.vue'),
     props: true
+  },
+  {
+    path: '/landing',
+    name: 'landing',
+    component: () => import('../views/Landing.vue')
   },
 ];
 

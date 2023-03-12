@@ -37,7 +37,7 @@
             </form>
         </div>
         <div class="nav-icons">
-            <svg class="nav-icon icon-default" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+            <svg class="nav-icon icon-default" @click="addAd" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
                 <ellipse rx="150" ry="150" transform="translate(150 150)" fill="#d2dbed" stroke-width="0"/>
                 <line x1="0" y1="-91.980459" x2="0" y2="108.316756" transform="translate(150 142.226971)" fill="none" stroke="currentColor" stroke-width="40"/>
                 <line x1="-100.148607" y1="-0.19756" x2="100.148607" y2="0.19756" transform="translate(149.988721 150.19756)" fill="none" stroke="currentColor" stroke-width="40"/>
@@ -101,6 +101,9 @@ export default {
                     this.account = responce.object;
                     console.log(this.account);
                 });
+        },
+        addAd() {
+            this.$router.push({ name: 'ad', params: { mode: 'create' } });
         }
     }
 }
@@ -246,6 +249,7 @@ export default {
     cursor: pointer;
     transition: .3s;
     color: #3f5787;
+    display: block;
 }
 
 .icon-default:hover {
