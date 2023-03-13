@@ -30,7 +30,7 @@
         },
         created() {
             this.$http.get('/api/Images/' + this.subType.image)
-                .then((resp) => this.imagePath = 'http://' + resp.data.object.host + resp.data.object.route)
+                .then((resp) => this.imagePath = 'https://' + resp.data.object.host + resp.data.object.route)
                 .catch((err) => console.log(err));
         },
         methods: {

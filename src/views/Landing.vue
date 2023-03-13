@@ -33,9 +33,9 @@
                             <h2>Как выбрать подходящую подписку?</h2>
                             <p style="font-weight: normal">Наши предложения ориентируются на потребности Вашего бизнеса в зависимости от направленности Вашей деятельности. Мы предлагаем Вам:</p>
                             <ol>
-                                <li>Бесплатное сотрудничество. <a href="#">Подробнее здесь.</a></li>
-                                <li>Предложения для владельцев фермерских подворий. <a href="#">Подробнее здесь.</a></li>
-                                <li>Предложения для владельцев питомников. <a href="#">Подробнее здесь.</a></li>
+                                <li>Бесплатное сотрудничество. <a href="#row0">Подробнее здесь.</a></li>
+                                <li>Предложения для владельцев фермерских подворий. <a href="#row1">Подробнее здесь.</a></li>
+                                <li>Предложения для владельцев питомников. <a href="#row2">Подробнее здесь.</a></li>
                             </ol>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                 Не нашли ничего для себя? Напишите нам свои предложения (<a href="#">mishmarket@mail.ru</a>) и команда &laquo;Мышь-маркет&raquo; сделает шаг навстречу комфорту Вашего бизнеса.
             </div>
 
-            <div v-for="(row, index) in rows" :key="index" class="landing-row">
+            <div v-for="(row, index) in rows" :key="index" class="landing-row" :id="'row' + index">
                 <LandingCard v-for="sub in row" :key="sub.id" :subType="sub" :style="'width: ' + (100 / row.length)" @moreClick="more(sub)" />
             </div>
         </div>
@@ -82,11 +82,10 @@ export default {
             .then((resp) => {
                 let rows = [];
                 resp.data.results.forEach((item) => {
-                    if(rows[item.line_num] == null) rows[item.line_num - 1] = [];
+                    if(rows[item.line_num - 1] == null) rows[item.line_num - 1] = [];
                     rows[item.line_num - 1].push(item);
                 });
                 this.rows = rows;
-                console.log(this.rows.length);
             })
             .catch((err) => console.log(err));
     },

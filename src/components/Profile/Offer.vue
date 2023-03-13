@@ -5,7 +5,7 @@
       <div class="offer-text">Вы владелец питомника, приюта или фермерского подворья?</div>
       <div class="offer-lower">
         Вам однозначно сюда:
-        <a href="#"> Перейти в бизнес-аккаунт </a>
+        <router-link to="/landing"> Предложения для бизнеса </router-link>
       </div>
     </div>
   </div>

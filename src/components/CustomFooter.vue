@@ -5,7 +5,7 @@
         </div>
         <div class="footer-upper">
             <div class="footer-left">
-                <router-link to="landing"> Правила публикации и использования нашего сервиса. </router-link>
+                <a href="#"> Правила публикации и использования нашего сервиса. </a>
             </div>
             <div class="footer-right">
                 <span class="text-lined">Возникли трудности? <br> Свяжитесь с нами:</span><br>
