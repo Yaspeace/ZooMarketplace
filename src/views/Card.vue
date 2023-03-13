@@ -4,8 +4,8 @@
 
         <div class="main-content">
             <div class="ad-info">
-                <img v-if="this.isView" class="ad-img" :src="this.$http.defaults.baseURL + 'assets/images/image' + ad.imgId + '.jpg'"/>
-                <picture-input v-if="this.isCreate"
+                <img v-if="isView" class="ad-img" :src="$http.defaults.baseURL + 'assets/images/image' + ad.imgId + '.jpg'"/>
+                <picture-input v-if="isCreate"
                     class="ad-img-input"
                     accept="image/jpeg,image/png"
                     :crop="false"
@@ -21,46 +21,46 @@
                     @change="onImageChange"
                 />
 
-                <input v-if="!this.isView" placeholder="Заголовок..." class="ad-title-input" />
+                <input v-if="!isView" placeholder="Заголовок..." class="ad-title-input" />
                 <div v-else class="ad-title">
-                    {{ this.ad.title }}
+                    {{ ad.title }}
                 </div>
 
-                <div class="ad-desc" v-if="this.isView">
-                    {{ this.ad.description }}
+                <div class="ad-desc" v-if="isView">
+                    {{ ad.description }}
                 </div>
-                <textarea v-if="this.isEdit" rows="3" class="ad-desc-input" placeholder="Описание..." v-model="this.ad.description"></textarea>
-                <textarea v-if="this.isCreate" rows="3" class="ad-desc-input" placeholder="Описание..."></textarea>
+                <textarea v-if="isEdit" rows="3" class="ad-desc-input" placeholder="Описание..." v-model="ad.description"></textarea>
+                <textarea v-if="isCreate" rows="3" class="ad-desc-input" placeholder="Описание..."></textarea>
 
-                <model-list-select v-if="!this.isView"
-                    :list="this.categories"
+                <model-list-select v-if="!isView"
+                    :list="categories"
                     v-model="currentCategory"
                     option-value="id"
                     :custom-text="(cat) => cat.name"
                     placeholder="Категория...">
                 </model-list-select>
 
-                <model-list-select v-if="!this.isView"
-                    :list="this.subcats"
+                <model-list-select v-if="!isView"
+                    :list="subcats"
                     v-model="curSubCategory"
                     option-value="id"
                     :custom-text="(cat) => cat.name"
                     placeholder="Подкатегория..."
-                    :isDisabled="this.subcats.length == 0">
+                    :isDisabled="subcats.length == 0">
                 </model-list-select>
 
-                <model-list-select v-if="!this.isView"
-                    :list="this.breeds"
-                    v-model="this.ad.breed"
+                <model-list-select v-if="!isView"
+                    :list="breeds"
+                    v-model="ad.breed"
                     option-value="id"
                     :custom-text="(item) => item.name"
                     placeholder="Порода..."
-                    :isDisabled="this.breeds.length == 0">
+                    :isDisabled="breeds.length == 0">
                 </model-list-select>
 
-                <model-list-select v-if="!this.isView"
-                    :list="this.sexes"
-                    v-model="this.ad.sex"
+                <model-list-select v-if="!isView"
+                    :list="sexes"
+                    v-model="ad.sex"
                     option-value="id"
                     :custom-text="(item) => item.name"
                     placeholder="Пол...">
@@ -113,7 +113,21 @@ export default {
             isView: this.mode == 'view',
             isEdit: this.mode == 'edit',
             isCreate: this.mode == 'create',
-            ad: Card,
+            ad: {
+                id: 0,
+                title: '',
+                description: '',
+                price: 0,
+                published: false,
+                state: 0,
+                views: 0,
+                sex: 0,
+                age: 0,
+                isPaid: false,
+                account: this.$store.state.aid,
+                type: 0,
+                breed: 0
+            },
             breedName: String,
             categoryName: String,
             breeds: [],
@@ -146,7 +160,7 @@ export default {
             .then((resp) => this.ad = resp.data.object)
             .catch((err) => console.log(err));
         } else {
-            this.ad = new Card();
+            //this.ad = new Card();
             this.$http.get('/api/Categories', { params: { parentId: 0 } })
                 .then((resp) => this.categories = resp.data.results)
                 .catch((err) => console.log(err));

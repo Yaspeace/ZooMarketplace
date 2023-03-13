@@ -5,7 +5,7 @@
         </div>
         <div class="footer-upper">
             <div class="footer-left">
-                <a href="#"> Правила публикации и использования нашего сервиса. </a>
+                <a :href="$http.defaults.baseURL + 'assets/publication_rules.pdf'" target="_blank"> Правила публикации и использования нашего сервиса. </a>
             </div>
             <div class="footer-right">
                 <span class="text-lined">Возникли трудности? <br> Свяжитесь с нами:</span><br>

@@ -1,13 +1,11 @@
 <template>
   <div :class="'nav' + (scrolling ? '' : ' nav-header-visible')">
-        <div class="nav-header">
-            <router-link to="/">
-                <img src="@/assets/staticimages/mmlogo.png" class="nav-logo-img" />
-            </router-link>
+        <router-link to="/" class="nav-header"> 
+            <img src="@/assets/staticimages/mmlogo.png" class="nav-logo-img" />
             <div class="nav-title">
                 МЫШЬ-МАРКЕТ
             </div>
-        </div>
+        </router-link>
         <div class="nav-header-title">
             <span class="nav-header-title-txt">От кота до бегемота &mdash; каждому нужна забота! Инвестируй в пушистое счастье!</span>
         </div>
