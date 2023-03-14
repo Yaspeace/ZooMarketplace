@@ -38,7 +38,7 @@ export default {
     },
     created() {
         console.log("USERID: " + this.userId);
-        this.$http.get('/api/Account', { userId: this.userId })
+        this.$http.get('/api/Account?userId=' + this.userId)
             .then((resp) => {
                 resp.data.results.forEach((acc) => {
                     acc.avatar = require('@/assets/staticimages/image1.jpg');

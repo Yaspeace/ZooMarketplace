@@ -1,7 +1,7 @@
 <template>
 <div class="ad-card-wrapper shadow">
     <div class="ad-img-wrapper">
-        <img class="ad-img" :src="this.$http.defaults.baseURL + 'assets/images/image' + ad.imgId + '.jpg'"/>
+        <img class="ad-img" :src="this.$http.defaults.baseURL + imagePath"/>
         <div class="ad-date" v-if="this.ad.state != 4">
             {{ ad.date }}
         </div>
@@ -14,7 +14,7 @@
             <path d="M66.941277,138.750701C66.574271,196.433789,150,240.366176,150,240.366176s83.043854-43.932383,83.043854-101.615471" transform="matrix(1.258692 0 0 1.312997-38.80366-69.382772)" stroke-width="0.6" fill="currentColor"/>
         </svg>
         <div class="ad-rightbar" v-if="showEdit">
-            <img class="ad-helpmepls" src="@/assets/staticimages/edit.png" />
+            <router-link :to="{name: 'ad', params: { mode: 'edit', adId: ad.id }}"><img class="ad-helpmepls" src="@/assets/staticimages/edit.png" /></router-link>
             <img class="ad-helpmepls" src="@/assets/staticimages/arrback.png" />
             <img class="ad-helpmepls" src="@/assets/staticimages/urn.png" />
         </div>
@@ -23,7 +23,7 @@
         </div>
     </div>
     
-    <div class="ad-main-txt">
+    <div class="ad-main-txt" @click="goToCard">
         {{ad.title}}
     </div>
     <div class="ad-price-txt">
@@ -32,9 +32,9 @@
     <div class="ad-address-txt">
         Адрес: <b>{{ad.address}}</b>
     </div>
-    <div class="ad-desc">
+    <!-- <div class="ad-desc">
         {{ad.description}}
-    </div>
+    </div> -->
 </div>
 </template>
 
@@ -52,11 +52,20 @@ export default {
             isLiked: this.liked,
             showHeart: this.ad.state == 2 && this.ad.account != this.$store.state.aid,
             showEdit: this.ad.account == this.$store.state.aid && this.ad.state != 4,
+            imagePath: '',
         }
+    },
+    created() {
+        this.$http.get('/api/Images/' + this.ad.image)
+            .then((resp) => this.imagePath = resp.data.object.route)
+            .catch((err) => console.log(err));
     },
     methods: {
         heartClick() {
             this.isLiked = !this.isLiked;
+        },
+        goToCard() {
+            this.$router.push({name: 'ad', params: { mode: 'view', adId: this.ad.id } });
         }
     }
 }
@@ -176,6 +185,11 @@ export default {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     display: -webkit-inline-box;
+    cursor: pointer;
+}
+
+.ad-main-txt:hover {
+    text-decoration: underline;
 }
 
 .ad-price-txt {

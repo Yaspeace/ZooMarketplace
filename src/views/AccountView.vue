@@ -17,7 +17,7 @@ import UserInfo from '@/components/Profile/UserInfo.vue';
 export default {
     name: "AccountView",
     props: {
-        accId: Number,
+        accId: String,
     },
     components: {
         DefaultHat,

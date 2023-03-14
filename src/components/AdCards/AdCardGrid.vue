@@ -23,6 +23,7 @@ export default {
     justify-content: space-around;
     align-content: space-around;
     row-gap: 20px;
+    width: 100%;
 }
 
 @media screen and (max-width: 2560px) {

@@ -3,9 +3,13 @@
         <Hat />
 
         <div class="main-content">
-            <div class="ad-info">
-                <img v-if="isView" class="ad-img" :src="$http.defaults.baseURL + 'assets/images/image' + ad.imgId + '.jpg'"/>
+            <div :class="'ad-info' + (isView ? ' lalign' : '')">
+                <div style="text-align: center;">
+                    <img v-if="!isCreate" class="ad-img" :src="$http.defaults.baseURL + imagePath"/>
+                </div>
+                
                 <picture-input v-if="isCreate"
+                    ref="pictureInput"
                     class="ad-img-input"
                     accept="image/jpeg,image/png"
                     :crop="false"
@@ -21,16 +25,16 @@
                     @change="onImageChange"
                 />
 
-                <input v-if="!isView" placeholder="Заголовок..." class="ad-title-input" />
-                <div v-else class="ad-title">
+                <div v-if="isView" class="card-title">
                     {{ ad.title }}
                 </div>
+                <input v-else placeholder="Заголовок..." class="ad-title-input" v-model="ad.title" />
 
-                <div class="ad-desc" v-if="isView">
-                    {{ ad.description }}
+                <textarea v-if="!isView" rows="3" class="ad-desc-input" placeholder="Описание..." v-model="ad.description"></textarea>
+
+                <div v-if="isView">
+                    Дата публикации: {{ ad.published }}
                 </div>
-                <textarea v-if="isEdit" rows="3" class="ad-desc-input" placeholder="Описание..." v-model="ad.description"></textarea>
-                <textarea v-if="isCreate" rows="3" class="ad-desc-input" placeholder="Описание..."></textarea>
 
                 <model-list-select v-if="!isView"
                     :list="categories"
@@ -58,6 +62,10 @@
                     :isDisabled="breeds.length == 0">
                 </model-list-select>
 
+                <div v-else>
+                    Порода: <span class="card-breed">{{ breedName }}</span>
+                </div>
+
                 <model-list-select v-if="!isView"
                     :list="sexes"
                     v-model="ad.sex"
@@ -66,6 +74,26 @@
                     placeholder="Пол...">
                 </model-list-select>
 
+                <div v-else>
+                    Пол: {{ sexes.find(x => x.id == ad.sex).name }}
+                </div>
+
+                <div v-if="!isView">
+                    Возраст:
+                    <input v-model="ad.age" />
+                    <select :ref="ageSelect">
+                        <option value="0">Месяцев</option>
+                        <option value="1">Лет</option>
+                    </select>
+                </div>
+                <div v-else>
+                    Возраст: {{ ad.age }} {{ ageStr }}
+                </div>
+
+                <div class="ad-desc" v-if="isView">
+                    Описание: {{ ad.description }}
+                </div>
+
                 <div class="card-btns-bot" v-if="!isView">
                     <BeautyButton look="primary" text="Сохранить" @click="saveAd" />
                     <BeautyButton look="secondary" text="Отмена" @click="cardCancel"/>
@@ -73,9 +101,9 @@
                 
             </div>
             <div class="btns-right">
-                <BeautyButton look="primary" text="Оставить отзыв" />
-                <BeautyButton look="secondary" text="Добавить в избранное" />
-                <beauty-button look="primary" text="Профиль продавца" />
+                <BeautyButton class="right-button" look="primary" text="Оставить отзыв" />
+                <BeautyButton class="right-button" look="secondary" text="Добавить в избранное" />
+                <beauty-button class="right-button" look="primary" text="Профиль продавца" />
             </div>
         </div>
 
@@ -89,7 +117,6 @@
 <script>
 import Hat from '@/components/Hat.vue';
 import CustomFooter from '@/components/CustomFooter.vue';
-import Card from '@/components/AdCards/Card.js';
 import BeautyButton from '@/components/BeautyButton.vue';
 import PictureInput from 'vue-picture-input';
 import { ModelListSelect } from 'vue-search-select';
@@ -106,10 +133,11 @@ export default {
     name: "Card",
     props: {
         mode: String,
-        adId: Number,
+        adId: String,
     },
     data() {
         return {
+            advertId: parseInt(this.adId),
             isView: this.mode == 'view',
             isEdit: this.mode == 'edit',
             isCreate: this.mode == 'create',
@@ -118,7 +146,7 @@ export default {
                 title: '',
                 description: '',
                 price: 0,
-                published: false,
+                published: '',
                 state: 0,
                 views: 0,
                 sex: 0,
@@ -126,16 +154,18 @@ export default {
                 isPaid: false,
                 account: this.$store.state.aid,
                 type: 0,
-                breed: 0
+                breed: 0,
+                image: 0
             },
-            breedName: String,
-            categoryName: String,
+            ageStr: '',
+            imagePath: '',
+            breedName: '',
+            categoryName: '',
             breeds: [],
             categories: [],
             subcats: [],
             currentCategory: 0,
             curSubCategory: 0,
-            curBreed: 0,
             hasSubcategories: false,
             sexes: [
                 {
@@ -155,23 +185,28 @@ export default {
         }
     },
     created() {
-        if(!this.isCreate) {
-            this.$http.get('/api/Ads/' + this.adId)
-            .then((resp) => this.ad = resp.data.object)
-            .catch((err) => console.log(err));
-        } else {
-            //this.ad = new Card();
+        if(this.isCreate || this.isEdit) {
             this.$http.get('/api/Categories', { params: { parentId: 0 } })
                 .then((resp) => this.categories = resp.data.results)
                 .catch((err) => console.log(err));
         }
+
+        if(!this.isCreate) {
+            this.initAd();
+        }
     },
     methods: {
         initAd() {
-            this.$http.get('/api/Ads/' + this.adId)
+            this.$http.get('/api/Cards/' + this.advertId)
                 .then((resp) => {
                     this.ad = resp.data.object;
+                    this.ageStr = 'мес.';
+                    if(this.ad.age >= 12) {
+                        this.ad.age /= 12;
+                        this.ageStr = 'лет';
+                    };
                     this.initBreed(this.ad.breed);
+                    this.setImage(this.ad.image);
                 })
                 .catch((err) => console.log(err));
         },
@@ -210,15 +245,33 @@ export default {
                 .then((resp) => this.breeds = resp.data.results)
                 .catch((err) => console.log(err));
         },
+        setImage(imgId) {
+            this.$http.get('/api/Images/' + imgId)
+                .then((imgResp) => this.imagePath = imgResp.data.object.route)
+                .catch((err) => console.log(err));
+        },
         cardCancel() {
             this.$router.back();
         },
         saveAd() {
-
+            if(this.isImageChanged) {                
+                this.$http.post('/api/Images', {
+                    image: this.$refs.pictureInput.file
+                }, { headers: { 'Content-Type': 'multipart/form-data' }})
+                    .then((resp) => {
+                        this.ad.image = resp.data.object.id;
+                        this.addOrUpdateAd(this.ad);
+                    })
+                    .catch((err) => console.log(err));
+            } else {
+                this.addOrUpdateAd(this.ad);
+            }
         },
-        addOrUpdateAd(data) {
-            let func = isCreate ? this.$http.post : this.$http.put;
-            func('/api/Ads', data)
+        addOrUpdateAd(ad) {
+            let func = this.isCreate ? this.$http.post : this.$http.put;
+            if(this.$refs.ageSelect.selectedIndex == 1) ad.age *= 12;
+            ad.state = 2;
+            func('/api/Cards', ad)
                 .then(this.$router.back())
                 .catch((err) => console.log(err));
         }
@@ -261,7 +314,7 @@ export default {
     border-radius: 14px;
     padding: 20px;
     box-sizing: border-box;
-    width: 40%;
+    width: 70%;
 
     display: flex;
     flex-direction: column;
@@ -270,15 +323,26 @@ export default {
     align-items: center;
 }
 
+.lalign {
+    align-items:initial;
+}
+
 .btns-right {
     padding: 10px;
-    width: 40%;
+    padding-top: 100px;
+    width: 20%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
 }
 
 .ad-img {
     width: 80%;
     max-width: 600px;
     aspect-ratio: 1/1;
+    object-fit: cover;
 }
 
 .ad-img-input {
@@ -286,7 +350,7 @@ export default {
     aspect-ratio: 1/1;
 }
 
-.ad-title {
+.card-title {
     font-weight: bold;
 }
 
@@ -310,6 +374,12 @@ export default {
     flex-direction: row;
     justify-content: center;
     gap: 15%;
+}
+
+.right-button {
+    height: 40px;
+    width: 100%;
+    font-size: 18px;
 }
 
 .footer-img-wrapper {

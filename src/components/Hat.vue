@@ -14,10 +14,10 @@
         </div>
 
         <div class="nav-search">
-            <form id="search-form" class="nav-search-bar" method="get" action="[[~[[*id]]]]">
-                <input class="nav-search-input" placeholder="Поеск" maxlength="200" name="search" />
+            <div id="search-form" class="nav-search-bar" method="get" action="[[~[[*id]]]]">
+                <input class="nav-search-input" placeholder="Поеск" maxlength="200" v-model="searchStr" />
                 
-                <svg id="search-submit" class="nav-search-button" viewBox="0 0 24 24" fill="none">
+                <svg @click="searchClick" id="search-submit" class="nav-search-button" viewBox="0 0 24 24" fill="none">
                     <path d="M13.3891 13.3891L19 19M9.5 15C12.5376 15 15 12.5376 15 9.5C15 6.46243 12.5376 4 9.5 4C6.46243 4 4 6.46243 4 9.5C4 12.5376 6.46243 15 9.5 15Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             
@@ -32,7 +32,7 @@
                     <line x1="173.407408" y1="0" x2="-173.407409" y2="0" transform="translate(338.592592 256)" fill="none" stroke-width="40"/>
                     <line x1="-32.855" y1="0" x2="32.855" y2="0" transform="translate(479.145 397.460167)" fill="none" stroke-width="40"/>
                 </svg>
-            </form>
+            </div>
         </div>
         <div class="nav-icons">
             <svg class="nav-icon icon-default" @click="addAd" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
@@ -81,6 +81,7 @@ export default {
                 id: this.$store.state.id,
                 img: this.$store.state.avatar,
             },
+            searchStr: '',
         }
     },
     created () {
@@ -102,6 +103,9 @@ export default {
         },
         addAd() {
             this.$router.push({ name: 'ad', params: { mode: 'create' } });
+        },
+        searchClick() {
+            this.$emit('search', this.searchStr);
         }
     }
 }

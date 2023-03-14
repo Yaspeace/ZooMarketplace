@@ -1,10 +1,10 @@
 <template>
   <div class="home">
-    <Hat />
+    <Hat @search="search" />
 
     <div id="content">
-      <AdCardCarousel :ads="[ad, ad, ad, ad, ad, ad, ad]" :toShow="4" class="carousel" />
-      <AdCardGrid :ads="[ad, ad, ad, ad, ad, ad, ad]" />
+      <AdCardCarousel v-if="paidAds.length > 0" :ads="paidAds" :toShow="4" class="carousel" />
+      <AdCardGrid v-if="ads.length > 0" :ads="ads" />
     </div>
 
     <CustomFooter />
@@ -27,6 +27,8 @@ export default {
   name: "HomeView",
   data() {
     return {
+      paidAds: [],
+      ads: [],
       ad: {
         id: 1,
         title: "Кот-упорот",
@@ -48,6 +50,30 @@ export default {
     AdCardCarousel,
     AdCardGrid,
   },
+  created() {
+    this.getPaidAds();
+    this.getAds();
+  },
+  methods: {
+    getPaidAds() {
+      this.$http.get('/api/Cards?paid=true')
+        .then((resp) => this.paidAds = resp.data.results)
+        .catch((err) => console.log(err));
+    },
+    getAds() {
+      this.$http.get('/api/Cards?paid=false')
+        .then((resp) => this.ads = resp.data.results)
+        .catch((err) => console.log(err));
+    },
+    search(searchStr) {
+      this.$http.get('/api/Cards?paid=false&search=' + searchStr)
+        .then((resp) => this.ads = resp.data.results)
+        .catch((err) => console.log(err));
+      this.$http.get('/api/Cards?paid=true&search=' + searchStr)
+        .then((resp) => this.paidAds = resp.data.results)
+        .catch((err) => console.log(err));
+    },
+  }
 };
 </script>
 

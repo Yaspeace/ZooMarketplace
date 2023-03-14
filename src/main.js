@@ -7,7 +7,7 @@ import axios from "axios";
 Vue.config.productionTip = false;
 
 Vue.prototype.$http = axios.create({
-  baseURL: "https://myshmarket.site/",
+  baseURL: "https://myshmarket.site",
   withCredentials: true,
 });
 
