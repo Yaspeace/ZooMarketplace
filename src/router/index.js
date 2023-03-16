@@ -53,6 +53,11 @@ const routes = [
     name: 'payment',
     component: () => import('../components/Payments/Payment.vue'),
     props: true
+  },
+  {
+    path: '/moderation',
+    name: 'moderation',
+    component: () => import('../views/Moderation.vue')
   }
 ];
 

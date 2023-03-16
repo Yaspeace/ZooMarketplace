@@ -82,4 +82,8 @@ a {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.light-shadow {
+  box-shadow: #80808047 6px 6px 20px 5px;
+}
 </style>

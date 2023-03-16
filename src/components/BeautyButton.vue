@@ -1,5 +1,5 @@
 <template>
-  <button :class="'btn btn-primary btn-' + look" v-on:click="$emit('click')">
+  <button :class="'btn btn-primary btn-' + look + (disabled ? ' disabled btn-' + look + '-disabled' : '')" v-on:click="$emit('click')" >
     {{ text }}
   </button>
 </template>
@@ -10,6 +10,7 @@ export default {
   props: {
     text: String,
     look: String,
+    disabled: Boolean,
   },
 };
 </script>
@@ -75,5 +76,23 @@ export default {
   padding: 8px;
   font-size: 19px;
   color: #252531;
+}
+
+.disabled {
+  user-select: none;
+  color: #3b3b3b;
+  pointer-events: none;
+}
+
+.btn-primary-disabled {
+  background: linear-gradient(to bottom left, #ace9ac, #2e8a5c);
+}
+
+.btn-secondary-disabled {
+  background: linear-gradient(to top right, #fd7171, #eecc6e);
+}
+
+.btn-warning-disabled {
+  background: linear-gradient(to top right, #fd6c6c, #f5a687);;
 }
 </style>
