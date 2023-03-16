@@ -81,7 +81,7 @@
                 <div v-if="!isView">
                     Возраст:
                     <input v-model="ad.age" />
-                    <select :ref="ageSelect">
+                    <select ref="ageSelect">
                         <option value="0">Месяцев</option>
                         <option value="1">Лет</option>
                     </select>
@@ -90,20 +90,39 @@
                     Возраст: {{ ad.age }} {{ ageStr }}
                 </div>
 
+                <div v-if="isView">
+                    Стоимость: {{ ad.price }} р.
+                </div>
+                <div v-else>
+                    Стоимость:
+                    <input v-model="ad.price" v-mask="'#######'" /> р.
+                </div>
+
                 <div class="ad-desc" v-if="isView">
                     Описание: {{ ad.description }}
                 </div>
 
-                <div class="card-btns-bot" v-if="!isView">
+                <!-- <div class="card-btns-bot" v-if="!isView">
                     <BeautyButton look="primary" text="Сохранить" @click="saveAd" />
                     <BeautyButton look="secondary" text="Отмена" @click="cardCancel"/>
-                </div>
+                </div> -->
                 
             </div>
-            <div class="btns-right">
-                <BeautyButton class="right-button" look="primary" text="Оставить отзыв" />
-                <BeautyButton class="right-button" look="secondary" text="Добавить в избранное" />
+            <div class="btns-right" v-if="isView && ad.account != $store.state.aid">
+                <beauty-button class="right-button" look="primary" text="Оставить отзыв" />
+                <beauty-button class="right-button" look="secondary" text="Добавить в избранное" />
                 <beauty-button class="right-button" look="primary" text="Профиль продавца" />
+            </div>
+            <div class="btns-right" v-if="isView && ad.account == $store.state.aid">
+                <beauty-button class="right-button" look="primary" text="Редактировать" />
+                <beauty-button class="right-button" look="secondary" text="Продвижение" @click="adPay" />
+                <beauty-button v-if="ad.state == 0" class="right-button" look="primary" text="Снять с публикации" @click="setAdState(0)" />
+                <beauty-button v-else class="right-button" look="primary" text="Опубликовать" @click="setAdState(1)" />
+            </div>
+            <div class="btns-right" v-if="isCreate">
+                <beauty-button class="right-button" look="primary" text="Сохранить" @click="saveAd(0)" />
+                <beauty-button class="right-button" look="secondary" text="Сохранить и опубликовать" @click="saveAd(1)"  />
+                <beauty-button class="right-button" look="primary" text="Выйти без сохранения" @click="cardCancel" />
             </div>
         </div>
 
@@ -121,6 +140,7 @@ import BeautyButton from '@/components/BeautyButton.vue';
 import PictureInput from 'vue-picture-input';
 import { ModelListSelect } from 'vue-search-select';
 import "vue-search-select/dist/VueSearchSelect.css"
+import {mask} from 'vue-the-mask';
 
 export default {
     components: { 
@@ -134,6 +154,9 @@ export default {
     props: {
         mode: String,
         adId: String,
+    },
+    directives: {
+        mask,
     },
     data() {
         return {
@@ -200,6 +223,7 @@ export default {
             this.$http.get('/api/Cards/' + this.advertId)
                 .then((resp) => {
                     this.ad = resp.data.object;
+                    console.log(this.ad.account);
                     this.ageStr = 'мес.';
                     if(this.ad.age >= 12) {
                         this.ad.age /= 12;
@@ -253,7 +277,7 @@ export default {
         cardCancel() {
             this.$router.back();
         },
-        saveAd() {
+        saveAd(newState) {
             if(this.isImageChanged) {                
                 this.$http.post('/api/Images', {
                     image: this.$refs.pictureInput.file
@@ -264,16 +288,26 @@ export default {
                     })
                     .catch((err) => console.log(err));
             } else {
-                this.addOrUpdateAd(this.ad);
+                this.addOrUpdateAd(this.ad, newState);
             }
         },
-        addOrUpdateAd(ad) {
+        addOrUpdateAd(ad, newState) {
             let func = this.isCreate ? this.$http.post : this.$http.put;
             if(this.$refs.ageSelect.selectedIndex == 1) ad.age *= 12;
-            ad.state = 2;
+            ad.state = newState;
             func('/api/Cards', ad)
                 .then(this.$router.back())
                 .catch((err) => console.log(err));
+        },
+        setAdState(state) {
+            this.$http.put('/api/Cards/' + this.ad.id, {
+                state: state
+            })
+            .then((resp) => this.ad.state = resp.data.object.state)
+            .catch((err) => console.log(err));
+        },
+        adPay() {
+            this.$router.push({name: 'payment', params: {adId: this.ad.id} });
         }
     },
     watch: {
@@ -397,5 +431,11 @@ export default {
     width: 50%;
     max-width: 600px;
     height: 100%;
+}
+
+@media screen and (max-width: 700px) {
+  .footer-img {
+    width: 100%;
+  }
 }
 </style>

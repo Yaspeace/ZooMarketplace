@@ -3,8 +3,8 @@
     <Hat @search="search" />
 
     <div id="content">
-      <AdCardCarousel v-if="paidAds.length > 0" :ads="paidAds" :toShow="4" class="carousel" />
-      <AdCardGrid v-if="ads.length > 0" :ads="ads" />
+      <AdCardCarousel v-if="paidAds.length > 0" :ads="paidAds" :toShow="toShow" class="carousel" />
+      <AdCardGrid v-if="ads.length > 0" :ads="ads" style="padding-top: 50px;padding-bottom: 50px;" />
     </div>
 
     <CustomFooter />
@@ -40,6 +40,7 @@ export default {
         state: 2,
         account: 1,
       },
+      toShow: 4,
     }
   },
   components: {
@@ -51,8 +52,12 @@ export default {
     AdCardGrid,
   },
   created() {
+    window.addEventListener('resize', this.resize);
     this.getPaidAds();
     this.getAds();
+  },
+  destroyed () {
+    window.removeEventListener('resize', this.resize);
   },
   methods: {
     getPaidAds() {
@@ -72,6 +77,14 @@ export default {
       this.$http.get('/api/Cards?paid=true&search=' + searchStr)
         .then((resp) => this.paidAds = resp.data.results)
         .catch((err) => console.log(err));
+    },
+    getShowingCardsNum() {
+      if(window.innerWidth >= 1440) return 3;
+      if(window.innerWidth >= 1000) return 2;
+      return 1;
+    },
+    resize() {
+      this.toShow = this.getShowingCardsNum();
     },
   }
 };
@@ -117,5 +130,11 @@ export default {
     width: 50%;
     max-width: 600px;
     height: 100%;
+}
+
+@media screen and (max-width: 700px) {
+  .footer-img {
+    width: 100%;
+  }
 }
 </style>

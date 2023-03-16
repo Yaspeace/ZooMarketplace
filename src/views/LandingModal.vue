@@ -17,5 +17,6 @@ export default {
     border-radius: 14px;
     background: white;
     padding: 20px;
+    overflow: scroll;
 }
 </style>

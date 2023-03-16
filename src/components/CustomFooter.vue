@@ -5,7 +5,7 @@
         </div>
         <div class="footer-upper">
             <div class="footer-left">
-                <a :href="$http.defaults.baseURL + 'assets/publication_rules.pdf'" target="_blank"> Правила публикации и использования нашего сервиса. </a>
+                <a :href="$http.defaults.baseURL + '/assets/publication_rules.pdf'" target="_blank"> Правила публикации и использования нашего сервиса. </a>
             </div>
             <div class="footer-right">
                 <span class="text-lined">Возникли трудности? <br> Свяжитесь с нами:</span><br>
@@ -89,5 +89,16 @@ export default {
 a {
     text-decoration: none;
     color: inherit;
+}
+
+@media screen and (max-width: 700px) {
+    .footer-left, .footer-right {
+        max-width: 100%;
+    }
+}
+@media screen and (max-width: 425px) {
+    .footer-left, .footer-right {
+        font-size: 14px;
+    }
 }
 </style>

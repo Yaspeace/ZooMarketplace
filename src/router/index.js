@@ -48,6 +48,12 @@ const routes = [
     name: 'landing',
     component: () => import('../views/Landing.vue')
   },
+  {
+    path: '/pay/:adId',
+    name: 'payment',
+    component: () => import('../components/Payments/Payment.vue'),
+    props: true
+  }
 ];
 
 const router = new VueRouter({

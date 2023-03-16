@@ -46,7 +46,7 @@
             </div>
 
             <div v-for="(row, index) in rows" :key="index" class="landing-row" :id="'row' + index">
-                <LandingCard v-for="sub in row" :key="sub.id" :subType="sub" :style="'width: ' + (100 / row.length)" @moreClick="more(sub)" />
+                <LandingCard v-for="sub in row" :key="sub.id" :subType="sub" :style="'width: ' + (100 / (row.length + 1))" @moreClick="more(sub)" />
             </div>
         </div>
 
@@ -126,6 +126,17 @@ export default {
     object-fit: cover;
 }
 
+@media screen and (max-width: 1050px) {
+    .landing-qa {
+        flex-direction: column-reverse;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+    .landing-qa-img {
+        width: 50%;
+    }
+}
+
 .landing-qa-text {
     width: 55%;
     font-weight: bold;
@@ -138,6 +149,15 @@ export default {
 
 .landing-qa-text h2 {
     text-align: center;
+}
+
+@media screen and (max-width: 700px) {
+    .landing-qa {
+        padding: 0px;
+    }
+    .landing-qa-text {
+        width: 100%;
+    }
 }
 
 ol {
@@ -192,6 +212,13 @@ a {
     justify-content: space-around;
     align-items: center;
     padding-bottom: 30px;
+    gap: 5%;
+}
+
+@media screen and (max-width: 600px) {
+    .landing-row {
+        flex-wrap: wrap;
+    }
 }
 
 .footer-img-wrapper {
@@ -209,5 +236,11 @@ a {
     width: 50%;
     max-width: 600px;
     height: 100%;
+}
+
+@media screen and (max-width: 700px) {
+  .footer-img {
+    width: 100%;
+  }
 }
 </style>

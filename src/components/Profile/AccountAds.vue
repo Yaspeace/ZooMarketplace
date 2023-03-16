@@ -31,6 +31,7 @@ export default {
                 date: new Date().toLocaleDateString('ru-RU'),
                 imgId: 1
             },
+            ads: [],
             currentTab: 0,
             toShow: this.getShowingCardsNum(),
         }

@@ -15,7 +15,7 @@
 
         <div class="nav-search">
             <div id="search-form" class="nav-search-bar" method="get" action="[[~[[*id]]]]">
-                <input class="nav-search-input" placeholder="Поеск" maxlength="200" v-model="searchStr" />
+                <input class="nav-search-input" placeholder="Поиск" maxlength="200" v-model="searchStr" />
                 
                 <svg @click="searchClick" id="search-submit" class="nav-search-button" viewBox="0 0 24 24" fill="none">
                     <path d="M13.3891 13.3891L19 19M9.5 15C12.5376 15 15 12.5376 15 9.5C15 6.46243 12.5376 4 9.5 4C6.46243 4 4 6.46243 4 9.5C4 12.5376 6.46243 15 9.5 15Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -102,7 +102,12 @@ export default {
                 });
         },
         addAd() {
-            this.$router.push({ name: 'ad', params: { mode: 'create' } });
+            if(this.$store.state.authorized) {
+                this.$router.push({ name: 'ad', params: { mode: 'create' } });
+            } else {
+                this.$router.push({ name: 'login', params: { register: 'false' } });
+            }
+            
         },
         searchClick() {
             this.$emit('search', this.searchStr);
@@ -290,7 +295,7 @@ export default {
     cursor: pointer;
 }
 
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 426px) {
     .nav {
         display: flex;
         flex-direction: column;
