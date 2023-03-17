@@ -81,4 +81,16 @@ export default {
 .ads {
     margin-top: 20px;
 }
+
+@media screen and (max-width: 740px) {
+    .upper {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .acc-list, .offer {
+        width: 100%;
+    }
+}
 </style>

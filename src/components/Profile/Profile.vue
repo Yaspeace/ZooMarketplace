@@ -45,9 +45,10 @@ export default {
     border-radius: 14px;
     display: flex;
     flex-direction: column;
-    align-content: center;
+    align-items: center;
     padding: 20px;
     background-color: #b2b6d2;
+    box-sizing: border-box;
 }
 
 .acc-image {

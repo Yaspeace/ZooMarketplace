@@ -4,29 +4,24 @@
         <beauty-button look="primary" :text="'Начать модерацию' + chosenModeStr" class="btn-big" @click="startMod" :disabled="chosenMode == 0" />
     </div>
     <div v-else class="moder-cards">
-        <div>ABOA</div>
-        <div>ABOA</div>
-        <div>ABOA</div>
-        <div>ABOA</div>
-        <div>ABOA</div>
-        <div>ABOA</div>
+        <moder-card v-for="(ad, index) in ads" :key="index" :ad="ad" />
     </div>
-    <div class="moder-profile light-shadow">
-        <div class="profile-item profile-avatar">
+    <div :class="'moder-profile shadow' + (isModStart ? ' collapsed' : '')">
+        <div class="profile-item profile-avatar" v-if="!isModStart">
             <img src="@/assets/staticimages/image1.jpg" class="profile-avatar-img" />
             <h3>Иванов Иван Иванович</h3>
         </div>
-        <div class="profile-item profile-item-li" @click="chooseMode(1)">
+        <div :class="getModeClassName(1)" @click="chooseMode(1)" v-if="!isModStart">
             Объявления
         </div>
-        <div class="profile-item profile-item-li" @click="chooseMode(2)">
+        <div :class="getModeClassName(2)" @click="chooseMode(2)" v-if="!isModStart">
             Афиши
         </div>
-        <div class="profile-item profile-item-li" @click="chooseMode(3)">
+        <div :class="getModeClassName(3)" @click="chooseMode(3)" v-if="!isModStart">
             Пользователи
         </div>
         <div class="moder-end-wrapper">
-            <beauty-button look="secondary" text="Закончить" class="moder-end"  v-if="isModStart" @click="endMod" />
+            <beauty-button look="secondary" text="Закончить" class="moder-end" v-if="isModStart" @click="endMod" />
         </div>
     </div>
   </div>
@@ -34,18 +29,31 @@
 
 <script>
 import BeautyButton from '@/components/BeautyButton.vue';
+import ModerCard from '@/components/Moderation/ModerCard.vue';
 
 export default {
     name: 'Moderation',
     components: {
         BeautyButton,
+        ModerCard,
     },
     data() {
         return {
             chosenMode: 0,
             chosenModeStr: '',
             isModStart: false,
+            ad: {
+                id: 0,
+                title: 'Тест',
+                description: 'Тестестест',
+                price: 25,
+                image: 1,
+            },
+            ads: [],
         }
+    },
+    created() {
+        this.ads = [this.ad, this.ad, this.ad, this.ad, this.ad, this.ad];
     },
     methods: {
         chooseMode(i) {
@@ -64,6 +72,9 @@ export default {
                     this.chosenModeStr = '';
                     break;
             }
+        },
+        getModeClassName(i) {
+            return 'profile-item profile-item-li' + (this.chosenMode == i ? ' profile-item-active' : '');
         },
         startMod() {
             this.isModStart = true;
@@ -88,6 +99,19 @@ export default {
     border-bottom-left-radius: 15px;
     background-color: var(--color-info-light);
     width: 350px;
+    transition: .5s;
+}
+
+.collapsed {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 225px;
+    height: 60px;
 }
 
 .moder-start {
@@ -100,11 +124,12 @@ export default {
 
 .moder-cards {
     display: grid;
-    grid-template-columns: repeat(3, 20%);
-    justify-content: space-around;
-    align-content: space-around;
-    row-gap: 20px;
+    grid-template-columns: repeat(3, 33%);
+    /* justify-content: space-around;
+    align-content: space-around; */
+    row-gap: 10px;
     flex-grow: 1;
+    padding: 10px 0px 10px 0px;
 }
 
 .profile-item {
@@ -117,6 +142,10 @@ export default {
 .profile-item-li {
     cursor: pointer;
     transition: .3s;
+}
+
+.profile-item-active {
+    background-color: var(--color-info-dark);
 }
 
 .profile-item-li:hover {
@@ -147,7 +176,7 @@ export default {
 }
 
 .moder-end {
-    width: 80%;
+    font-size: 14px;
 }
 
 .btn-big {

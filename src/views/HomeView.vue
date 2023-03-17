@@ -40,7 +40,7 @@ export default {
         state: 2,
         account: 1,
       },
-      toShow: 4,
+      toShow: this.getShowingCardsNum(),
     }
   },
   components: {

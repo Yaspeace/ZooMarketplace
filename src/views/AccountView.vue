@@ -55,9 +55,25 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
+    gap: 30px;
 }
 
 .user-info {
     width: 75%;
+}
+
+@media screen and (max-width: 1065px) {
+    .content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile {
+        width: 100%;
+    }
+
+    .user-info {
+        width: 100%;
+    }
 }
 </style>
