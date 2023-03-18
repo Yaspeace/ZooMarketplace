@@ -50,6 +50,11 @@ export default new Vuex.Store({
                 .finally(() => commit('login', { avatar: image, aid: acc.data.object.id }));
             });
         });
+    },
+    logout({commit}) {
+      Vue.prototype.$http.delete('/api/Authorize')
+        .then(() => commit('logout'))
+        .catch((err) => console.log(err));
     }
   },
   modules: {},

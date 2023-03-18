@@ -1,5 +1,6 @@
 <template>
-    <div class="gen-wrapper">
+<div>
+    <div class="gen-wrapper" v-if="isHadPerms === true">
         <modal-window ref="cardDescModal" />
         <modal-image-view ref="imgModal" />
 
@@ -7,20 +8,25 @@
             <beauty-button look="primary" :text="'Начать модерацию' + chosenModeStr" class="btn-big" @click="startMod" :disabled="chosenMode == 0" />
         </div>
         <div v-else class="moder-cards">
-            <moder-card v-for="(ad, index) in ads" :key="index" :ad="ad" @titleClick="adTitleClick(ad)" @imgClick="adImgClick(ad)" />
+            <moder-card v-for="(ad, index) in ads" :key="index" 
+                :ad="ad" 
+                @titleClick="adTitleClick(ad)" 
+                @imgClick="adImgClick(ad)"
+                @allow="removeFromArr(ad)"
+                @deny="removeFromArr(ad)" />
         </div>
         <div :class="'moder-profile shadow' + (isModStart ? ' collapsed' : '')">
-            <div class="profile-item profile-avatar" v-if="!isModStart">
-                <img src="@/assets/staticimages/image1.jpg" class="profile-avatar-img" />
-                <h3>Иванов Иван Иванович</h3>
-            </div>
-            <div :class="getModeClassName(1)" @click="chooseMode(1)" v-if="!isModStart">
+            <router-link class="profile-item profile-avatar" v-if="!isModStart" :to="{ name: 'account', params: { accId: $store.state.aid } }">
+                <img :src="$store.state.avatar" class="profile-avatar-img" />
+                <h3>{{ account.family }} {{ account.name }}</h3>
+            </router-link>
+            <div :class="getModeClassName(1)" @click="chooseMode(1)" v-if="!isModStart && isAds">
                 Объявления
             </div>
-            <div :class="getModeClassName(2)" @click="chooseMode(2)" v-if="!isModStart">
+            <div :class="getModeClassName(2)" @click="chooseMode(2)" v-if="!isModStart && isPosters">
                 Афиши
             </div>
-            <div :class="getModeClassName(3)" @click="chooseMode(3)" v-if="!isModStart">
+            <div :class="getModeClassName(3)" @click="chooseMode(3)" v-if="!isModStart && isUsers">
                 Пользователи
             </div>
             <div class="moder-end-wrapper">
@@ -28,6 +34,10 @@
             </div>
         </div>
     </div>
+    <div class="gen-err-wrap" v-if="isHadPerms === false">
+        <h2>Недостаточно прав!</h2>
+    </div>
+</div>
 </template>
 
 <script>
@@ -57,10 +67,22 @@ export default {
                 image: 1,
             },
             ads: [],
+            isHadPerms: null,
+            account: {
+                id: 0,
+                name: '',
+                family: '',
+            },
+            isAds: false,
+            isPosters: false,
+            isUsers: false,
         }
     },
     created() {
-        this.ads = [this.ad, this.ad, this.ad, this.ad, this.ad, this.ad];
+        if(!this.$store.state.authorized) {
+            this.$router.push({name: 'login', params: {register: 'false'}});
+        }
+        this.checkPermissions();        
     },
     methods: {
         chooseMode(i) {
@@ -84,17 +106,64 @@ export default {
             return 'profile-item profile-item-li' + (this.chosenMode == i ? ' profile-item-active' : '');
         },
         startMod() {
+            this.pushToArr(6);
             this.isModStart = true;
         },
         endMod() {
+            this.ads = [];
             this.isModStart = false;
         },
         adTitleClick(ad) {
             this.$refs.cardDescModal.show(ad.title, ad.description);
         },
         adImgClick(ad) {
-            let imagePath = require('@/assets/staticimages/image1.jpg');
-            this.$refs.imgModal.show(imagePath);
+            this.$http.get('/api/Images/' + ad.image)
+                .then((resp) => this.$refs.imgModal.show(this.$http.defaults.baseURL + resp.data.object.route))
+                .catch((err) => console.log(err));
+        },
+        pushToArr(limit) {
+            let tmpArr = [];
+            this.ads.forEach((ad) => tmpArr.push(ad));
+            this.$http.get('/api/Cards?state=1&limit=' + limit)
+            .then((resp) => {
+                if(resp.data.results.length > 0) {
+                    resp.data.results.forEach(x => tmpArr.push(x));
+                    this.ads = tmpArr;
+                }
+            })
+            .catch((err) => console.log(err));
+        },
+        removeFromArr(ad) {
+            this.ads = this.ads.filter(x => x.id != ad.id);
+            this.pushToArr(1);
+        },
+        checkPermissions() {
+            this.$http.get('/api/Authorize')
+            .then((resp) => {
+                this.$http.get('/api/Session/Roles?user=' + resp.data.object.id)
+                .then((rolesResp) => {
+                    this.isHadPerms = rolesResp.data.results.some(x => x.name == 'Moderator');
+                    if(this.isHadPerms) {
+                        this.initAccount();
+                    }
+                })
+                .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+        },
+        initAccount() {
+            this.$http.get('/api/Account/' + this.$store.state.aid)
+            .then((resp) => {
+                this.account = resp.data.object;
+                this.$http.get('/api/Session/Roles?user=' + this.account.user)
+                .then((roles) => {
+                    this.isAds = roles.data.results.some(x => x.name == 'AdsModerator');
+                    this.isPosters = roles.data.results.some(x => x.name == 'PosterModerator');
+                    this.isUsers = roles.data.results.some(x => x.name == 'UserModerator');
+                })
+                .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
         },
     }
 }
@@ -202,5 +271,14 @@ export default {
         grid-template-columns: repeat(2, 45%);
         grid-template-rows: repeat(3, 75vh);
     }
+}
+
+.gen-err-wrap {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--color-info);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>

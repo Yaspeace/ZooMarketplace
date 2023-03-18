@@ -1,7 +1,7 @@
 <template>
     <div class="mod-card-wrapper shadow">
         <div class="mod-card-img-wrapper">
-            <img src="@/assets/staticimages/image1.jpg" class="mod-card-img" @click="imgClick" />
+            <img :src="$http.defaults.baseURL + imagePath" class="mod-card-img" @click="imgClick" />
         </div>
         
         <div class="mod-card-title" @click="titleClick">
@@ -34,7 +34,9 @@ export default {
         BeautyButton,
     },
     created() {
-
+        this.$http.get('/api/Images/' + ad.image)
+            .then((resp) => this.imagePath = resp.data.object.route)
+            .catch((err) => console.log(err));
     },
     data() {
         return {
@@ -47,6 +49,20 @@ export default {
         },
         imgClick() {
             this.$emit('imgClick');
+        },
+        allowAd() {
+            this.$http.put('/api/Cards/' + ad.id, {
+                state: 2
+            })
+            .then((resp) => this.$emit('allow', resp.data.object))
+            .catch((err) => console.log(err));
+        },
+        denyAd() {
+            this.$http.put('/api/Cards/' + ad.id, {
+                state: 0
+            })
+            .then((resp) => this.$emit('deny', resp.data.object))
+            .catch((err) => console.log(err));
         },
     }
 }

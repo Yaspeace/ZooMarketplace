@@ -3,7 +3,10 @@
     <DefaultHat />
 
     <div v-if="loaded" class="content">
-        <Profile :account="this.account" class="profile" />
+        <div class="content-left">
+            <Profile :account="this.account" class="profile" />
+            <beauty-button look="secondary" text="Выйти из аккаунта" style="width: 100%;" @click="logout" />
+        </div>
         <UserInfo :account="this.account" class="user-info" />
     </div>
 </div>
@@ -13,6 +16,7 @@
 import DefaultHat from '@/components/DefaultHat.vue';
 import Profile from '@/components/Profile/Profile.vue';
 import UserInfo from '@/components/Profile/UserInfo.vue';
+import BeautyButton from '@/components/BeautyButton.vue';
 
 export default {
     name: "AccountView",
@@ -23,6 +27,7 @@ export default {
         DefaultHat,
         Profile,
         UserInfo,
+        BeautyButton,
     },
     data() {
         return {
@@ -43,6 +48,12 @@ export default {
                 this.loaded = true;
             })
             .catch((err) => console.log(err));
+    },
+    methods: {
+        logout() {
+            this.$store.dispatch('logout');
+            this.$router.push('/');
+        }
     }
 }
 </script>
@@ -62,18 +73,35 @@ export default {
     width: 75%;
 }
 
+.content-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
 @media screen and (max-width: 1065px) {
     .content {
         flex-direction: column;
         align-items: center;
     }
 
-    .profile {
+    .content-left {
+        flex-direction: column;
+    }
+
+    .content-left, .profile {
         width: 100%;
     }
 
     .user-info {
         width: 100%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .content {
+        padding: 10px;
     }
 }
 </style>

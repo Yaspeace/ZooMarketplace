@@ -5,10 +5,16 @@
         <Offer class="offer" />
     </div>
     
-    <div class="my-stats">
-        <img src="@/assets/staticimages/free-icon-statistics-7147801.png" />
-        Моя статистика
+    <div class="mid-btns">
+        <div class="mid-btn">
+            <img src="@/assets/staticimages/free-icon-statistics-7147801.png" />
+            Моя статистика
+        </div>
+        <router-link to="/moderation" class="mid-btn moderation-btn" v-if="isModer" >
+            Модерация
+        </router-link>
     </div>
+    
     
     <AccountAds class="ads" />
   </div>
@@ -29,9 +35,14 @@ export default {
     },
     data() {
         return {
-
+            isModer: false,
         }
     },
+    created() {
+        this.$http.get('/api/Session/Roles?user=' + this.account.user)
+        .then((roles) => this.isModer = roles.data.results.some(x => x.name == 'Moderator'))
+        .catch((err) => console.log(err));
+    }
 }
 </script>
 
@@ -59,7 +70,14 @@ export default {
     width: 40%;
 }
 
-.my-stats {
+.mid-btns {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 5%;
+}
+
+.mid-btn {
     background: var(--color-info-light);
     padding: 10px 0px 10px 0px;
     border: 1px solid var(--color-primary);
@@ -68,18 +86,28 @@ export default {
     font-size: 24px;
     cursor: pointer;
     transition: .3s;
+    flex-grow: 1;
+    display: block;
+    text-decoration: none;
 }
 
-.my-stats img {
+.mid-btn img {
     height: 1.5em;
+    vertical-align: middle;
 }
 
-.my-stats:hover {
+.mid-btn:hover {
     background: var(--color-info-dark);
 }
 
 .ads {
     margin-top: 20px;
+}
+
+@media screen and (max-width: 900px) {
+    .moderation-btn {
+        display: none;
+    }
 }
 
 @media screen and (max-width: 740px) {
