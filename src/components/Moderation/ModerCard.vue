@@ -1,21 +1,25 @@
 <template>
     <div class="mod-card-wrapper shadow">
-        <img src="@/assets/staticimages/image1.jpg" class="mod-card-img" />
+        <div class="mod-card-img-wrapper">
+            <img src="@/assets/staticimages/image1.jpg" class="mod-card-img" />
+        </div>
         
         <div class="mod-card-title">
             {{ ad.title }}
         </div>
 
-        <div class="mod-card-price">
-            Цена: {{ ad.price }}
-        </div>
+        <div class="mod-card-low-wrapper">
+            <div class="mod-card-price">
+                Цена: {{ ad.price }} р.
+            </div>
 
-        <div class="mod-btns">
-            <beauty-button look="primary" text="Опубликовать" class="moder-btn" style="width: 40%" />
-            <beauty-button look="secondary" text="Вернуть" class="moder-btn" style="width: 40%" />
-        </div>
-        <div class="mod-btns">
-            <beauty-button look="warning" text="Блок пользователя" class="moder-btn" />
+            <div class="mod-btns">
+                <beauty-button look="primary" text="Опубликовать" class="moder-btn btn-upper" />
+                <beauty-button look="secondary" text="Вернуть" class="moder-btn btn-upper" />
+            </div>
+            <div class="mod-btns">
+                <beauty-button look="warning" text="Блок пользователя" class="moder-btn" />
+            </div>
         </div>
     </div>
 </template>
@@ -45,23 +49,37 @@ export default {
 
 <style scoped> 
 .mod-card-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     background: white;
     border-radius: 14px;
     border: 5px solid gray;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.mod-card-img-wrapper {
+    height: calc(60% - 2.5em);
+    text-align: center;
 }
 
 .mod-card-img {
-    width: 50%;
+    height: 100%;
     aspect-ratio: 1/1;
     object-fit: cover;
     max-width: 400px;
     border-radius: 14px;
     border: 5px solid gray;
     cursor: pointer;
+    box-sizing: border-box;
+}
+
+.mod-card-low-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    height: 25%;
 }
 
 .mod-btns {
@@ -73,10 +91,23 @@ export default {
     margin-bottom: 10px;
 }
 
+.btn-upper {
+    width: 40%;
+}
+
 .mod-card-title {
     font-weight: bold;
     font-size: 24px;
     cursor: pointer;
+    width: 100%;
+    height: 2.5em;
+    text-align: center;
+
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    display: -webkit-inline-box;
+    overflow: hidden;
 }
 
 .mod-card-title:hover {
@@ -88,17 +119,4 @@ export default {
         font-size: 18px;
     }
 }
-
-@media screen and (max-width: 1650px) {
-    .moder-btn {
-        font-size: 16px;
-    }
-}
-
-@media screen and (max-width: 1480px) {
-    .moder-btn {
-        font-size: 10px;
-    }
-}
-
 </style>

@@ -1,30 +1,30 @@
 <template>
-  <div class="gen-wrapper">
-    <div class="moder-start" v-if="!isModStart">
-        <beauty-button look="primary" :text="'Начать модерацию' + chosenModeStr" class="btn-big" @click="startMod" :disabled="chosenMode == 0" />
+    <div class="gen-wrapper">
+        <div class="moder-start" v-if="!isModStart">
+            <beauty-button look="primary" :text="'Начать модерацию' + chosenModeStr" class="btn-big" @click="startMod" :disabled="chosenMode == 0" />
+        </div>
+        <div v-else class="moder-cards">
+            <moder-card v-for="(ad, index) in ads" :key="index" :ad="ad" />
+        </div>
+        <div :class="'moder-profile shadow' + (isModStart ? ' collapsed' : '')">
+            <div class="profile-item profile-avatar" v-if="!isModStart">
+                <img src="@/assets/staticimages/image1.jpg" class="profile-avatar-img" />
+                <h3>Иванов Иван Иванович</h3>
+            </div>
+            <div :class="getModeClassName(1)" @click="chooseMode(1)" v-if="!isModStart">
+                Объявления
+            </div>
+            <div :class="getModeClassName(2)" @click="chooseMode(2)" v-if="!isModStart">
+                Афиши
+            </div>
+            <div :class="getModeClassName(3)" @click="chooseMode(3)" v-if="!isModStart">
+                Пользователи
+            </div>
+            <div class="moder-end-wrapper">
+                <beauty-button look="secondary" text="Закончить" class="moder-end" v-if="isModStart" @click="endMod" />
+            </div>
+        </div>
     </div>
-    <div v-else class="moder-cards">
-        <moder-card v-for="(ad, index) in ads" :key="index" :ad="ad" />
-    </div>
-    <div :class="'moder-profile shadow' + (isModStart ? ' collapsed' : '')">
-        <div class="profile-item profile-avatar" v-if="!isModStart">
-            <img src="@/assets/staticimages/image1.jpg" class="profile-avatar-img" />
-            <h3>Иванов Иван Иванович</h3>
-        </div>
-        <div :class="getModeClassName(1)" @click="chooseMode(1)" v-if="!isModStart">
-            Объявления
-        </div>
-        <div :class="getModeClassName(2)" @click="chooseMode(2)" v-if="!isModStart">
-            Афиши
-        </div>
-        <div :class="getModeClassName(3)" @click="chooseMode(3)" v-if="!isModStart">
-            Пользователи
-        </div>
-        <div class="moder-end-wrapper">
-            <beauty-button look="secondary" text="Закончить" class="moder-end" v-if="isModStart" @click="endMod" />
-        </div>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -44,7 +44,7 @@ export default {
             isModStart: false,
             ad: {
                 id: 0,
-                title: 'Тест',
+                title: 'Тут какой-то ооооооооочень длинный текст заголовка этого дурацкого объявления аааааааааааааааааааааааааааааааааааа',
                 description: 'Тестестест',
                 price: 25,
                 image: 1,
@@ -91,7 +91,7 @@ export default {
     background-color: var(--color-info);
     display: flex;
     flex-direction: row;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .moder-profile {
@@ -117,19 +117,19 @@ export default {
 .moder-start {
     display: flex;
     flex-grow: 1;
-    height: 100%;
     justify-content: center;
     align-items: center;
 }
 
 .moder-cards {
     display: grid;
-    grid-template-columns: repeat(3, 33%);
-    /* justify-content: space-around;
-    align-content: space-around; */
+    grid-template-columns: repeat(3, 30%);
+    grid-template-rows: repeat(2, 50%);
+    justify-content: space-around;
+    align-content: space-between;
     row-gap: 10px;
     flex-grow: 1;
-    padding: 10px 0px 10px 0px;
+    padding: 80px 0px 10px 0px;
 }
 
 .profile-item {
@@ -181,5 +181,12 @@ export default {
 
 .btn-big {
     padding: 20px;
+}
+
+@media screen  and (max-width: 1650px) {
+    .moder-cards {
+        grid-template-columns: repeat(2, 45%);
+        grid-template-rows: repeat(3, 75vh);
+    }
 }
 </style>
