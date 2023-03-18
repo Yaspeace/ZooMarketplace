@@ -1,10 +1,13 @@
 <template>
     <div class="gen-wrapper">
+        <modal-window ref="cardDescModal" />
+        <modal-image-view ref="imgModal" />
+
         <div class="moder-start" v-if="!isModStart">
             <beauty-button look="primary" :text="'Начать модерацию' + chosenModeStr" class="btn-big" @click="startMod" :disabled="chosenMode == 0" />
         </div>
         <div v-else class="moder-cards">
-            <moder-card v-for="(ad, index) in ads" :key="index" :ad="ad" />
+            <moder-card v-for="(ad, index) in ads" :key="index" :ad="ad" @titleClick="adTitleClick(ad)" @imgClick="adImgClick(ad)" />
         </div>
         <div :class="'moder-profile shadow' + (isModStart ? ' collapsed' : '')">
             <div class="profile-item profile-avatar" v-if="!isModStart">
@@ -30,12 +33,16 @@
 <script>
 import BeautyButton from '@/components/BeautyButton.vue';
 import ModerCard from '@/components/Moderation/ModerCard.vue';
+import ModalWindow from '@/components/Modals/ModalWindow.vue';
+import ModalImageView from '@/components/Modals/ModalImageView.vue';
 
 export default {
     name: 'Moderation',
     components: {
         BeautyButton,
         ModerCard,
+        ModalWindow,
+        ModalImageView,
     },
     data() {
         return {
@@ -81,7 +88,14 @@ export default {
         },
         endMod() {
             this.isModStart = false;
-        }
+        },
+        adTitleClick(ad) {
+            this.$refs.cardDescModal.show(ad.title, ad.description);
+        },
+        adImgClick(ad) {
+            let imagePath = require('@/assets/staticimages/image1.jpg');
+            this.$refs.imgModal.show(imagePath);
+        },
     }
 }
 </script>

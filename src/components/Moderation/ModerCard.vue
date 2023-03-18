@@ -1,10 +1,10 @@
 <template>
     <div class="mod-card-wrapper shadow">
         <div class="mod-card-img-wrapper">
-            <img src="@/assets/staticimages/image1.jpg" class="mod-card-img" />
+            <img src="@/assets/staticimages/image1.jpg" class="mod-card-img" @click="imgClick" />
         </div>
         
-        <div class="mod-card-title">
+        <div class="mod-card-title" @click="titleClick">
             {{ ad.title }}
         </div>
 
@@ -42,7 +42,12 @@ export default {
         }
     },
     methods: {
-
+        titleClick() {
+            this.$emit('titleClick');
+        },
+        imgClick() {
+            this.$emit('imgClick');
+        },
     }
 }
 </script>
