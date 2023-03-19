@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="main-wrapper">
     <DefaultHat />
 
     <div v-if="loaded" class="content">
@@ -59,9 +59,13 @@ export default {
 </script>
 
 <style scoped>
+.main-wrapper {
+    background-color: var(--color-info-light);
+}
+
 .content {
-    margin-top: 200px;
     padding: 50px;
+    padding-top: 250px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;

@@ -107,7 +107,6 @@ export default {
             } else {
                 this.$router.push({ name: 'login', params: { register: 'false' } });
             }
-            
         },
         searchClick() {
             this.$emit('search', this.searchStr);

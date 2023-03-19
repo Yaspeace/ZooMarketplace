@@ -21,7 +21,7 @@
             </div>
 
             <div class="nav-icons">
-                <div class="nav-icon-wrapper">
+                <div class="nav-icon-wrapper" @click="addAd">
                     <svg class="nav-icon icon-default" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
                         <ellipse rx="150" ry="150" transform="translate(150 150)" fill="#d2dbed" stroke-width="0"/>
                         <line x1="0" y1="-91.980459" x2="0" y2="108.316756" transform="translate(150 142.226971)" fill="none" stroke="currentColor" stroke-width="40"/>
@@ -94,7 +94,14 @@ export default {
                 .then((responce) => {
                     this.account = responce.object;
                 });
-        }
+        },
+        addAd() {
+            if(this.$store.state.authorized) {
+                this.$router.push({ name: 'ad', params: { mode: 'create' } });
+            } else {
+                this.$router.push({ name: 'login', params: { register: 'false' } });
+            }
+        },
     }
 }
 </script>

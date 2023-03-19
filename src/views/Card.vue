@@ -110,7 +110,8 @@
             </div>
             <div class="btns-right" v-if="isView && ad.account != $store.state.aid">
                 <beauty-button class="right-button" look="primary" text="Оставить отзыв" />
-                <beauty-button class="right-button" look="secondary" text="Добавить в избранное" />
+                <beauty-button class="right-button" look="secondary" text="Добавить в избранное" @click="addToFavorites" v-if="!isLiked" />
+                <beauty-button class="right-button" look="secondary" text="Убрать из избранного" @click="removeFromFavorites" v-else />
                 <beauty-button class="right-button" look="primary" text="Профиль продавца" />
             </div>
             <div class="btns-right" v-if="isView && ad.account == $store.state.aid">
@@ -141,6 +142,7 @@ import PictureInput from 'vue-picture-input';
 import { ModelListSelect } from 'vue-search-select';
 import "vue-search-select/dist/VueSearchSelect.css"
 import {mask} from 'vue-the-mask';
+import { FavoritesService } from '@/services/FavoritesService.ts';
 
 export default {
     components: { 
@@ -178,7 +180,8 @@ export default {
                 account: this.$store.state.aid,
                 type: 0,
                 breed: 0,
-                image: 0
+                image: 0,
+                isLiked: false,
             },
             ageStr: '',
             imagePath: '',
@@ -205,6 +208,7 @@ export default {
                 }
             ],
             isImageChanged: false,
+            favoritesService: new FavoritesService(this.$http),
         }
     },
     created() {
@@ -308,6 +312,19 @@ export default {
         },
         adPay() {
             this.$router.push({name: 'payment', params: {adId: this.ad.id} });
+        },
+        addToFavorites() {
+            this.$http.post('/api/Favorites', {
+                account: this.$store.state.aid,
+                ad: this.ad.id
+            })
+            .then(() => this.ad.isLiked = true)
+            .catch((err) => console.log(err));
+        },
+        removeFromFavorites() {
+            this.$http.delete('/api/Favorites?account=' + this.$store.state.aid + '&ad=' + this.ad.id)
+            .then(() => this.ad.isLiked = false)
+            .catch((err) => console.log(err));
         }
     },
     watch: {

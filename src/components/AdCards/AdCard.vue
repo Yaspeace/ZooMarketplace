@@ -6,7 +6,7 @@
             {{ ad.date }}
         </div>
         <svg 
-        v-on:click="heartClick" :class="'ad-heart' + (isLiked ? ' pressed' : '')" 
+        v-on:click="heartClick" :class="'ad-heart' + (ad.isLiked ? ' pressed' : '')" 
         v-if="showHeart" xmlns="http://www.w3.org/2000/svg" 
         xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
             <ellipse rx="31.7696" ry="27.3061" transform="matrix(1.888041 0 0 1.969489 105 112.796487)" stroke-width="0" fill="currentColor"/>
@@ -44,12 +44,10 @@ import Card from "./Card.js";
 export default {
     name: "AdCard",
     props: {
-        ad: Card,
-        liked: Boolean
+        ad: Card
     },
     data() {
         return {
-            isLiked: this.liked,
             showHeart: this.ad.state == 2 && this.ad.account != this.$store.state.aid,
             showEdit: this.ad.account == this.$store.state.aid && this.ad.state != 4,
             imagePath: '',

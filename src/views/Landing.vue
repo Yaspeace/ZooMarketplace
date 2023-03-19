@@ -1,7 +1,6 @@
 <template>
     <div class="main-main-wrapper">
-        <landing-modal v-if="subType != null" :subType="subType" class="modal-wnd" />
-        <div v-if="subType != null" class="cover" @click="hideMore"></div>
+        <modal-window ref="modalWnd" />
         <Hat />
 
         <div class="content">
@@ -61,7 +60,7 @@
 import Hat from '@/components/Hat.vue';
 import CustomFooter from '@/components/CustomFooter.vue';
 import LandingCard from '@/components/LandingCard.vue';
-import LandingModal from './LandingModal.vue';
+import ModalWindow from '@/components/Modals/ModalWindow.vue';
 
 export default {
     name: "Landing",
@@ -69,12 +68,11 @@ export default {
         Hat,
         CustomFooter,
         LandingCard,
-        LandingModal,
+        ModalWindow,
     },
     data() {
         return {
             rows: [],
-            subType: null,
         }
     },
     created() {
@@ -91,11 +89,7 @@ export default {
     },
     methods: {
         more(sub) {
-            console.log('more');
-            this.subType = sub;
-        },
-        hideMore() {
-            this.subType = null;
+            this.$refs.modalWnd.show(sub.name, sub.description);
         }
     }
 }
@@ -175,25 +169,6 @@ li {
 
 a {
     color: rgb(255, 82, 111);
-}
-
-.modal-wnd {
-    position: fixed;
-    width: 50%;
-    height: 50%;
-    z-index: 102;
-    top: 25%;
-    left: 25%;
-}
-
-.cover {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 101;
-    background-color: rgba(0, 0, 0, 0.555);
 }
 
 .text-warn {
