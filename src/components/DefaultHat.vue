@@ -48,7 +48,7 @@
                     </svg>
                 Уведомления
                 </div>
-                <div class="nav-icon-wrapper">
+                <div class="nav-icon-wrapper" @click="goToFavorites">
                     <svg class="nav-icon icon-red" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
                     <ellipse rx="150" ry="150" transform="translate(150 150)" fill="#d2dbed" stroke-width="0"/>
                     <ellipse rx="31.769648" ry="27.306144" transform="matrix(1.5 0 0 1.5 105 125)" fill="currentColor" stroke-width="0"/>
@@ -102,6 +102,9 @@ export default {
                 this.$router.push({ name: 'login', params: { register: 'false' } });
             }
         },
+        goToFavorites() {
+            this.$router.push('/favorites');
+        }
     }
 }
 </script>

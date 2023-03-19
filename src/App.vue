@@ -6,8 +6,8 @@
 
 <script>
 export default {
-  created() {
-    this.$store.dispatch('checkLogin');
+  async created() {
+    await this.$store.dispatch('checkLogin');
 
     this.$http.interceptors.response.use(
       (response) => {

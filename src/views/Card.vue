@@ -110,15 +110,15 @@
             </div>
             <div class="btns-right" v-if="isView && ad.account != $store.state.aid">
                 <beauty-button class="right-button" look="primary" text="Оставить отзыв" />
-                <beauty-button class="right-button" look="secondary" text="Добавить в избранное" @click="addToFavorites" v-if="!isLiked" />
+                <beauty-button class="right-button" look="secondary" text="Добавить в избранное" @click="addToFavorites" v-if="!ad.isLiked" />
                 <beauty-button class="right-button" look="secondary" text="Убрать из избранного" @click="removeFromFavorites" v-else />
                 <beauty-button class="right-button" look="primary" text="Профиль продавца" />
             </div>
             <div class="btns-right" v-if="isView && ad.account == $store.state.aid">
                 <beauty-button class="right-button" look="primary" text="Редактировать" />
                 <beauty-button class="right-button" look="secondary" text="Продвижение" @click="adPay" />
-                <beauty-button v-if="ad.state == 0" class="right-button" look="primary" text="Снять с публикации" @click="setAdState(0)" />
-                <beauty-button v-else class="right-button" look="primary" text="Опубликовать" @click="setAdState(1)" />
+                <beauty-button v-if="ad.state == 0" class="right-button" look="primary" text="Опубликовать" @click="setAdState(1)" />
+                <beauty-button v-else class="right-button" look="primary" text="Снять с публикации" @click="setAdState(0)" />
             </div>
             <div class="btns-right" v-if="isCreate">
                 <beauty-button class="right-button" look="primary" text="Сохранить" @click="saveAd(0)" />
@@ -142,7 +142,6 @@ import PictureInput from 'vue-picture-input';
 import { ModelListSelect } from 'vue-search-select';
 import "vue-search-select/dist/VueSearchSelect.css"
 import {mask} from 'vue-the-mask';
-import { FavoritesService } from '@/services/FavoritesService.ts';
 
 export default {
     components: { 
@@ -155,7 +154,7 @@ export default {
     name: "Card",
     props: {
         mode: String,
-        adId: String,
+        adId: Number|String,
     },
     directives: {
         mask,
@@ -208,7 +207,6 @@ export default {
                 }
             ],
             isImageChanged: false,
-            favoritesService: new FavoritesService(this.$http),
         }
     },
     created() {
@@ -288,7 +286,7 @@ export default {
                 }, { headers: { 'Content-Type': 'multipart/form-data' }})
                     .then((resp) => {
                         this.ad.image = resp.data.object.id;
-                        this.addOrUpdateAd(this.ad);
+                        this.addOrUpdateAd(this.ad, newState);
                     })
                     .catch((err) => console.log(err));
             } else {
@@ -381,7 +379,8 @@ export default {
 .btns-right {
     padding: 10px;
     padding-top: 100px;
-    width: 20%;
+    /* width: 20%; */
+    flex-grow: 1;
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
@@ -429,7 +428,7 @@ export default {
 
 .right-button {
     height: 40px;
-    width: 100%;
+    width: 70%;
     font-size: 18px;
 }
 

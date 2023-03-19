@@ -29,17 +29,6 @@ export default {
     return {
       paidAds: [],
       ads: [],
-      ad: {
-        id: 1,
-        title: "Кот-упорот",
-        price: 500,
-        description: "Тут должно быть описание, но мы с котом пили (вылерьяночку)",
-        address: "г. Талдом, ул. Мышная, д. 11",
-        date: new Date().toLocaleDateString('ru-RU'),
-        imgId: 1,
-        state: 2,
-        account: 1,
-      },
       toShow: this.getShowingCardsNum(),
     }
   },
@@ -61,20 +50,20 @@ export default {
   },
   methods: {
     getPaidAds() {
-      this.$http.get('/api/Cards?paid=true')
+      this.$http.get('/api/Cards?state=2&paid=true')
         .then((resp) => this.paidAds = resp.data.results)
         .catch((err) => console.log(err));
     },
     getAds() {
-      this.$http.get('/api/Cards?paid=false')
+      this.$http.get('/api/Cards?state=2&paid=false')
         .then((resp) => this.ads = resp.data.results)
         .catch((err) => console.log(err));
     },
     search(searchStr) {
-      this.$http.get('/api/Cards?paid=false&search=' + searchStr)
+      this.$http.get('/api/Cards?state=2&paid=false&search=' + searchStr)
         .then((resp) => this.ads = resp.data.results)
         .catch((err) => console.log(err));
-      this.$http.get('/api/Cards?paid=true&search=' + searchStr)
+      this.$http.get('/api/Cards?state=2&paid=true&search=' + searchStr)
         .then((resp) => this.paidAds = resp.data.results)
         .catch((err) => console.log(err));
     },

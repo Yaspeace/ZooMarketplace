@@ -6,7 +6,7 @@
             {{ ad.date }}
         </div>
         <svg 
-        v-on:click="heartClick" :class="'ad-heart' + (ad.isLiked ? ' pressed' : '')" 
+        @click="heartClick" :class="'ad-heart' + (ad.isLiked ? ' pressed' : '')" 
         v-if="showHeart" xmlns="http://www.w3.org/2000/svg" 
         xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
             <ellipse rx="31.7696" ry="27.3061" transform="matrix(1.888041 0 0 1.969489 105 112.796487)" stroke-width="0" fill="currentColor"/>
@@ -60,7 +60,22 @@ export default {
     },
     methods: {
         heartClick() {
-            this.isLiked = !this.isLiked;
+            if(!this.$store.state.authorized) {
+                this.$router.push({name: 'login', params: {register: 'false'}});
+            } else {
+                if(this.ad.isLiked) {
+                    this.$http.delete('/api/Favorites?account=' + this.$store.state.aid + '&ad=' + this.ad.id)
+                    .then(() => this.ad.isLiked = false)
+                    .catch((err) => console.log(err));
+                } else {
+                    this.$http.post('/api/Favorites', {
+                        account: this.$store.state.aid,
+                        ad: this.ad.id
+                    })
+                    .then(() => this.ad.isLiked = true)
+                    .catch((err) => console.log(err));
+                }
+            }
         },
         goToCard() {
             this.$router.push({name: 'ad', params: { mode: 'view', adId: this.ad.id } });

@@ -61,6 +61,7 @@ export default {
 <style scoped>
 .main-wrapper {
     background-color: var(--color-info-light);
+    min-height: 100vh;
 }
 
 .content {

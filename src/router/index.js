@@ -58,6 +58,11 @@ const routes = [
     path: '/moderation',
     name: 'moderation',
     component: () => import('../views/Moderation.vue')
+  },
+  {
+    path: '/favorites',
+    name: 'favorites',
+    component: () => import('../views/Favorites.vue')
   }
 ];
 

@@ -53,7 +53,7 @@
                 <path d="M49.948585,200.216356c0,0,27.536507-50.216356,27.536507-80.079724c44.461044,0,102.238123,0,146.699167,0c0,29.863368,26.63173,79.827802,26.63173,79.827802" transform="translate(.000001 0)" fill="currentColor" stroke="#3f5787" stroke-width="0.6"/>
                 <ellipse rx="44.202643" ry="22.294627" transform="matrix(.580086 0 0 1 150 200.216356)" fill="currentColor"/>
             </svg>
-            <svg class="nav-icon icon-red" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+            <svg @click="goToFavorites" class="nav-icon icon-red" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
                 <ellipse rx="150" ry="150" transform="translate(150 150)" fill="#d2dbed" stroke-width="0"/>
                 <ellipse rx="31.769648" ry="27.306144" transform="matrix(1.5 0 0 1.5 105 125)" fill="currentColor" stroke-width="0"/>
                 <ellipse rx="31.769648" ry="27.306144" transform="matrix(1.5 0 0 1.5 195 125)" fill="currentColor" stroke-width="0"/>
@@ -110,6 +110,9 @@ export default {
         },
         searchClick() {
             this.$emit('search', this.searchStr);
+        },
+        goToFavorites() {
+            this.$router.push('/favorites');
         }
     }
 }

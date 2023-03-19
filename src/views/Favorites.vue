@@ -4,7 +4,7 @@
 
         <div class="content">
             <h1>Ваши избранные объявления</h1>
-            <ad-card-grid :ads="ads" class="card-grid" />
+            <ad-card-grid :ads="likedAds" class="card-grid" />
         </div>
 
     </div>
@@ -13,7 +13,6 @@
 <script>
 import Hat from '@/components/Hat.vue';
 import AdCardGrid from '@/components/AdCards/AdCardGrid.vue';
-import { FavoritesService } from '@/services/FavoritesService';
 
 export default {
     name: 'Favorites',
@@ -24,17 +23,23 @@ export default {
     data() {
         return {
             likedAds: [],
-            favoritesService: new FavoritesService(this.$http),
         }
     },
     created() {
-        this.favoritesService.get(this.$store.state.aid)
+        this.$http.get('/api/FavoriteCards?account=' + this.$store.state.aid)
         .then((resp) => this.likedAds = resp.data.results)
         .catch((err) => console.log(err));
     },
     methods: {
         search(searchStr) {
-            this.favoritesService.search(this.$store.state.aid, searchStr)
+            this.$http.get('/api/FavoriteCards?account=' + this.$store.state.aid + '&search=' + searchStr)
+            .then((resp) => this.likedAds = resp.data.results)
+            .catch((err) => console.log(err));
+        }
+    },
+    watch: {
+        '$store.state.aid': function(aid) {
+            this.$http.get('/api/FavoriteCards?account=' + aid)
             .then((resp) => this.likedAds = resp.data.results)
             .catch((err) => console.log(err));
         }
@@ -44,6 +49,7 @@ export default {
 
 <style scoped>
 .content {
+    padding: 3%;
     padding-top: 250px;
 }
 

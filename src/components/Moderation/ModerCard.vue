@@ -14,8 +14,8 @@
             </div>
 
             <div class="mod-btns">
-                <beauty-button look="primary" text="Опубликовать" class="moder-btn btn-upper" />
-                <beauty-button look="secondary" text="Вернуть" class="moder-btn btn-upper" />
+                <beauty-button look="primary" text="Опубликовать" class="moder-btn btn-upper" @click="allowAd" />
+                <beauty-button look="secondary" text="Вернуть" class="moder-btn btn-upper" @click="denyAd" />
             </div>
             <div class="mod-btns">
                 <beauty-button look="warning" text="Блок пользователя" class="moder-btn" />
@@ -34,9 +34,9 @@ export default {
         BeautyButton,
     },
     created() {
-        this.$http.get('/api/Images/' + ad.image)
-            .then((resp) => this.imagePath = resp.data.object.route)
-            .catch((err) => console.log(err));
+        this.$http.get('/api/Images/' + this.ad.image)
+        .then((resp) => this.imagePath = resp.data.object.route)
+        .catch((err) => console.log(err));
     },
     data() {
         return {
@@ -51,19 +51,19 @@ export default {
             this.$emit('imgClick');
         },
         allowAd() {
-            this.$http.put('/api/Cards/' + ad.id, {
+            this.$http.put('/api/Cards/' + this.ad.id, {
                 state: 2
             })
             .then((resp) => this.$emit('allow', resp.data.object))
             .catch((err) => console.log(err));
         },
         denyAd() {
-            this.$http.put('/api/Cards/' + ad.id, {
+            this.$http.put('/api/Cards/' + this.ad.id, {
                 state: 0
             })
             .then((resp) => this.$emit('deny', resp.data.object))
             .catch((err) => console.log(err));
-        },
+        }
     }
 }
 </script>

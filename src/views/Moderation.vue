@@ -10,7 +10,7 @@
         <div v-else class="moder-cards">
             <moder-card v-for="(ad, index) in ads" :key="index" 
                 :ad="ad" 
-                @titleClick="adTitleClick(ad)" 
+                @titleClick="adTitleClick(ad)"
                 @imgClick="adImgClick(ad)"
                 @allow="removeFromArr(ad)"
                 @deny="removeFromArr(ad)" />
@@ -79,9 +79,9 @@ export default {
         }
     },
     created() {
-        if(!this.$store.state.authorized) {
-            this.$router.push({name: 'login', params: {register: 'false'}});
-        }
+        // if(!this.$store.state.authorized) {
+        //     this.$router.push({name: 'login', params: {register: 'false'}});
+        // }
         this.checkPermissions();        
     },
     methods: {

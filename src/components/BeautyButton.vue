@@ -44,7 +44,7 @@ export default {
 .btn-primary:active {
   background: #3caa3c;
   padding: 8px;
-  font-size: 19px;
+  font-size: 0.8em;
   color: #252531;
 }
 
