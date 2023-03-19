@@ -97,7 +97,7 @@ export default {
         },
         addAd() {
             if(this.$store.state.authorized) {
-                this.$router.push({ name: 'ad', params: { mode: 'create' } });
+                this.$router.push({ name: 'adCreate', params: { mode: 'create' } });
             } else {
                 this.$router.push({ name: 'login', params: { register: 'false' } });
             }
