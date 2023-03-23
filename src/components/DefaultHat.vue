@@ -1,6 +1,6 @@
 <template>
     <div :class="'nav' + (scrolling ? '' : ' nav-header-visible')">
-        <div class="sub-nav">
+        <div class="sub-nav subnav-upper">
             <div class="nav-header">
                 <router-link to="/">
                     <img src="@/assets/staticimages/mmlogo.png" class="nav-logo-img" />
@@ -27,7 +27,7 @@
                         <line x1="0" y1="-91.980459" x2="0" y2="108.316756" transform="translate(150 142.226971)" fill="none" stroke="currentColor" stroke-width="40"/>
                         <line x1="-100.148607" y1="-0.19756" x2="100.148607" y2="0.19756" transform="translate(149.988721 150.19756)" fill="none" stroke="currentColor" stroke-width="40"/>
                     </svg>
-                    Добавить
+                    <span class="nav-icon-lbl">Добавить</span>
                 </div>
                 <div class="nav-icon-wrapper">
                     <svg class="nav-icon icon-default" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
@@ -35,7 +35,7 @@
                     <rect width="170.6634" height="117.626466" rx="20" ry="20" transform="matrix(.859378 0 0 0.973217 76.667814 79.12995)" fill="currentColor" stroke-width="0" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M161.191733,193.606026c23.256932,32.025978,35.637036,29.727148,35.637036,29.727148v-29.727148" transform="translate(4.637646-.374163)" fill="currentColor" stroke="#3f5787" stroke-width="0.6"/>
                     </svg>
-                Чаты
+                <span class="nav-icon-lbl">Чаты</span>
                 </div>
                 <div class="nav-icon-wrapper">
                     <svg class="nav-icon icon-default" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
@@ -46,7 +46,7 @@
                     <path d="M49.948585,200.216356c0,0,27.536507-50.216356,27.536507-80.079724c44.461044,0,102.238123,0,146.699167,0c0,29.863368,26.63173,79.827802,26.63173,79.827802" transform="translate(.000001 0)" fill="currentColor" stroke="#3f5787" stroke-width="0.6"/>
                     <ellipse rx="44.202643" ry="22.294627" transform="matrix(.580086 0 0 1 150 200.216356)" fill="currentColor"/>
                     </svg>
-                Уведомления
+                    <span class="nav-icon-lbl">Уведомления</span>
                 </div>
                 <div class="nav-icon-wrapper" @click="goToFavorites">
                     <svg class="nav-icon icon-red" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
@@ -55,7 +55,7 @@
                     <ellipse rx="31.769648" ry="27.306144" transform="matrix(1.5 0 0 1.5 195 125)" fill="currentColor" stroke-width="0"/>
                     <path d="M57.345528,125C56.978522,182.683088,150,240.366176,150,240.366176s92.654472-57.683088,92.654472-115.366176" fill="currentColor" stroke="#3f5787" stroke-width="0.6"/>
                     </svg>
-                Избранные
+                    <span class="nav-icon-lbl">Избранные</span>
                 </div>
             </div>
 
@@ -169,6 +169,7 @@ flex-direction: column;
     background: rgb(147, 181, 233);
     border-radius: 7px;
     padding: 10px;
+    box-sizing: border-box;
 }
 
 .nav-title {
@@ -228,7 +229,42 @@ align-items: center;
     cursor: pointer;
 }
 
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 900px) {
+    .nav-title, .nav-header-title, .nav-icon-lbl, .nav-empty-upper {
+        display: none;
+    }
+
+    .nav-icons {
+        flex-grow: 1;
+    }
+
+    .nav-icon-wrapper {
+        width: fit-content;
+    }
+
+    .nav-icon {
+        height: 80%;
+    }
+
+    .nav-header-title {
+        width: initial;
+        flex-grow: 1;
+    }
+
+    .subnav-upper {
+        justify-content: center;
+    }
+    
+}
+
+@media screen and (max-width: 500px) {
+    .nav-icon {
+        height: 100%;
+    }
+    
+}
+
+/*@media screen and (max-width: 425px) {
     .nav {
         display: flex;
         flex-direction: column;
@@ -244,7 +280,7 @@ align-items: center;
     .nav-avatar, .nav-icons, .nav-header-title {
         display: none;
     }
-}
+}*/
 
 .nav-header-visible {
     top: 0px;

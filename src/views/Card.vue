@@ -570,10 +570,6 @@ export default {
     padding-left: 10px;
 }
 
-.card-inp {
-
-}
-
 @media screen and (max-width: 700px) {
   .footer-img {
     width: 100%;
