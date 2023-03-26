@@ -95,7 +95,7 @@
                 <div v-if="!isView" style="width: 100%;max-width: 500px;">
                     Возраст:
                     <div class="age-input">
-                        <input v-model="ad.age" />
+                        <input v-model="ad.age" v-mask="'###'" />
                         <select ref="ageSelect">
                             <option value="0">Месяцев</option>
                             <option value="1">Лет</option>
@@ -117,12 +117,6 @@
                 <div class="ad-desc" v-if="isView">
                     Описание: {{ ad.description }}
                 </div>
-
-                <!-- <div class="card-btns-bot" v-if="!isView">
-                    <BeautyButton look="primary" text="Сохранить" @click="saveAd" />
-                    <BeautyButton look="secondary" text="Отмена" @click="cardCancel"/>
-                </div> -->
-                
             </div>
             <div class="btns-right" v-if="isView && ad.account != $store.state.aid">
                 <beauty-button class="right-button" look="primary" text="Оставить отзыв" />

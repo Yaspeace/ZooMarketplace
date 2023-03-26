@@ -9,8 +9,18 @@
         <div class="nav-header-title">
             <span class="nav-header-title-txt">От кота до бегемота &mdash; каждому нужна забота! Инвестируй в пушистое счастье!</span>
         </div>
-        <div class="nav-city">
-            <img class="nav-pin" src="@/assets/staticimages/pin.png"/> <span class="nav-city-name">Белгород</span>
+        <div class="nav-city-wrapper">
+            <div class="nav-ava-mob-btn">
+                <router-link v-if="$store.state.authorized" :to="{ name: 'account', params: { accId: $store.state.aid.toString() } }">
+                    Личный кабинет
+                </router-link>
+                <router-link v-else :to="{ name: 'login', params: { register: 'false' } }" >
+                    Войти
+                </router-link>
+            </div>
+            <div class="nav-city">
+                <img class="nav-pin" src="@/assets/staticimages/pin.png"/> <span class="nav-city-name">Белгород</span>
+            </div>
         </div>
 
         <div class="nav-search">
@@ -61,7 +71,7 @@
             </svg>
         </div>
         <div class="nav-avatar">
-            <router-link v-if="$store.state.authorized" :to="{ name: 'account', params: { accId: $store.state.aid } }">
+            <router-link v-if="$store.state.authorized" :to="{ name: 'account', params: { accId: $store.state.aid.toString() } }">
                 <img class="nav-avatar-img" :src="$store.state.avatar" />
             </router-link>
             <router-link v-else :to="{ name: 'login', params: { register: 'false' } }" class="text-main underline enter-text">
@@ -171,13 +181,19 @@ export default {
     padding: 10px;
 }
 
+.nav-city-wrapper {
+    display: flex;
+    justify-content: center;
+    grid-area: E;
+}
+
 .nav-city {
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
-    grid-area: E;
     overflow: hidden;
     white-space: nowrap;
+    width: 50%;
 }
 
 .nav-city-name {
@@ -297,7 +313,13 @@ export default {
     cursor: pointer;
 }
 
-@media screen and (max-width: 426px) {
+.nav-ava-mob-btn {
+    width: 50%;
+    display: none;
+    align-items: flex-end;
+}
+
+@media screen and (max-width: 768px) {
     .nav {
         display: flex;
         flex-direction: column;
@@ -322,8 +344,12 @@ export default {
         font-size: 24px;
     }
 
-    .nav-city {
-        padding-right: 10px;
+    .nav-city-wrapper {
+        padding: 0px 10px 0px 10px;
+    }
+
+    .nav-ava-mob-btn {
+        display: flex;
     }
 }
 

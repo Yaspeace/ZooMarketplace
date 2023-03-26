@@ -1,7 +1,7 @@
 <template>
     <div class="main-main-wrapper">
         <modal-window ref="modalWnd" />
-        <Hat />
+        <default-hat />
 
         <div class="content">
             <div class="landingdesign">
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import Hat from '@/components/Hat.vue';
+import DefaultHat from '@/components/DefaultHat.vue';
 import CustomFooter from '@/components/CustomFooter.vue';
 import LandingCard from '@/components/LandingCard.vue';
 import ModalWindow from '@/components/Modals/ModalWindow.vue';
@@ -65,7 +65,7 @@ import ModalWindow from '@/components/Modals/ModalWindow.vue';
 export default {
     name: "Landing",
     components: {
-        Hat,
+        DefaultHat,
         CustomFooter,
         LandingCard,
         ModalWindow,

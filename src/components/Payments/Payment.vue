@@ -1,27 +1,54 @@
 <template>
-    <div class="row">
+    <div class="main row">
         <div class="col-75">
             <div class="container">
                 <div class="row">
                     <div class="col-50">
                         <h3>Оплата</h3>
+                        <label for="ccnum">Номер карты*</label>
+                        <input 
+                          type="text" 
+                          placeholder="1111-2222-3333-4444" 
+                          v-mask="'####-####-####-####'" 
+                          v-on:input="focusNext($event, 19, $refs.months, cardData.number)" 
+                          v-model="cardData.number.value" 
+                          :class="cardData.number.isValid? '' : 'invalid'">
+                        <label for="expmonth">Срок действия*</label>
+                        <input 
+                          ref="months" 
+                          type="text" 
+                          placeholder="01/23" 
+                          v-mask="'##/##'" 
+                          v-on:input="focusNext($event, 5, $refs.cvv, cardData.months)" 
+                          v-model="cardData.months.value"
+                          :class="cardData.months.isValid? '' : 'invalid'">
+                        <label for="cvv">CVV*</label>
+                        <input 
+                          ref="cvv" 
+                          type="text" 
+                          placeholder="352" 
+                          v-mask="'###'" 
+                          v-on:input="focusNext($event, 3, $refs.name, cardData.cvv)" 
+                          v-model="cardData.cvv.value"
+                          :class="cardData.cvv.isValid? '' : 'invalid'">
                         <label for="cname">Имя на карте</label>
-                        <input type="text" id="cname" name="cardname" placeholder="John More Doe">
-                        <label for="ccnum">Номер карты</label>
-                        <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444" v-mask="'####-####-####-####'">
-                        <label for="expmonth">Срок действия</label>
-                        <input type="text" id="expmonth" name="expmonth" placeholder="01/23" v-mask="'##/##'">
-
-                        <label for="cvv">CVV</label>
-                        <input type="text" id="cvv" name="cvv" placeholder="352" v-mask="'###'">
+                        <input 
+                          ref="name" 
+                          type="text" 
+                          placeholder="JOHN DEERE" 
+                          v-on:input="toUpper($event)" 
+                          v-model="cardData.name.value"
+                          :class="cardData.name.isValid? '' : 'invalid'">
                     </div>
 
                     <div class="col-50">
                         <h3>Контактная информация</h3>
                         <label for="fname">Ваше имя (полное)</label>
-                        <input type="text" id="fname" name="firstname" placeholder="Иванов Иван Иванович">
-                        <label for="email">Почта</label>
-                        <input type="text" id="email" name="email" placeholder="example@mail.ru">
+                        <input type="text" placeholder="Иванов Иван Иванович" v-model="cardData.fio.value"
+                          :class="cardData.fio.isValid? '' : 'invalid'">
+                        <label for="email">Почта*</label>
+                        <input type="text" placeholder="example@mail.ru" v-model="cardData.mail.value"
+                          :class="cardData.mail.isValid? '' : 'invalid'" v-on:input="makeValid(cardData.mail)">
                     </div>
                 </div>
                 <input type="submit" value="Оплатить" class="btn" @click="pay">
@@ -36,22 +63,107 @@ import {mask} from 'vue-the-mask';
 export default {
     name: "Payment",
     props: ['adId'],
+    data() {
+      return {
+        namePrevVal: '',
+        namePrevSelStart: 0,
+        cardData: {
+          number: {
+            value: '',
+            isValid: true
+          },
+          months: {
+            value: '',
+            isValid: true
+          },
+          cvv: {
+            value: '',
+            isValid: true
+          },
+          name: {
+            value: '',
+            isValid: true
+          },
+          fio: {
+            value: '',
+            isValid: true
+          },
+          mail: {
+            value: '',
+            isValid: true
+          }
+        },
+      }
+    },
     directives: {
         mask,
     },
     methods: {
         pay() {
+          let isValid = true;
+          if(this.cardData.number.value.length != 19) {
+            this.cardData.number.isValid = false;
+            isValid = false;
+          }
+
+          if(this.cardData.months.value.length != 5) {
+            this.cardData.months.isValid = false;
+            isValid = false;
+          }
+
+          if(this.cardData.cvv.value.length != 3) {
+            this.cardData.cvv.isValid = false;
+            isValid = false;
+          }
+
+          if(!this.cardData.mail.value.toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+            this.cardData.mail.isValid = false;
+            isValid = false;
+          }
+
+          if(isValid) {
             this.$http.put('/api/Cards/' + this.adId, {
                 isPaid: true
             })
             .then(this.$router.back())
             .catch((err) => console.log(err));
+          }
+        },
+        toUpper(e) {
+          // Check if value is number
+          let isValid = this.cardData.name.value.match(/^[a-zA-Z ]*$/);
+
+          if (isValid) {
+            // preserve input state
+            this.cardData.name.value = this.cardData.name.value.toUpperCase();
+            this.namePrevVal = this.cardData.name.value;
+            this.namePrevSelStart = e.target.selectionStart;
+          } else {
+            // restore previous valid input state.
+            // we have to fire one more Input event in  order to reset cursor position.
+            this.cardData.name.value = this.namePrevVal;
+            e.target.selectionStart = this.namePrevSelStart;
+            e.target.selectionEnd = this.namePrevSelStart;
+            e.target.dispatchEvent(new InputEvent('input'));
+          }
+        },
+        focusNext(e, toFocus, elem, field) {
+          field.isValid = true;
+          if(e.target.value.length == toFocus) {
+            elem.focus();
+          }
+        },
+        makeValid(field) {
+          field.isValid = true;
         }
     }
 }
 </script>
 
 <style scoped>
+.main {
+  padding-top: 50px;
+}
 .row {
   display: -ms-flexbox; /* IE10 */
   display: flex;
@@ -95,6 +207,7 @@ input[type=text] {
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 3px;
+  transition: .5s;
 }
 
 label {
@@ -137,5 +250,9 @@ span.price {
   .col-25 {
     margin-bottom: 20px;
   }
+}
+
+.invalid {
+  border-color: red !important;
 }
 </style>
