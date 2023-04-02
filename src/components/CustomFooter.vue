@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="footer-lower">
-            Версия: 0.0.1 &#9400; LyaTiKrisaCompany
+            Версия: 0.0.2 &#9400; LyaTiKrisaCompany
             2022-2023г
         </div>
     </div>

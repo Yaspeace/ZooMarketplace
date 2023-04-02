@@ -60,8 +60,12 @@
             </div>
 
             <div class="nav-avatar">
-              <img v-if="$store.state.authorized" class="nav-avatar-img" :src="$store.state.avatar" v-on:click="getAccInfo"/>
-              <router-link v-else :to="{ name: 'login', params: { register: 'false' } }" class="text-main underline enter-text">Войти</router-link>
+                <router-link v-if="$store.state.authorized" :to="{ name: 'account', params: { accId: $store.state.aid.toString() } }">
+                    <img class="nav-avatar-img" :src="$store.state.avatar"/>
+                </router-link>
+                <router-link v-else :to="{ name: 'login', params: { register: 'false' } }" class="text-main underline enter-text">
+                    Войти
+                </router-link>
             </div>
         </div>
     </div>
