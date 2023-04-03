@@ -65,6 +65,10 @@
                     class="list-sel">
                 </model-list-select>
 
+                <div v-else>
+                    Категория: <span class="card-breed">{{ (ad.category == 0 ? 'Не указана' : categoryName) }}</span>
+                </div>
+
                 <model-list-select v-if="!isView"
                     :list="breeds"
                     v-model="ad.breed"
@@ -189,6 +193,7 @@ export default {
                 account: this.$store.state.aid,
                 type: 0,
                 breed: 0,
+                category: 0,
                 image: 0,
                 isLiked: false,
             },
@@ -244,6 +249,7 @@ export default {
                         this.ageStr = 'лет';
                     };
                     this.initBreed(this.ad.breed);
+                    this.initCategory(this.ad.category);
                     this.setImage(this.ad.image);
                 })
                 .catch((err) => console.log(err));
@@ -252,7 +258,6 @@ export default {
             this.$http.get('/api/Breeds/' + breedId)
                 .then((resp) => { 
                     this.breedName = resp.data.object.name;
-                    this.initCategory(resp.data.object.category);
                 })
                 .catch((err) => console.log(err));
         },
@@ -309,6 +314,7 @@ export default {
             let func = this.isCreate ? this.$http.post : this.$http.put;
             if(this.$refs.ageSelect.selectedIndex == 1) ad.age *= 12;
             ad.state = newState;
+            ad.category = this.curSubCategory == 0 ? this.currentCategory : this.curSubCategory;
             func('/api/Cards', ad)
                 .then(this.$router.back())
                 .catch((err) => console.log(err));
