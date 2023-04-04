@@ -1,22 +1,22 @@
 <template>
 <div class="footer">
-        <div class="footer-center">
-            Спасибо, что выбрали Мышь-маркет!
+    <div class="footer-center">
+        Спасибо, что выбрали Мышь-маркет!
+    </div>
+    <div class="footer-upper">
+        <div class="footer-left">
+            <a :href="$http.defaults.baseURL + '/assets/publication_rules.pdf'" target="_blank"> Правила публикации и использования нашего сервиса. </a>
         </div>
-        <div class="footer-upper">
-            <div class="footer-left">
-                <a :href="$http.defaults.baseURL + '/assets/publication_rules.pdf'" target="_blank"> Правила публикации и использования нашего сервиса. </a>
-            </div>
-            <div class="footer-right">
-                <span class="text-lined">Возникли трудности? <br> Свяжитесь с нами:</span><br>
-                <span class="text-yellow">mishmarket@mail.ru</span>
-            </div>
-        </div>
-        <div class="footer-lower">
-            Версия: 0.0.2 &#9400; LyaTiKrisaCompany
-            2022-2023г
+        <div class="footer-right">
+            <span class="text-lined">Возникли трудности? <br> Свяжитесь с нами:</span><br>
+            <span class="text-yellow">mishmarket@mail.ru</span>
         </div>
     </div>
+    <div class="footer-lower">
+        Версия: 0.0.3 &#9400; LyaTiKrisaCompany
+        2022-2023г
+    </div>
+</div>
 </template>
 
 <script>

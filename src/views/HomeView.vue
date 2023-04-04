@@ -105,14 +105,14 @@ export default {
 }
 
 .footer-img-wrapper {
-    width: 100%;
-    height: 300px;
-    position: fixed;
-    bottom: 0px;
-    left: 0px;
-    z-index: -1;
-    text-align: center;
-    background: black;
+  width: 100%;
+  height: 300px;
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  z-index: -1;
+  text-align: center;
+  background: black;
 }
 
 .footer-img {
