@@ -8,8 +8,8 @@
             <beauty-button look="primary" :text="'Начать модерацию' + chosenModeStr" class="btn-big" @click="startMod" :disabled="chosenMode == 0" />
         </div>
         <div v-else class="moder-cards">
-            <moder-card v-for="(ad, index) in ads" :key="index" 
-                :ad="ad" 
+            <moder-card v-for="ad in ads" :key="ad.id" 
+                :ad="ad"
                 @titleClick="adTitleClick(ad)"
                 @imgClick="adImgClick(ad)"
                 @allow="removeFromArr(ad)"
@@ -135,7 +135,7 @@ export default {
         },
         removeFromArr(ad) {
             this.ads = this.ads.filter(x => x.id != ad.id);
-            this.pushToArr(1);
+            if(this.ads.length == 0) this.isModStart = false;
         },
         checkPermissions() {
             this.$http.get('/api/Authorize')
