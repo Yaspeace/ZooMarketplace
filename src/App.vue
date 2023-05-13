@@ -1,13 +1,19 @@
 <template>
   <div id="app">
-      <router-view :key="$route.path" />
+    <router-view :key="$route.path" v-if="isChecked" />
   </div>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      isChecked: false
+    }
+  },
   async created() {
     await this.$store.dispatch('checkLogin');
+    this.isChecked = true;
 
     this.$http.interceptors.response.use(
       (response) => {

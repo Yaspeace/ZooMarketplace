@@ -3,6 +3,7 @@
     <Hat @search="search" />
 
     <div id="content">
+      <chat-short-list class="chats" />
       <AdCardCarousel v-if="paidAds.length > 0" :ads="paidAds" :toShow="toShow" class="carousel" />
       <AdCardGrid v-if="ads.length > 0" :ads="ads" style="padding-top: 50px;padding-bottom: 50px;" />
     </div>
@@ -22,6 +23,7 @@ import Hat from '@/components/Hat.vue';
 import CustomFooter from '@/components/CustomFooter.vue';
 import AdCardCarousel from '@/components/AdCards/AdCardCarousel.vue';
 import AdCardGrid from "@/components/AdCards/AdCardGrid.vue";
+import ChatShortList from "@/components/Chats/ChatShortList.vue";
 
 export default {
   name: "HomeView",
@@ -39,6 +41,7 @@ export default {
     CustomFooter,
     AdCardCarousel,
     AdCardGrid,
+    ChatShortList,
   },
   created() {
     window.addEventListener('resize', this.resize);
@@ -125,5 +128,10 @@ export default {
   .footer-img {
     width: 100%;
   }
+}
+
+.chats {
+  height: 100px;
+  width: 500px;
 }
 </style>
