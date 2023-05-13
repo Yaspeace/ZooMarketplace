@@ -141,6 +141,25 @@ export default {
                 ];
                 this.msgLoaded = true;
             });
+        },
+        mapChat(chat) {
+
+        },
+        mapUser(user) {
+
+        },
+        mapMessage(msg) {
+            const msgDate = new Date(msg.date);
+            const u = this.chat.users.find((x) => x.id != this.$store.state.aid);
+            return {
+                _id: msg.id.toString(),
+                content: msg.content,
+                senderId: msg.sender,
+                date: msgDate.toLocaleDateString('ru-RU', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+                timestamp: `${msgDate.getHours()}:${msgDate.getMinutes()}`,
+                username: '',
+                avatar: 'https://myshmarket.site/assets/images/uploaded/image20.png'
+            }
         }
     }
 }
