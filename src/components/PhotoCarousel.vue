@@ -1,61 +1,43 @@
 <template>
     <VueSlickCarousel v-bind="carouselSettings">
-        <div v-for="ad in ads" :key="ad.id" class="carousel-ad-wrapper">
-          <AdCard :ad="ad" :liked="false" class="carousel-ad" :key="ad.id" />
-        </div>
+        <img v-for="src in srcs" :key="src" :src="src" class="custom-item" />
         <template #prevArrow>
-          <div class="custom-arrow-prev"></div>
+            <div class="custom-arrow-prev"></div>
         </template>
         <template #nextArrow>
-          <div class="custom-arrow-next"></div>
+            <div class="custom-arrow-next"></div>
         </template>
-      </VueSlickCarousel>
+    </VueSlickCarousel>
 </template>
 
 <script>
-import AdCard from './AdCard.vue';
 import VueSlickCarousel from 'vue-slick-carousel'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 
 export default {
-    name: "AdCardCarousel",
-    props: ["ads", "toShow"],
+    name: 'PhotoCarousel',
     components: {
-        AdCard,
         VueSlickCarousel,
     },
+    props: ['srcs'],
     data() {
         return {
             carouselSettings: {
                 "focusOnSelect": true,
                 "infinite": false,
                 "speed": 500,
-                "slidesToShow": this.toShow,
-                "slidesToScroll": 1,
+                "slidesToShow": 3,
+                "slidesToScroll": 3,
                 "touchThreshold": 5,
                 "arrows": true,
             }
         }
-    },
-    watch: {
-      toShow: function(newVal, oldVal) {
-        this.carouselSettings.slidesToShow = newVal;
-      }
     }
 }
 </script>
 
 <style scoped>
-.carousel-ad-wrapper {
-  display: flex !important;
-  justify-content: center;
-}
-
-.carousel-ad {
-  width: 80%;
-}
-
 .custom-arrow-prev, .custom-arrow-next {
   color: black;
   font-size: 50px;
@@ -74,5 +56,13 @@ export default {
 .custom-arrow-prev:before, .custom-arrow-next:before {
   color: black;
   font-size: 35px;
+}
+
+.custom-item {
+    user-select: none;
+    object-fit:contain;
+    pointer-events: none;
+    aspect-ratio: 1/1;
+    background-color: gray;
 }
 </style>

@@ -5,7 +5,12 @@
         <div class="main-content">
             <div :class="'ad-info shadow' + (isView ? ' lalign' : '')">
                 <div style="text-align: center;">
-                    <img v-if="!isCreate" class="ad-img" :src="$http.defaults.baseURL + imagePath"/>
+                    <div v-if="!isCreate" class="imgs-wrapper">
+                        <img class="ad-img" :src="$http.defaults.baseURL + imagePath"/>
+                        <div class="imgs-carousel" v-if="subImages.length > 0">
+                            <photo-carousel :srcs="subImages" style="width: 100%; height: 100%" />
+                        </div>
+                    </div>
                 </div>
                 
                 <picture-input v-if="isCreate"
@@ -156,6 +161,7 @@ import PictureInput from 'vue-picture-input';
 import { ModelListSelect } from 'vue-search-select';
 import "vue-search-select/dist/VueSearchSelect.css"
 import {mask} from 'vue-the-mask';
+import PhotoCarousel from '@/components/PhotoCarousel.vue';
 
 export default {
     components: { 
@@ -164,6 +170,7 @@ export default {
         Hat,
         CustomFooter,
         ModelListSelect,
+        PhotoCarousel
     },
     name: "Card",
     props: {
@@ -224,6 +231,7 @@ export default {
             isImageChanged: false,
             isPhone: false,
             phone: '+7(911)111-11-11',
+            subImages: []
         }
     },
     created() {
@@ -251,6 +259,7 @@ export default {
                     this.initBreed(this.ad.breed);
                     this.initCategory(this.ad.category);
                     this.setImage(this.ad.image);
+                    this.getSubImages();
                 })
                 .catch((err) => console.log(err));
         },
@@ -354,6 +363,11 @@ export default {
                 .catch((err) => console.log(err));
             })
             .catch((err) => console.log(err));
+        },
+        getSubImages() {
+            this.$http.get('/api/Images', {params: {ad: this.ad.id, isMain: false}})
+            .then((resp) => this.subImages = resp.data.results.map((x) => 'https://myshmarket.site' + x.route))
+            .catch((err) => console.log(err));
         }
     },
     watch: {
@@ -425,13 +439,35 @@ export default {
     align-items: center;
 }
 
+.imgs-wrapper {
+    /* aspect-ratio: 1/1; */
+    padding: 0px 5% 0px 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 650px;
+}
+
 .ad-img {
-    width: 80%;
+    width: 100%;
     max-width: 650px;
     max-height: 650px;
-    aspect-ratio: 1/1;
+    aspect-ratio: 1/0.7;
     object-fit: cover;
     border-radius: 10px;
+}
+
+.imgs-carousel {
+    /* aspect-ratio: 1/0.25; */
+    height: 200px;
+    width: 100%;
+    max-width: 650px;
+}
+
+.carousel {
+    width: 100%;
+    height: 100%;
 }
 
 .ad-img-input {
