@@ -12,6 +12,8 @@ export default new Vuex.Store({
   getters: {},
   mutations: {
     login(state, payload) {
+      console.log('payload');
+      console.log(payload);
       state.authorized = true;
       state.avatar = payload.avatar;
       state.aid = payload.aid;
@@ -23,20 +25,17 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    checkLogin({commit}) {
-      Vue.prototype.$http.get('/api/Session/Account')
-        .then((acc) => {
-          let image;
-          Vue.prototype.$http.get('/api/Images/' + acc.data.object.image)
-            .then((img) => image = 'https://' + img.data.object.host + img.data.object.route)
-            .catch(() => image = '@/assets/staticimages/image1.jpg')
-            .finally(() => commit('login', { avatar: image, aid: acc.data.object.id }));
-        })
-        .catch((err) => {
-          if(err.response && err.response.status == 401) {
-            commit('logout');
-          }
+    async checkLogin({commit}) {
+      try {
+        let acc = (await Vue.prototype.$http.get('/api/Session/Account')).data.object;
+        commit('login', {
+          avatar: `https://${acc.avatar.host}${acc.avatar.route}`,
+          aid: acc.id
         });
+      } catch (error) {
+        commit('logout');
+        console.log(error);
+      }
     },
     async login({commit}, payload) {
       return Vue.prototype.$http.put('/api/Authorize', payload)

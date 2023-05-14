@@ -87,12 +87,17 @@ export default {
         },
         async logIn() {
             this.covered = true;
-            await this.$store.dispatch('login', {
-                phone: this.phone,
-                password: this.password
-            });
+            try {
+                await this.$store.dispatch('login', {
+                    phone: this.phone,
+                    password: this.password
+                });
+                this.$router.push({ name: 'home' });
+            } catch(error) {
+                console.log(error);
+            }
+            
             this.covered = false;
-            this.$router.push({ name: 'home' });
         },
         registerUser() {
             if(this.password == this.passwordCheck) {

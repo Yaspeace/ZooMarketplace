@@ -10,7 +10,7 @@
                 :messages-loaded="msgLoaded"
                 :rooms="JSON.stringify(rooms)"
                 :rooms-loaded="roomsLoaded"
-                :room-info-enabled="true"
+                :room-info-enabled="false"
                 :text-messages="JSON.stringify({LAST_SEEN: 'последний раз был(а) в сети '})"
                 show-emojis="false"
                 show-audio="false"
@@ -18,11 +18,13 @@
                 show-search="false"
                 show-add-room="false"
                 :menu-actions="JSON.stringify([
-                    {name: 'f1', title: 'Убрать уведомления'},
-                    {name: 'f2', title: 'Пожаловаться на собеседника'}])"
+                    {name: 'denotify', title: 'Убрать уведомления'},
+                    {name: 'complain', title: 'Пожаловаться на собеседника'}])"
                 @send-message="msgSend($event.detail[0])"
                 @delete-message="msgDel($event.detail[0].message)"
-                @fetch-messages="fetch()"
+                @fetch-messages="fetchMessages($event.detail[0])"
+                @fetch-more-rooms="getChats"
+                @menu-action-handler="menuActionHandler($event.detail[0])"
                 :styles="JSON.stringify({
                     header: {
                         background: 'var(--color-info)'
@@ -34,7 +36,7 @@
                         background: 'var(--color-info-semilight)'
                     }
                 })"
-                room-id="2"
+                room-id="1"
             />
         </div>
     </div>
@@ -43,6 +45,7 @@
 <script>
 import DefaultHat from '@/components/DefaultHat.vue';
 import {register} from 'vue-advanced-chat';
+import {append, appendFront} from '@/js/arrays.js';
 register();
 
 export default {
@@ -62,103 +65,169 @@ export default {
             isLoaded: true,
             msgLoaded: false,
             roomsLoaded: false,
-            rooms: [
-                {
-                    roomId: '1',
-                    roomName: 'Терентьев Михаил',
-                    avatar: 'https://myshmarket.site/assets/images/uploaded/image20.png',
-                    users: [],
-                    lastMessage: {
-                        content: 'Котика ещё продаёте?',
-                        senderId: 1234,
-                        username: 'John Doe',
-                        timestamp: '13:53',
-                        saved: true,
-                        distributed: false,
-                        seen: false,
-                        new: true
-                    },
-                    unreadCount: 1,
-                },
-                {
-                    roomId: '2',
-                    roomName: 'Измаилова Людмила',
-                    avatar: 'https://myshmarket.site/assets/images/uploaded/image20.png',
-                    users: [],
-                    lastMessage: {
-                        content: 'Добрый день!',
-                        senderId: 1234,
-                        username: 'John Doe',
-                        timestamp: '11:24',
-                        saved: true,
-                        distributed: false,
-                        seen: true,
-                        new: false
-                    },
-                },
-                {
-                    roomId: '3',
-                    roomName: 'Петров Анатолий',
-                    avatar: 'https://myshmarket.site/assets/images/uploaded/image20.png',
-                    users: [],
-                    lastMessage: {
-                        content: 'А он у вас не кусается???',
-                        senderId: 1234,
-                        username: 'John Doe',
-                        timestamp: '10:20',
-                        saved: true,
-                        distributed: false,
-                        seen: false,
-                        new: true
-                    },
-                }
-            ],
-            messages: []
+            rooms: [],
+            messages: [],
+            chats: [],
+            maxMsgId: 0,
+            messagesPerPage: 20,
+            curPage: 0,
+            curRoom: 0,
         }
     },
     created() {
-        setTimeout(() => this.roomsLoaded = true, 1000);
+        this.getChats();
     },
     methods: {
-        msgSend(msg) {
-            console.log('sended ' + msg.content);
+        msgSend(payload) {
+            this.$http.post(`/api/Chat/Messages/${payload.roomId}?content=${payload.content}`)
+            .then((resp) => {
+                const msg = resp.data.object;
+                if(msg.id > this.maxMsgId) this.maxMsgId = msg.id;
+                let mappedMsg = this.mapMessage(payload.roomId, msg);
+                this.messages = append(this.messages, mappedMsg);
+
+                this.setLastMessage(payload.roomId, mappedMsg);
+            })
+            .catch((err) => console.log(err));
         },
-        msgDel() {
-            console.log('deleted');
+        msgDel(message) {
+            this.$http.delete('/api/Chat/Messages/' + message._id)
+            .then(() => this.messages = this.messages.filter((x) => x._id != message._id))
+            .catch((err) => console.log(err));
         },
-        fetch() {
-            setTimeout(() => {
-                this.messages = [
-                    {
-                        _id: '5612',
-                        content: 'Добрый день!',
-                        senderId: '2',
-                        timestamp: '11:24',
-                        date: (new Date()).toLocaleDateString('ru-RU', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
-                        username: '',
-                        avatar: 'https://myshmarket.site/assets/images/uploaded/image20.png'
-                    }
-                ];
+        getChats() {
+            this.roomsLoaded = false;
+            this.$http.get('/api/Chats')
+            .then((resp) => {
+                this.chats = resp.data.results;
+                this.rooms = append(this.rooms, resp.data.results.map(this.mapChat));
+            })
+            .catch((err) => console.log(err))
+            .finally(() => this.roomsLoaded = true);
+        },
+        async fetchMessages({room, options = {}}) {
+            this.curRoom = room.roomId;
+            if(!room.roomId || room.roomId <= 0) {
+                return;
+            }
+
+            this.msgLoaded = false;
+
+            if(options.reset) {
+                this.messages = [];
+            }
+
+            const take = this.messagesPerPage;
+            const skip = this.curPage * this.messagesPerPage;
+            let messages = (await this.$http.get(
+                '/api/Chat/Messages', { params: { chat: room.roomId, limit: take, start: skip } })).data.results
+                .map((x) => this.mapMessage(room.roomId, x));
+
+            if(messages && messages.length) {
+                messages.forEach((x) => {
+                    if(this.maxMsgId < x._id) this.maxMsgId = x._id;
+                });
+                this.messages = appendFront(this.messages, messages);
+                this.seeMessages(messages);
+                this.curPage++;
+            }
+
+            if(!messages || messages.length < take) {
                 this.msgLoaded = true;
-            });
+            }
+
+            if (!this.isGotMessages) setTimeout(() => this.checkMessages(room.roomId), 10000);
+            this.isGotMessages = true;
+        },
+        async checkMessages(roomId) {
+            if(!this.curRoom || this.curRoom != roomId) return;
+
+            try {
+                let messages = (await this.$http.get(
+                    '/api/Chat/Messages', { params: { chat: roomId, limit: 10, start: 0 } })).data.results
+                    .map((x) => this.mapMessage(roomId, x));
+                
+                let msgToAdd = messages.filter((x) => x._id > this.maxMsgId);
+                if(msgToAdd.length > 0) {
+                    this.messages = append(this.messages, msgToAdd);
+                    this.seeMessages(msgToAdd);
+                    msgToAdd.forEach((x) => {
+                        if(this.maxMsgId < x._id) {
+                            this.maxMsgId = x._id;
+                            this.setLastMessage(roomId, x);
+                        }
+                    });
+                };
+
+                setTimeout(() => this.checkMessages(roomId), 10000);
+            }
+            catch (err) {
+                console.log(err);
+            }
         },
         mapChat(chat) {
-
+            const acc = chat.accounts.find((x) => x.id != this.$store.state.aid);
+            return {
+                roomId: chat.id,
+                roomName: this.getUsername(acc),
+                avatar: 'https://myshmarket.site' + acc?.avatar?.route,
+                users: chat.accounts.map(this.mapUser),
+                lastMessage: this.mapMessage(chat.id, chat.lastMessage)
+            }
         },
-        mapUser(user) {
-
+        mapUser(account) {
+            return {
+                _id: account.id.toString(),
+                username: account.family + ' ' + account.name,
+                avatar: 'https://myshmarket.site' + account.avatar.route,
+                status: null,
+            }
         },
-        mapMessage(msg) {
+        mapMessage(chatId, msg) {
             const msgDate = new Date(msg.date);
-            const u = this.chat.users.find((x) => x.id != this.$store.state.aid);
+            const chat = this.chats.find((x) => x.id == chatId);
+            const u = chat.accounts.find((x) => x.id == msg.sender);
             return {
                 _id: msg.id.toString(),
                 content: msg.content,
-                senderId: msg.sender,
+                senderId: msg.sender.toString(),
                 date: msgDate.toLocaleDateString('ru-RU', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
                 timestamp: `${msgDate.getHours()}:${msgDate.getMinutes()}`,
                 username: '',
-                avatar: 'https://myshmarket.site/assets/images/uploaded/image20.png'
+                avatar: 'https://myshmarket.site' + u.avatar.route,
+                distributed: true,
+                seen: msg.seen == '1',
+            }
+        },
+        getUsername(user) {
+            if(!user) {
+                return '?';
+            } else {
+                return user.family + ' ' + user.name;
+            }
+        },
+        seeMessages(messages) {
+            messages = messages.filter((x) => Number(x.senderId) != this.$store.state.aid && !x.seen);
+            messages.forEach((msg) => {
+                this.$http.put('/api/Chat/Messages/' + msg._id, {seen: true})
+                .catch((err) => console.log(err));
+            })
+        },
+        setLastMessage(roomId, lastMessage) {
+            let room = this.rooms.find((x) => x.roomId == roomId);
+            if(!room) return;
+
+            room.lastMessage = lastMessage;
+            this.rooms = appendFront(this.rooms.filter((x) => x.roomId != room.roomId), room);
+        },
+        menuActionHandler({roomId, action}) {
+            switch(action.name) {
+                case 'denotify':
+                    console.log('Убрать уведомления! ' + roomId);
+                    break;
+                case 'complain':
+                    console.log('Жалоба! ' + roomId);
+                    break;
             }
         }
     }

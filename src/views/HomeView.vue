@@ -3,7 +3,6 @@
     <Hat @search="search" />
 
     <div id="content">
-      <chat-short-list class="chats" />
       <AdCardCarousel v-if="paidAds.length > 0" :ads="paidAds" :toShow="toShow" class="carousel" />
       <AdCardGrid v-if="ads.length > 0" :ads="ads" style="padding-top: 50px;padding-bottom: 50px;" />
     </div>

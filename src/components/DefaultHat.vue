@@ -29,7 +29,7 @@
                     </svg>
                     <span class="nav-icon-lbl">Добавить</span>
                 </div>
-                <div class="nav-icon-wrapper">
+                <div class="nav-icon-wrapper" @click="$router.push('/chat')">
                     <svg class="nav-icon icon-default" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
                     <ellipse rx="150" ry="150" transform="translate(150 150)" fill="#d2dbed" stroke-width="0"/>
                     <rect width="170.6634" height="117.626466" rx="20" ry="20" transform="matrix(.859378 0 0 0.973217 76.667814 79.12995)" fill="currentColor" stroke-width="0" stroke-linecap="round" stroke-linejoin="round"/>

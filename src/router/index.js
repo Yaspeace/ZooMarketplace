@@ -65,7 +65,7 @@ const routes = [
     component: () => import('../views/Favorites.vue')
   },
   {
-    path: '/chat/:id?',
+    path: '/chat/:chatId?',
     name: 'chat',
     component: () => import('../views/ChatView.vue'),
     props: true

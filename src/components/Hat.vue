@@ -50,7 +50,7 @@
                 <line x1="0" y1="-91.980459" x2="0" y2="108.316756" transform="translate(150 142.226971)" fill="none" stroke="currentColor" stroke-width="40"/>
                 <line x1="-100.148607" y1="-0.19756" x2="100.148607" y2="0.19756" transform="translate(149.988721 150.19756)" fill="none" stroke="currentColor" stroke-width="40"/>
             </svg>
-            <svg class="nav-icon icon-default" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+            <svg @click="$router.push('/chat')" class="nav-icon icon-default" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
                 <ellipse rx="150" ry="150" transform="translate(150 150)" fill="#d2dbed" stroke-width="0"/>
                 <rect width="170.6634" height="117.626466" rx="20" ry="20" transform="matrix(.859378 0 0 0.973217 76.667814 79.12995)" fill="currentColor" stroke-width="0" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M161.191733,193.606026c23.256932,32.025978,35.637036,29.727148,35.637036,29.727148v-29.727148" transform="translate(4.637646-.374163)" fill="currentColor" stroke="#3f5787" stroke-width="0.6"/>
