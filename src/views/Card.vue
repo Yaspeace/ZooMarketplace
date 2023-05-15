@@ -4,31 +4,40 @@
 
         <div class="main-content">
             <div :class="'ad-info shadow' + (isView ? ' lalign' : '')">
-                <div style="text-align: center;">
-                    <div v-if="!isCreate" class="imgs-wrapper">
+                <div style="text-align: center;" v-if="!isCreate">
+                    <div class="imgs-wrapper">
                         <img class="ad-img" :src="$http.defaults.baseURL + imagePath"/>
                         <div class="imgs-carousel" v-if="subImages.length > 0">
-                            <photo-carousel :srcs="subImages" style="width: 100%; height: 100%" />
+                            <photo-carousel :srcs="subImages" style="width: 100%; height: 100%" :allow-add="false" />
                         </div>
                     </div>
                 </div>
                 
-                <picture-input v-if="isCreate"
-                    ref="pictureInput"
-                    class="ad-img-input"
-                    accept="image/jpeg,image/png"
-                    :crop="false"
-                    :zIndex="1"
-                    :removable="true"
-                    :alertOnError="false"
-                    :custom-strings="{
-                        upload: 'Загрузите фото питомца',
-                        drag: 'Перетащите фото сюда',
-                        change: 'Изменить фото',
-                        remove: 'Удалить фото'
-                    }"
-                    @change="onImageChange"
-                />
+                <div style="text-align: center;width: 100%" v-if="isCreate">
+                    <div class="imgs-wrapper" style="width: 100%">
+                        <picture-input
+                            ref="pictureInput"
+                            class="ad-img-input"
+                            accept="image/jpeg,image/png"
+                            :crop="false"
+                            :zIndex="1"
+                            :removable="true"
+                            :alertOnError="false"
+                            :custom-strings="{
+                                upload: 'Загрузите фото питомца',
+                                drag: 'Перетащите фото сюда',
+                                change: 'Изменить фото',
+                                remove: 'Удалить фото'
+                            }"
+                            @change="onImageChange"
+                        />
+                        <div class="imgs-carousel">
+                            <photo-carousel :srcs="subImages" style="width: 100%; height: 100%" :allow-add="true" />
+                        </div>
+                    </div>
+                    
+                </div>
+                
 
                 <div v-if="isView" class="card-title">
                     {{ ad.title }}
@@ -446,6 +455,7 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    gap: 15px;
     max-width: 650px;
 }
 
@@ -455,7 +465,8 @@ export default {
     max-height: 650px;
     aspect-ratio: 1/0.7;
     object-fit: cover;
-    border-radius: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 .imgs-carousel {
