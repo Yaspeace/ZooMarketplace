@@ -26,6 +26,11 @@ const routes = [
     props: true
   },
   {
+    path: '/busireg',
+    name: 'busireg',
+    component: () => import('../views/BusinessRegisterView.vue')
+  },
+  {
     path: '/account/:accId',
     name: 'account',
     component: () => import('../views/AccountView.vue'),

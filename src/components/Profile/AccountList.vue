@@ -37,7 +37,6 @@ export default {
         }
     },
     created() {
-        console.log("USERID: " + this.userId);
         this.$http.get('/api/Account?userId=' + this.userId)
             .then((resp) => {
                 resp.data.results.forEach((acc) => {
