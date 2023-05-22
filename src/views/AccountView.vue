@@ -44,7 +44,7 @@ export default {
     created() {
         this.$http.get('/api/Account/' + this.accId)
             .then((resp) => {
-                this.account = resp.data.object;
+                this.account = resp.data;
                 this.loaded = true;
             })
             .catch((err) => console.log(err));

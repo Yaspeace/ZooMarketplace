@@ -363,7 +363,7 @@ export default {
         showPhone() {
             this.$http.get('/api/Account/' + this.ad.account)
             .then((resp) => {
-                this.phone = resp.data.object.phone;
+                this.phone = resp.data.phone;
                 this.isPhone = true;
                 this.$http.put('/api/Cards/' + this.ad.id, {
                     views: this.ad.views + 1

@@ -6,20 +6,6 @@
             <div class="login">
                 <h3>Контактные данные</h3>
                 <input
-                    v-model="phone.value" 
-                    v-mask="'+7(###) ###-##-##'" 
-                    class="login-input"
-                    type="text" 
-                    placeholder="Контактный телефон"
-                    :class="{'invalid': phone.invalid}"
-                    @focus="phone.invalid = false;phone.errors = []"
-                    v-tooltip.right="{
-                        content: phone.errors.length > 0 ? phone.errors.join(', ') : null,
-                        shown: phone.errors.length > 0,
-                        triggers: [],
-                    }"
-                />
-                <input
                     v-model="family.value"
                     class="login-input" 
                     type="text" 
@@ -87,34 +73,6 @@
                         triggers: [],
                     }"
                 />
-
-                <h3>Конфиденциальные данные</h3>
-                <input 
-                    v-model="password.value" 
-                    class="login-input" 
-                    type="password" 
-                    placeholder="Пароль"
-                    :class="{'invalid': password.invalid}"
-                    @focus="password.invalid = false;password.errors = []"
-                    v-tooltip.right="{
-                        content: password.errors.length > 0 ? password.errors.join(', ') : null,
-                        shown: password.errors.length > 0,
-                        triggers: [],
-                    }"
-                />
-                <input
-                    v-model="passwordCheck.value"  
-                    class="login-input" 
-                    type="password" 
-                    placeholder="Повторите пароль"
-                    :class="{'invalid': passwordCheck.invalid}"
-                    @focus="passwordCheck.invalid = false;passwordCheck.errors = []"
-                    v-tooltip.right="{
-                        content: passwordCheck.errors.length > 0 ? passwordCheck.errors.join(', ') : null,
-                        shown: passwordCheck.errors.length > 0,
-                        triggers: [],
-                    }"
-                />
                 <BeautyButton 
                     text="Зарегистрировать аккаунт!" 
                     look="primary" 
@@ -131,7 +89,7 @@
     import {mask} from  "vue-the-mask";
     import vSelect from "vue-select";
     import 'vue-select/dist/vue-select.css';
-import { append } from '@/js/arrays.js';
+    import { append } from '@/js/arrays.js';
     
     export default {
         name: 'LoginView',
@@ -150,21 +108,6 @@ import { append } from '@/js/arrays.js';
                     errors: []
                 },
                 family: {
-                    value: '',
-                    invalid: false,
-                    errors: []
-                },
-                phone: {
-                    value: '',
-                    invalid: false,
-                    errors: []
-                },
-                password: {
-                    value: '',
-                    invalid: false,
-                    errors: []
-                },
-                passwordCheck: {
                     value: '',
                     invalid: false,
                     errors: []
@@ -200,7 +143,19 @@ import { append } from '@/js/arrays.js';
                 .finally(() => loading(false));
             },
             register() {
-                this.validate();
+                if(!this.validate()) return;
+
+                this.$http.post('/api/Account/BuisRegister', {
+                    name: this.name,
+                    family: this.family,
+                    inn: this.inn,
+                    organizationName: this.organizationName,
+                    type: this.accountType.id
+                })
+                .then((resp) => {
+                    this.$store.commit('login', { avatar: resp.data.object });
+                })
+
                 /*if(this.password == this.passwordCheck) {
                     this.covered = true;
                     this.$http.post('/api/Authorize', {
@@ -221,13 +176,9 @@ import { append } from '@/js/arrays.js';
                 let valid = true;
                 valid &= this.validateString(this.name);
                 valid &= this.validateString(this.family);
-                valid &= this.validateString(this.phone);
-                valid &= this.validateString(this.password);
-                valid &= this.validateString(this.passwordCheck);
                 valid &= this.validateString(this.inn);
                 valid &= this.validateString(this.organizationName);
                 valid &= this.validateObject(this.accountType);
-                valid &= this.validatePassword();
                 return valid;
             },
             validateString(control) {
@@ -248,23 +199,9 @@ import { append } from '@/js/arrays.js';
 
                 return true;
             },
-            validatePassword() {
-                if(this.password.value != this.passwordCheck.value) {
-                    this.password.invalid = true;
-                    this.passwordCheck.invalid = true;
-                    this.password.errors = append(this.password.errors, 'Пароли не совпадают');
-                    this.passwordCheck.errors = append(this.passwordCheck.errors, 'Пароли не совпадают');
-                    return false;
-                }
-
-                return true;
-            },
             clearErrors() {
                 this.name.errors = [];
                 this.family.errors = [];
-                this.phone.errors = [];
-                this.password.errors = [];
-                this.passwordCheck.errors = [];
                 this.organizationName.errors = [];
                 this.inn.errors = [];
                 this.accountType.errors = [];

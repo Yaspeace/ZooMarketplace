@@ -31,11 +31,7 @@ export default {
         }
     },
     created() {
-        this.$http.get('/api/Images/' + this.account.image)
-            .then((resp) => {
-                this.image = 'https://' + resp.data.object.host + resp.data.object.route
-            })
-            .catch((err) => console.log(err));
+        this.image = 'https://myshmarket.site' + this.account.avatar.route;
     }
 }
 </script>

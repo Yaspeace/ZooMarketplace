@@ -154,7 +154,7 @@ export default {
         initAccount() {
             this.$http.get('/api/Account/' + this.$store.state.aid)
             .then((resp) => {
-                this.account = resp.data.object;
+                this.account = resp.data;
                 this.$http.get('/api/Session/Roles?user=' + this.account.user)
                 .then((roles) => {
                     this.isAds = roles.data.results.some(x => x.name == 'AdsModerator');
