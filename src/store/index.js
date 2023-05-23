@@ -12,8 +12,6 @@ export default new Vuex.Store({
   getters: {},
   mutations: {
     login(state, payload) {
-      console.log('payload');
-      console.log(payload);
       state.authorized = true;
       state.avatar = payload.avatar;
       state.aid = payload.aid;

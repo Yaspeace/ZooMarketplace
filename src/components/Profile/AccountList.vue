@@ -5,7 +5,11 @@
             <PulseLoader v-if="accounts.length == 0" class="spinner" color="#3f5787" />
             
             <div v-else class="acc-list">
-                <div v-for="acc in accounts" :key="acc.id" class="acc-list-item">
+                <div v-for="acc in accounts" :key="acc.id"
+                class="acc-list-item"
+                :class="{'chosen': acc.id == $store.state.aid}"
+                @click="logAccount(acc)"
+                >
                     <img :src="'https://myshmarket.site' + acc.avatar.route" class="acc-round acc-img" />
                     <div class="acc-item-text text-cut">
                         {{ acc.name }} {{ acc.family }}
@@ -41,6 +45,16 @@ export default {
             .then((resp) => this.accounts = resp.data)
             .catch((err) => console.log(err));
     },
+    methods: {
+        logAccount(acc) {
+            this.$http.post('/api/Session/Account?accountId=' + acc.id)
+            .then(() => this.$store.commit('login', {
+                avatar: 'https://myshmarket.site' + acc.avatar.route,
+                aid: acc.id
+            }))
+            .catch((err) => console.log(err));
+        }
+    }
 }
 </script>
 
@@ -78,7 +92,7 @@ export default {
     border-bottom-right-radius: 14px;
 }
 
-.acc-list-item:hover {
+.acc-list-item:hover, .acc-list-item.chosen {
     background: var(--color-info-dark);
 }
 

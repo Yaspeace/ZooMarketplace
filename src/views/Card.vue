@@ -140,7 +140,7 @@
                 <beauty-button class="right-button" look="primary" text="Оставить отзыв" />
                 <beauty-button class="right-button" look="secondary" text="Добавить в избранное" @click="addToFavorites" v-if="!ad.isLiked" />
                 <beauty-button class="right-button" look="secondary" text="Убрать из избранного" @click="removeFromFavorites" v-else />
-                <beauty-button class="right-button" look="primary" text="Профиль продавца" />
+                <card-seller :accId="ad.account" style="width: 70%" />
             </div>
             <div class="btns-right" v-if="isView && ad.account == $store.state.aid">
                 <beauty-button class="right-button" look="primary" text="Редактировать" />
@@ -171,6 +171,7 @@ import { ModelListSelect } from 'vue-search-select';
 import "vue-search-select/dist/VueSearchSelect.css"
 import {mask} from 'vue-the-mask';
 import PhotoCarousel from '@/components/PhotoCarousel.vue';
+import CardSeller from '@/components/AdCards/CardSeller.vue';
 
 export default {
     components: { 
@@ -179,7 +180,8 @@ export default {
         Hat,
         CustomFooter,
         ModelListSelect,
-        PhotoCarousel
+        PhotoCarousel,
+        CardSeller,
     },
     name: "Card",
     props: {

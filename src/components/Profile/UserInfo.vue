@@ -1,11 +1,11 @@
 <template>
   <div class="main shadow">
-    <div class="upper">
+    <div class="upper" v-if="isSelf">
         <AccountList class="acc-list" :userId="account.user" />
         <Offer class="offer" />
     </div>
     
-    <div class="mid-btns">
+    <div class="mid-btns" v-if="isSelf">
         <div class="mid-btn">
             <img src="@/assets/staticimages/free-icon-statistics-7147801.png" />
             Моя статистика
@@ -16,7 +16,7 @@
     </div>
     
     
-    <AccountAds class="ads" />
+    <AccountAds class="ads" :isSelf="isSelf" :accId="account.id" />
   </div>
 </template>
 
@@ -27,7 +27,7 @@ import AccountAds from './AccountAds.vue';
 
 export default {
     name: 'UserInfo',
-    props: ['account'],
+    props: ['account', 'isSelf'],
     components: {
         AccountList,
         Offer,

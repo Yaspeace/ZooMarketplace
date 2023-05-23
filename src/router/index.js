@@ -31,7 +31,7 @@ const routes = [
     component: () => import('../views/BusinessRegisterView.vue')
   },
   {
-    path: '/account/:accId',
+    path: '/account/:accId?',
     name: 'account',
     component: () => import('../views/AccountView.vue'),
     props: true

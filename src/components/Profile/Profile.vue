@@ -11,7 +11,7 @@
         {{ account.phone }}
     </div>
     <div>
-        <a href="#">
+        <a v-if="isSelf" href="#">
             Добавить способ связи...
         </a>
     </div>
@@ -24,7 +24,7 @@
 <script>
 export default {
     name: "Profile",
-    props: ["account"],
+    props: ["account", "isSelf"],
     data() {
         return {
             image: require("../../assets/staticimages/image1.jpg"),

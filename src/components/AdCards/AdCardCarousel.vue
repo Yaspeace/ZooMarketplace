@@ -20,7 +20,10 @@ import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 
 export default {
     name: "AdCardCarousel",
-    props: ["ads", "toShow"],
+    props:{
+      ads: Array,
+      toShow: Number
+    },
     components: {
         AdCard,
         VueSlickCarousel,
@@ -35,12 +38,36 @@ export default {
                 "slidesToScroll": 1,
                 "touchThreshold": 5,
                 "arrows": true,
+                //'rows': this.rowsNum
             }
         }
     },
     watch: {
       toShow: function(newVal, oldVal) {
         this.carouselSettings.slidesToShow = newVal;
+      }
+    },
+    computed: {
+      rowsNum: function() {
+        if(this.toShow == 1) {
+          return 1;
+        }
+
+        if(this.toShow == 2) {
+          if(this.ads.length <= 2) {
+            return 1;
+          } else {
+            return 2;
+          }
+        }
+
+        if(this.ads.length <= this.toShow) {
+          return 1;
+        } else if(this.ads.length <= 2 * this.toShow) {
+          return 2;
+        } else {
+          return 3;
+        }
       }
     }
 }
@@ -54,6 +81,7 @@ export default {
 
 .carousel-ad {
   width: 80%;
+  margin-bottom: 20px;
 }
 
 .custom-arrow-prev, .custom-arrow-next {

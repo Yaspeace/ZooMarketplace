@@ -71,7 +71,7 @@
             </svg>
         </div>
         <div class="nav-avatar">
-            <router-link v-if="$store.state.authorized" :to="{ name: 'account', params: { accId: $store.state.aid.toString() } }">
+            <router-link v-if="$store.state.authorized" to="/account">
                 <img class="nav-avatar-img" :src="$store.state.avatar" />
             </router-link>
             <router-link v-else :to="{ name: 'login', params: { register: 'false' } }" class="text-main underline enter-text">

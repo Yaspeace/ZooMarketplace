@@ -142,19 +142,36 @@
                 .catch((err) => console.log(err))
                 .finally(() => loading(false));
             },
-            register() {
+            async register() {
                 if(!this.validate()) return;
 
+                let userId = 0;
+                try {
+                    let acc = await this.$http.get('/api/Session/Account');
+                    userId = acc.data.object.user;
+                } catch (err) {
+                    console.log(err);
+                }
+
+                if(userId == 0) return;
+
                 this.$http.post('/api/Account/BuisRegister', {
-                    name: this.name,
-                    family: this.family,
-                    inn: this.inn,
-                    organizationName: this.organizationName,
-                    type: this.accountType.id
+                    name: this.name.value,
+                    family: this.family.value,
+                    inn: this.inn.value,
+                    organizationName: this.organizationName.value,
+                    type: this.accountType.value.id,
+                    user: userId,
+                    image: 1,
                 })
                 .then((resp) => {
-                    this.$store.commit('login', { avatar: resp.data.object });
+                    this.$store.commit('login', {
+                        avatar: 'https://myshmarket.site' + resp.data.object.avatar.route,
+                        aid: resp.data.object.id
+                    });
+                    this.$router.push('/account/' + this.$store.state.aid);
                 })
+                .catch((err) => console.log(err));
 
                 /*if(this.password == this.passwordCheck) {
                     this.covered = true;

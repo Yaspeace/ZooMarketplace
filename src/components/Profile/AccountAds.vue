@@ -1,16 +1,16 @@
 <template>
   <div>
     <div class="acc-ads-header">
-        Мои объявления
+        {{ header }}
     </div>
     <div class="tabs">
         <div :class="'tab' + (currentTab == 0 ? ' tab-current' : '')" @click="changeTab(0)">Активные</div>
-        <div :class="'tab' + (currentTab == 1 ? ' tab-current' : '')" @click="changeTab(1)">Архив</div>
-        <div :class="'tab' + (currentTab == 2 ? ' tab-current' : '')" @click="changeTab(2)">Продано</div>
+        <div :class="'tab' + (currentTab == 1 ? ' tab-current' : '')" @click="changeTab(1)" v-if="isSelf">Архив</div>
+        <div :class="'tab' + (currentTab == 2 ? ' tab-current' : '')" @click="changeTab(2)" v-if="isSelf">Продано</div>
     </div>
     <AdCardCarousel :ads="ads" :toShow="toShow" class="acc-ads-carousel" v-if="ads.length > 0" />
     <div v-else class="acc-no-ads">
-        У вас пока нет {{ currentTab == 0 ? 'активных' : currentTab == 1 ? 'архивных' : 'закрытых' }} объявлений! 
+        У {{isSelf ? 'вас' : 'пользователя'}} пока нет {{ currentTab == 0 ? 'активных' : currentTab == 1 ? 'архивных' : 'закрытых' }} объявлений! 
     </div>
   </div>
 </template>
@@ -23,6 +23,7 @@ export default {
     components: {
         AdCardCarousel,
     },
+    props: ['isSelf', 'accId'],
     data() {
         return {
             ads: [],
@@ -33,11 +34,14 @@ export default {
             toShow: this.getShowingCardsNum(),
         }
     },
+    computed: {
+        header: function() {
+            return this.isSelf ? 'Мои объявления' : 'Объявления пользователя';
+        }
+    },
     created() {
         window.addEventListener('resize', this.resize);
-        if(this.$store.state.aid > 0) {
-            this.initAds(this.$store.state.aid);
-        }
+        this.initAds(this.accId);
     },
     destroyed () {
         window.removeEventListener('resize', this.resize);
@@ -63,13 +67,13 @@ export default {
         resize() {
             this.toShow = this.getShowingCardsNum();
         },
-        initAds(aid) {
+        initAds() {
             this.activeAds = [];
             this.archiveAds = [];
             this.soldAds = [];
             this.ads = [];
 
-            this.$http.get('/api/Cards?account=' + aid + '&state=' + 2)
+            this.$http.get('/api/Cards?account=' + this.accId + '&state=' + 2)
                 .then((resp) => {
                     this.activeAds = resp.data.results;
                     this.ads = this.activeAds;
@@ -77,24 +81,24 @@ export default {
                 })
                 .catch((err) => console.log(err));
 
-            this.$http.get('/api/Cards?account=' + aid + '&state=' + 0)
+            this.$http.get('/api/Cards?account=' + this.accId + '&state=' + 0)
                 .then((resp) => resp.data.results.forEach(x => this.archiveAds.push(x)))
                 .catch((err) => console.log(err));
-            this.$http.get('/api/Cards?account=' + aid + '&state=' + 1)
+            this.$http.get('/api/Cards?account=' + this.accId + '&state=' + 1)
                 .then((resp) => resp.data.results.forEach(x => this.archiveAds.push(x)))
                 .catch((err) => console.log(err));
-            this.$http.get('/api/Cards?account=' + aid + '&state=' + 3)
+            this.$http.get('/api/Cards?account=' + this.accId + '&state=' + 3)
                 .then((resp) => resp.data.results.forEach(x => this.archiveAds.push(x)))
                 .catch((err) => console.log(err));
             
-            this.$http.get('/api/Cards?account=' + aid + '&state=' + 4)
+            this.$http.get('/api/Cards?account=' + this.accId + '&state=' + 4)
                 .then((resp) => this.soldAds = resp.data.results)
                 .catch((err) => console.log(err));
         }
     },
     watch: {
-        '$store.state.aid': function(aid) {
-            this.initAds(aid);
+        '$store.state.aid': function() {
+            this.initAds();
         },
     }
 }

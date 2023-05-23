@@ -4,10 +4,10 @@
 
     <div v-if="loaded" class="content">
         <div class="content-left">
-            <Profile :account="this.account" class="profile" />
-            <beauty-button look="secondary" text="Выйти из аккаунта" style="width: 100%;" @click="logout" />
+            <Profile :account="this.account" class="profile" :isSelf="isSelf" />
+            <beauty-button v-if="isSelf" look="secondary" text="Выйти из аккаунта" style="width: 100%;" @click="logout" />
         </div>
-        <UserInfo :account="this.account" class="user-info" />
+        <UserInfo :account="this.account" class="user-info" :isSelf="isSelf" />
     </div>
 </div>
 </template>
@@ -21,7 +21,7 @@ import BeautyButton from '@/components/BeautyButton.vue';
 export default {
     name: "AccountView",
     props: {
-        accId: String,
+        accId: String | null,
     },
     components: {
         DefaultHat,
@@ -39,20 +39,43 @@ export default {
                 image: this.$store.state.avatar,
             },
             loaded: false,
+            isSelf: this.accId == null || this.accId == '',
         }
     },
     created() {
-        this.$http.get('/api/Account/' + this.accId)
-            .then((resp) => {
-                this.account = resp.data;
-                this.loaded = true;
-            })
-            .catch((err) => console.log(err));
+        if(this.accId == null || this.accId == '') {
+            this.initSelfAcc();
+        } else {
+            this.initOtherAcc(this.accId);
+        }
     },
     methods: {
         logout() {
             this.$store.dispatch('logout');
             this.$router.push('/');
+        },
+        initSelfAcc() {
+            this.$http.get('/api/Session/Account')
+            .then((resp) => {
+                this.account = resp.data.object;
+                this.loaded = true;
+            })
+            .catch((err) => console.log(err));
+        },
+        initOtherAcc(aid) {
+            this.$http.get('/api/Account/' + aid)
+            .then((resp) => {
+                this.account = resp.data;
+                this.loaded = true;
+            })
+            .catch((err) => console.log(err));
+        }
+    },
+    watch: {
+        '$store.state.aid': function() {
+            if(this.accId == null || this.accId <= 0) {
+                this.initSelfAcc();
+            }
         }
     }
 }
