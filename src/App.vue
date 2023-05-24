@@ -92,4 +92,18 @@ a {
 .light-shadow {
   box-shadow: #80808047 6px 6px 20px 5px;
 }
+
+.cover {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+}
+
+.hidden {
+  display: none;
+}
 </style>

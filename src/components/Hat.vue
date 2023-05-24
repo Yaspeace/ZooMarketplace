@@ -78,12 +78,19 @@
                 Войти
             </router-link>
         </div>
+
+        <one-or-group ref="cardCreateModal" />
     </div>
 </template>
 
 <script>
+import OneOrGroup from './Modals/CardCreation/OneOrGroup.vue';
+
 export default {
     name: "Hat",
+    components: {
+        OneOrGroup,
+    },
     data() {
         return {
             scrolling: Boolean = false,
@@ -112,11 +119,12 @@ export default {
                 });
         },
         addAd() {
-            if(this.$store.state.authorized) {
+            /*if(this.$store.state.authorized) {
                 this.$router.push({ name: 'adCreate', params: { mode: 'create' } });
             } else {
                 this.$router.push({ name: 'login', params: { register: 'false' } });
-            }
+            }*/
+            this.$refs.cardCreateModal.show();
         },
         searchClick() {
             this.$emit('search', this.searchStr);
