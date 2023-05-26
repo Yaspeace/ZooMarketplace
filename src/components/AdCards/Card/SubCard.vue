@@ -1,63 +1,25 @@
 <template>
   <div class="wrapper">
     <div class="row">
-        <picture-input
-            ref="pictureInput"
-            class="img-input"
-            accept="image/jpeg,image/png"
-            :crop="false"
-            :zIndex="1"
-            :removable="true"
-            :alertOnError="false"
-            :custom-strings="{
-                upload: 'Загрузите фото питомца',
-                drag: 'Перетащите фото сюда',
-                change: 'Изменить фото',
-                remove: 'Удалить фото'
-            }"
-            @change="onImageChange"
-        />
-        <picture-input
-            ref="pictureInput"
-            class="img-input"
-            accept="image/jpeg,image/png"
-            :crop="false"
-            :zIndex="1"
-            :removable="true"
-            :alertOnError="false"
-            :custom-strings="{
-                upload: 'Загрузите фото питомца',
-                drag: 'Перетащите фото сюда',
-                change: 'Изменить фото',
-                remove: 'Удалить фото'
-            }"
-            @change="onImageChange"
-        />
-        <picture-input
-            ref="pictureInput"
-            class="img-input"
-            accept="image/jpeg,image/png"
-            :crop="false"
-            :zIndex="1"
-            :removable="true"
-            :alertOnError="false"
-            :custom-strings="{
-                upload: 'Загрузите фото питомца',
-                drag: 'Перетащите фото сюда',
-                change: 'Изменить фото',
-                remove: 'Удалить фото'
-            }"
-            @change="onImageChange"
-        />
+        <photo-carousel :srcs="images" style="width: 100%;" :allow-add="true" @imageAdd="addImage" />
     </div>
     <div class="row">
-        <div style="flex-grow: 1"><input placeholder="Заголовок" style="width: 100%;"/></div>
-        <div><input placeholder="Цена" /></div>
+        <div style="flex-grow: 1"><input placeholder="Заголовок" style="width: 100%;" v-model="title" /></div>
+        <div><input placeholder="Стоимость" v-mask="'#######'" v-model="price" /></div>
     </div>
     <div class="row">
+        <model-list-select
+            :list="sexes"
+            v-model="sex"
+            option-value="id"
+            :custom-text="(item) => item.name"
+            placeholder="Пол..."
+            style="width: 20%">
+        </model-list-select>
         <textarea
             placeholder="Описание"
-            style="resize: none;width: 100%"
+            style="resize: none;flex-grow: 1;"
+            v-model="description"
         >
         </textarea>
     </div>
@@ -66,15 +28,42 @@
 
 <script>
 import PictureInput from 'vue-picture-input';
+import {mask} from 'vue-the-mask';
+import PhotoCarousel from '@/components/PhotoCarousel.vue';
+import {append} from '@/js/arrays.js';
+import { ModelListSelect } from 'vue-search-select';
 
 export default {
     name: 'SubCard',
     components: {
         PictureInput,
+        PhotoCarousel,
+        ModelListSelect,
+    },
+    directives: {
+        mask,
     },
     data() {
         return {
-            image: null
+            title: '',
+            description: '',
+            price: 0,
+            images: [],
+            sex: 0,
+            sexes: [
+                {
+                    id: 0,
+                    name: 'Не определен'
+                },
+                {
+                    id: 1,
+                    name: 'Самец'
+                },
+                {
+                    id: 2,
+                    name: 'Самка'
+                }
+            ],
         }
     },
     methods: {
@@ -82,6 +71,18 @@ export default {
             if (image) {
                 this.image = image;
             }
+        },
+        addImage(image) {
+            this.images = append(this.images, image);
+        },
+        getValue() {
+            return {
+                title: this.title,
+                description: this.description,
+                price: this.price,
+                sex: this.sex,
+                images: this.images
+            };
         }
     }
 }

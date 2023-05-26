@@ -78,7 +78,7 @@ export default {
             }
         },
         goToCard() {
-            this.$router.push({name: 'ad', params: { mode: 'view', adId: this.ad.id } });
+            this.$router.push({name: 'viewAd', params: { adId: this.ad.id } });
         }
     }
 }

@@ -45,10 +45,16 @@
             </div>
         </div>
         <div class="nav-icons">
-            <svg class="nav-icon icon-default" @click="addAd" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+            <svg class="nav-icon icon-default" @click="$refs.cardCreateModal.show()" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
                 <ellipse rx="150" ry="150" transform="translate(150 150)" fill="#d2dbed" stroke-width="0"/>
                 <line x1="0" y1="-91.980459" x2="0" y2="108.316756" transform="translate(150 142.226971)" fill="none" stroke="currentColor" stroke-width="40"/>
                 <line x1="-100.148607" y1="-0.19756" x2="100.148607" y2="0.19756" transform="translate(149.988721 150.19756)" fill="none" stroke="currentColor" stroke-width="40"/>
+            </svg>
+            <svg v-if="$store.state.isBusiness" class="nav-icon icon-premium" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+                <ellipse rx="150" ry="150" transform="translate(150 150)" fill="#d2dbed" stroke-width="0"/>
+                <line x1="0" y1="-91.980459" x2="0" y2="108.316756" transform="translate(150 141.831852)" fill="none" stroke="currentColor" stroke-width="40"/>
+                <line x1="-100.148607" y1="-0.19756" x2="100.148607" y2="0.19756" transform="translate(150 149.80244)" fill="none" stroke="currentColor" stroke-width="40"/>
+                <polygon points="0,-38.648839 9.086887,-12.507027 36.75723,-11.943148 14.702892,4.777259 22.717217,31.267567 0,15.459535 -22.717217,31.267567 -14.702892,4.777259 -36.75723,-11.943148 -9.086887,-12.507027 0,-38.648839" transform="translate(218.32794 84.159176)" fill="currentColor" stroke-width="0"/>
             </svg>
             <svg @click="$router.push('/chat')" class="nav-icon icon-default" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
                 <ellipse rx="150" ry="150" transform="translate(150 150)" fill="#d2dbed" stroke-width="0"/>
@@ -79,7 +85,7 @@
             </router-link>
         </div>
 
-        <one-or-group ref="cardCreateModal" />
+        <one-or-group ref="cardCreateModal" @clickOne="addAd('one')" @clickMany="addAd('many')" />
     </div>
 </template>
 
@@ -118,13 +124,12 @@ export default {
                     console.log(this.account);
                 });
         },
-        addAd() {
-            /*if(this.$store.state.authorized) {
-                this.$router.push({ name: 'adCreate', params: { mode: 'create' } });
+        addAd(mode) {
+            if(this.$store.state.authorized) {
+                this.$router.push({ name: 'createAd', params: { mode: mode } });
             } else {
                 this.$router.push({ name: 'login', params: { register: 'false' } });
-            }*/
-            this.$refs.cardCreateModal.show();
+            }
         },
         searchClick() {
             this.$emit('search', this.searchStr);
@@ -291,6 +296,10 @@ export default {
 
 .icon-red:hover {
     color:rgb(172, 45, 45);
+}
+
+.icon-premium:hover {
+    color: rgb(196, 183, 0);
 }
 
 .nav-filter-btn {

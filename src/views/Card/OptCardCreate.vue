@@ -22,7 +22,7 @@
                             }"
                             @change="onImageChange"
                         />
-                        <div class="imgs-carousel" v-if="mode == 'one'">
+                        <div class="imgs-carousel">
                             <photo-carousel :srcs="subImages" style="width: 100%; height: 100%" :allow-add="true" @imageAdd="addSubImage" />
                         </div>
                     </div>
@@ -62,16 +62,6 @@
                     class="list-sel">
                 </model-list-select>
 
-                <model-list-select
-                    v-if="mode == 'one'"
-                    :list="sexes"
-                    v-model="ad.sex"
-                    option-value="id"
-                    :custom-text="(item) => item.name"
-                    placeholder="Пол..."
-                    class="list-sel">
-                </model-list-select>
-
                 <div style="width: 100%;max-width: 500px;">
                     Возраст:
                     <div class="age-input">
@@ -83,17 +73,10 @@
                     </div>
                 </div>
 
-                <div v-if="mode == 'one'" class="card-price-inp">
-                    Стоимость:
+                <div class="card-price-inp">
+                    Стоимость (за шт.):
                     <input v-model="ad.price" v-mask="'#######'" class="card-inp"/> р.
                 </div>
-
-                <div v-for="(sub, i) in subcards" :key="sub" style="width: 100%;display:flex;align-items: center;gap: 15px;">
-                    <sub-card style="flex-grow: 1" ref="subcardComponents" />
-                    <img src="@/assets/staticimages/urn.png" class="icon-trash" @click="removeSub(i)" />
-                </div>
-                <beauty-button v-if="mode == 'many'" look="primary" text="Добавить подобъявление" @click="addSubAd" />
-                
             </div>
             <div class="btns-right">
                 <beauty-button class="right-button" look="primary" text="Сохранить" @click="saveAd(0)" />
@@ -119,7 +102,6 @@ import "vue-search-select/dist/VueSearchSelect.css"
 import {mask} from 'vue-the-mask';
 import PhotoCarousel from '@/components/PhotoCarousel.vue';
 import CardSeller from '@/components/AdCards/CardSeller.vue';
-import SubCard from '@/components/AdCards/Card/SubCard.vue';
 import { append } from '@/js/arrays';
 
 export default {
@@ -131,12 +113,8 @@ export default {
         ModelListSelect,
         PhotoCarousel,
         CardSeller,
-        SubCard,
     },
-    name: "CardCreate",
-    props: {
-        mode: String,
-    },
+    name: "OptCardCreate",
     directives: {
         mask,
     },

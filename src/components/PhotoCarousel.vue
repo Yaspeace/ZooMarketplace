@@ -19,6 +19,7 @@
                         change: 'Изменить фото',
                         remove: 'Удалить фото'
                     }"
+                    @change="emit('imageAdd', $event)"
                 />
             </div>
         </div>
@@ -59,6 +60,11 @@ export default {
                 "touchThreshold": 5,
                 "arrows": true
             }
+        }
+    },
+    methods: {
+        emit(action, params = null) {
+            this.$emit(action, params);
         }
     }
 }

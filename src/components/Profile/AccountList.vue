@@ -50,7 +50,8 @@ export default {
             this.$http.post('/api/Session/Account?accountId=' + acc.id)
             .then(() => this.$store.commit('login', {
                 avatar: 'https://myshmarket.site' + acc.avatar.route,
-                aid: acc.id
+                aid: acc.id,
+                isBusiness: acc.type > 1,
             }))
             .catch((err) => console.log(err));
         }

@@ -43,8 +43,8 @@ export default {
 
 .btn-primary:active {
   background: #3caa3c;
-  padding: 8px;
-  font-size: 0.8em;
+  /* padding: 2px; */
+  /* font-size: 0.8em; */
   color: #252531;
 }
 
@@ -58,8 +58,8 @@ export default {
 
 .btn-secondary:active {
   background: #ff4500;
-  padding: 8px;
-  font-size: 19px;
+  /* padding: 8px; */
+  /* font-size: 19px; */
   color: #252531;
 }
 
@@ -73,8 +73,8 @@ export default {
 
 .btn-warning:active {
   background: #ff0000;
-  padding: 8px;
-  font-size: 19px;
+  /* padding: 8px; */
+  /* font-size: 19px; */
   color: #252531;
 }
 

@@ -1,11 +1,12 @@
 <template>
     <div class="cover" :class="{'hidden': !display}" @click="hide">
-        <div class="window">
-            <h2>Выберите формат объявления</h2>
-            <beauty-button class="btn" look="primary" text="Одно" @click="emit('clickOne')" />
-            <beauty-button class="btn" look="primary" text="Несколько" @click="emit('clickMany')" />
-            <beauty-button class="btn" look="primary" text="Потеряшка" @click="emit('clickLost')" />
-        </div>
+      <div class="window">
+          <h2>Выберите формат объявления</h2>
+          <beauty-button v-if="type == 2" class="btn" look="primary" text="Передержка" @click="emit('clickRetake')" />
+          <beauty-button v-if="type == 3" class="btn" look="primary" text="Бронь" @click="emit('clickReserve')" />
+          <beauty-button v-if="type == 4" class="btn" look="primary" text="Оптовое" @click="emit('clickOpt')" />
+          <beauty-button class="btn" look="primary" text="Афиша" @click="emit('clickBill')" />
+      </div>
     </div>
   </template>
   
@@ -14,6 +15,9 @@
   
   export default {
       name: 'CardType',
+      props: {
+        type: Number
+      },
       components: {
           BeautyButton,
       },
@@ -53,7 +57,7 @@
       padding-right: 5%;
       padding-bottom: 10px;
       align-items: center;
-      gap: 20px;
+      gap: 25px;
   }
   
   .btns {
@@ -64,6 +68,6 @@
   }
   
   .btn {
-      width: 45%;
+      width: 60%;
   }
   </style>

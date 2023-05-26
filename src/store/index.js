@@ -8,6 +8,7 @@ export default new Vuex.Store({
     authorized: false,
     avatar: "",
     aid: 0,
+    isBusiness: false,
   },
   getters: {},
   mutations: {
@@ -15,11 +16,13 @@ export default new Vuex.Store({
       state.authorized = true;
       state.avatar = payload.avatar;
       state.aid = payload.aid;
+      state.isBusiness = payload.isBusiness;
     },
     logout(state) {
       state.authorized = false;
       state.avatar = "";
       state.aid = 0;
+      state.isBusiness = false;
     },
   },
   actions: {
@@ -28,7 +31,8 @@ export default new Vuex.Store({
         let acc = (await Vue.prototype.$http.get('/api/Session/Account')).data.object;
         commit('login', {
           avatar: `https://${acc.avatar.host}${acc.avatar.route}`,
-          aid: acc.id
+          aid: acc.id,
+          isBusiness: acc.type > 1
         });
       } catch (error) {
         commit('logout');
@@ -44,7 +48,11 @@ export default new Vuex.Store({
               Vue.prototype.$http.get('/api/Images/' + acc.data.object.image)
                 .then((img) => image = 'https://' + img.data.object.host + img.data.object.route)
                 .catch(() => image = '@/assets/staticimages/image1.jpg')
-                .finally(() => commit('login', { avatar: image, aid: acc.data.object.id }));
+                .finally(() => commit('login', {
+                  avatar: image,
+                  aid: acc.data.object.id,
+                  isBusiness: acc.data.object.type > 1
+                }));
             });
         });
     },

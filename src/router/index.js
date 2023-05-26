@@ -38,8 +38,14 @@ const routes = [
   },
   {
     path: '/ad-create/:mode',
-    name: 'testAdCreate',
+    name: 'createAd',
     component: () => import('../views/Card/CardCreate.vue'),
+    props: true
+  },
+  {
+    path: '/ad-view/:adId',
+    name: 'viewAd',
+    component: () => import('../views/Card/CardView.vue'),
     props: true
   },
   {
