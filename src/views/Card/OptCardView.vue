@@ -4,7 +4,6 @@
 
         <div class="main-content">
             <div class="ad-info shadow">
-                <h2>{{ type.name }}</h2>
                 <div style="text-align: center;">
                     <div class="imgs-wrapper">
                         <img class="ad-img" :src="$http.defaults.baseURL + imagePath"/>
@@ -49,7 +48,7 @@
                     </div>
 
                     <div>
-                        <b>Стоимость{{ ad.type == 6 ? ' услуги' : '' }}:</b> {{ ad.price }} р.
+                        <b>Стоимость:</b> {{ ad.price }} р./шт.
                     </div>
 
                     <div class="ad-desc">
@@ -57,13 +56,49 @@
                     </div>
                 </div>
 
-                <sub-card-view v-for="subCard in ad.subCards" :key="subCard.id" :card="subCard" style="width: 100%" />
+                <div class="amounts-wrapper shadow">
+                    <div class="amounts-row">
+                        <div>Количество самцов: {{ ad.amountMale }}</div>
+                        <div v-if="ad.account == $store.state.aid" class="amount-arrows">
+                            <beauty-button look="primary" class="arrow-btn" @click="ad.amountMale = changeAmount(ad.amountMale, 1)">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+                                    <line x1="50" y1="-25" x2="-75" y2="50" transform="translate(105 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
+                                    <line x1="-50" y1="-25" x2="75" y2="50" transform="translate(195 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
+                                </svg>
+                            </beauty-button>
+                            <beauty-button look="primary" class="arrow-btn" @click="ad.amountMale = changeAmount(ad.amountMale, -1)">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+                                    <line x1="50" y1="-25" x2="-75" y2="50" transform="translate(220 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
+                                    <line x1="-50" y1="-25" x2="75" y2="50" transform="translate(80 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
+                                </svg>
+                            </beauty-button>
+                        </div>
+                        <beauty-button v-if="ad.account == $store.state.aid" look="primary" text="Подтвердить" @click="saveAmounts" />
+                    </div>
+                    <div class="amounts-row" style="margin-top: 25px;">
+                        <div>Количество самок: {{ ad.amountFemale }}</div>
+                        <div v-if="ad.account == $store.state.aid" class="amount-arrows">
+                            <beauty-button look="primary" class="arrow-btn" @click="ad.amountFemale = changeAmount(ad.amountFemale, 1)">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+                                    <line x1="50" y1="-25" x2="-75" y2="50" transform="translate(105 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
+                                    <line x1="-50" y1="-25" x2="75" y2="50" transform="translate(195 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
+                                </svg>
+                            </beauty-button>
+                            <beauty-button look="primary" class="arrow-btn" @click="ad.amountFemale = changeAmount(ad.amountFemale, -1)">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+                                    <line x1="50" y1="-25" x2="-75" y2="50" transform="translate(220 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
+                                    <line x1="-50" y1="-25" x2="75" y2="50" transform="translate(80 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
+                                </svg>
+                            </beauty-button>
+                        </div>
+                        <beauty-button v-if="ad.account == $store.state.aid" look="primary" text="Подтвердить" @click="saveAmounts" />
+                    </div>
+                </div>
             </div>
             <div class="btns-right" v-if="ad.account != $store.state.aid">
                 <beauty-button class="right-button" look="primary" text="Оставить отзыв" />
                 <beauty-button class="right-button" look="secondary" text="Добавить в избранное" @click="addToFavorites" v-if="!ad.isLiked" />
                 <beauty-button class="right-button" look="secondary" text="Убрать из избранного" @click="removeFromFavorites" v-else />
-                <beauty-button v-if="ad.type == 3" class="right-button" look="secondary" text="Забронировать" />
                 <card-seller :accId="ad.account" style="width: 70%" />
             </div>
             <div class="btns-right" v-else>
@@ -87,7 +122,6 @@ import CustomFooter from '@/components/CustomFooter.vue';
 import BeautyButton from '@/components/BeautyButton.vue';
 import PhotoCarousel from '@/components/PhotoCarousel.vue';
 import CardSeller from '@/components/AdCards/CardSeller.vue';
-import SubCardView from '@/components/AdCards/Card/SubCardView.vue';
 
 export default {
     components: { 
@@ -96,9 +130,8 @@ export default {
         CustomFooter,
         PhotoCarousel,
         CardSeller,
-        SubCardView,
     },
-    name: "CardView",
+    name: "OptCardView",
     props: {
         adId: Number|String,
     },
@@ -122,7 +155,8 @@ export default {
                 category: 0,
                 image: 0,
                 isLiked: false,
-                subCards: []
+                amountMale: 0,
+                amountFemale: 0,
             },
             ageStr: '',
             imagePath: '',
@@ -144,12 +178,7 @@ export default {
             ],
             isPhone: false,
             phone: '+7(911)111-11-11',
-            subImages: [],
-            type: {
-                id: 0,
-                name: 'Не определено',
-                enumName: ''
-            }
+            subImages: []
         }
     },
     created() {
@@ -176,7 +205,6 @@ export default {
                             }
                         }
                     };
-                    this.initType(this.ad.type);
                     this.initBreed(this.ad.breed);
                     this.initCategory(this.ad.category);
                     this.setImage(this.ad.image);
@@ -195,11 +223,6 @@ export default {
             this.$http.get('/api/Categories/' + catId)
                 .then((resp) => this.categoryName = resp.data.object.name)
                 .catch((err) => console.log(err));
-        },
-        initType(typeId) {
-            this.$http.get('/api/Types/' + typeId)
-            .then((resp) => this.type = resp.data.object)
-            .catch((err) => console.log(err));
         },
         setImage(imgId) {
             this.$http.get('/api/Images/' + imgId)
@@ -243,13 +266,22 @@ export default {
             .catch((err) => console.log(err));
         },
         getSubImages() {
-            if(this.ad.subCards.length > 0) {
-                this.subImages = this.ad.subCards.map((x) => 'https://myshmarket.site' + x.images[0].route);
-            } else {
-                this.$http.get('/api/Images', {params: {ad: this.ad.id, isMain: false}})
-                .then((resp) => this.subImages = resp.data.results.map((x) => 'https://myshmarket.site' + x.route))
-                .catch((err) => console.log(err));
-            }
+            this.$http.get('/api/Images', {params: {ad: this.ad.id, isMain: false}})
+            .then((resp) => this.subImages = resp.data.results.map((x) => 'https://myshmarket.site' + x.route))
+            .catch((err) => console.log(err));
+        },
+        changeAmount(amount, num) {
+            amount += num;
+            if(amount < 0) amount = 0;
+            if(amount > 999999) amount = 999999;
+            return amount;
+        },
+        saveAmounts() {
+            this.$http.put('/api/Cards/' + this.ad.id, {
+                amountMale: this.ad.amountMale,
+                amountFemale: this.ad.amountFemale
+            })
+            .catch((err) => console.log(err));
         }
     },
 }
@@ -396,6 +428,42 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+.amounts-wrapper {
+    background: var(--color-info-light);
+    border-radius: 14px;
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.amounts-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 2em;
+    gap: 25px;
+}
+
+.amount-arrows {
+    display: flex;
+    flex-direction:column;
+    justify-content: space-around;
+    width:7%;
+    height: 100%;
+}
+
+.arrow-btn {
+    height: 35%;
+    width: 100%;
+    padding:0px 5px;
+    font-size:initial
+}
+
+.arrow-btn > svg {
+    height: 100%;
+    aspect-ratio: 1/1;
 }
 
 @media screen and (max-width: 700px) {

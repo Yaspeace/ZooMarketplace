@@ -51,7 +51,7 @@ export default {
             .then(() => this.$store.commit('login', {
                 avatar: 'https://myshmarket.site' + acc.avatar.route,
                 aid: acc.id,
-                isBusiness: acc.type > 1,
+                type: acc.type,
             }))
             .catch((err) => console.log(err));
         }

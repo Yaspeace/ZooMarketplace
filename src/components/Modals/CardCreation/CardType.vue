@@ -2,10 +2,10 @@
     <div class="cover" :class="{'hidden': !display}" @click="hide">
       <div class="window">
           <h2>Выберите формат объявления</h2>
-          <beauty-button v-if="type == 2" class="btn" look="primary" text="Передержка" @click="emit('clickRetake')" />
-          <beauty-button v-if="type == 3" class="btn" look="primary" text="Бронь" @click="emit('clickReserve')" />
-          <beauty-button v-if="type == 4" class="btn" look="primary" text="Оптовое" @click="emit('clickOpt')" />
-          <beauty-button class="btn" look="primary" text="Афиша" @click="emit('clickBill')" />
+          <beauty-button v-if="type == 2" class="btn" look="primary" text="Передержка" @click="$router.push('/ad-create/one')" />
+          <beauty-button v-if="type == 3" class="btn" look="primary" text="Бронь" @click="$router.push('/ad-create/one')" />
+          <beauty-button v-if="type == 4" class="btn" look="primary" text="Оптовое" @click="$router.push('/opt-ad-create')" />
+          <beauty-button class="btn" look="primary" text="Афиша" @click="$router.push('/poster-create')" />
       </div>
     </div>
   </template>
@@ -68,6 +68,6 @@
   }
   
   .btn {
-      width: 60%;
+      width: 80%;
   }
   </style>

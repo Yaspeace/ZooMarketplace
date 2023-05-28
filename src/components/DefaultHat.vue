@@ -29,7 +29,7 @@
                     </svg>
                     <span class="nav-icon-lbl">Добавить</span>
                 </div>
-                <div class="nav-icon-wrapper" v-if="$store.state.isBusiness">
+                <div class="nav-icon-wrapper" v-if="$store.getters.isBusiness" @click="$refs.buisCardModal.show()">
                     <svg class="nav-icon icon-premium" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
                         <ellipse rx="150" ry="150" transform="translate(150 150)" fill="#d2dbed" stroke-width="0"/>
                         <line x1="0" y1="-91.980459" x2="0" y2="108.316756" transform="translate(150 141.831852)" fill="none" stroke="currentColor" stroke-width="40"/>
@@ -80,16 +80,19 @@
         </div>
 
         <one-or-group ref="cardCreateModal" @clickOne="addAd('one')" @clickMany="addAd('many')" />
+        <card-type ref="buisCardModal" :type="$store.state.type" />
     </div>
 </template>
   
 <script>
 import OneOrGroup from './Modals/CardCreation/OneOrGroup.vue';
+import CardType from './Modals/CardCreation/CardType.vue';
 
 export default {
     name: "DefaultHat",
     components: {
         OneOrGroup,
+        CardType,
     },
     data() {
         return {

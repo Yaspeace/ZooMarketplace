@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper shadow" v-if="account != null">
-    <div>Продавец:</div>
+    <div>{{ header }}:</div>
     <div class="info-wrapper" style="margin-top: 20px;">
         <div class="main-info">
             <img class="info-image" :src="'https://myshmarket.site' + account.avatar.route" />
@@ -26,7 +26,13 @@ export default {
     components: {
         BeautyButton,
     },
-    props: ['accId'],
+    props: {
+        accId: Number,
+        header: {
+            type: String,
+            default: 'Продавец'
+        }
+    },
     data() {
         return {
             account: null

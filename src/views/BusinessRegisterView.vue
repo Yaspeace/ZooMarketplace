@@ -168,7 +168,7 @@
                     this.$store.commit('login', {
                         avatar: 'https://myshmarket.site' + resp.data.object.avatar.route,
                         aid: resp.data.object.id,
-                        isBusiness: true,
+                        type: resp.data.object.type,
                     });
                     this.$router.push('/account/' + this.$store.state.aid);
                 })

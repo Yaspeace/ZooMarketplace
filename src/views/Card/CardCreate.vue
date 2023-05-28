@@ -34,6 +34,15 @@
                 <textarea rows="5" class="ad-desc-input" placeholder="Описание..." v-model="ad.description"></textarea>
 
                 <model-list-select
+                    :list="types"
+                    v-model="ad.type"
+                    option-value="id"
+                    :custom-text="(type) => type.name"
+                    placeholder="Тип..."
+                    class="list-sel">
+                </model-list-select>
+
+                <model-list-select
                     :list="categories"
                     v-model="currentCategory"
                     option-value="id"
@@ -183,9 +192,11 @@ export default {
             ],
             subImages: [],
             subcards: [],
+            types: [],
         }
     },
     created() {
+        this.setTypes();
         this.$http.get('/api/Categories', { params: { parentId: 0 } })
             .then((resp) => this.categories = resp.data.results)
             .catch((err) => console.log(err));
@@ -266,6 +277,16 @@ export default {
         },
         addSubImage(image) {
             this.subImages = append(this.subImages, image);
+        },
+        setTypes() {
+            this.$http.get('/api/Types')
+            .then((resp) => this.types = resp.data.results
+                .filter((x) =>
+                    x.id == 1 ||
+                    x.id == 2 ||
+                    (this.$store.state.type == 3 && x.id == 3) ||
+                    (this.$store.state.type == 2 && x.id == 6)))
+            .catch((err) => console.log(err));
         }
     },
     watch: {

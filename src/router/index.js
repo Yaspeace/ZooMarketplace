@@ -49,6 +49,39 @@ const routes = [
     props: true
   },
   {
+    path: '/opt-ad-create',
+    name: 'createOptAd',
+    component: () => import('../views/Card/OptCardCreate.vue')
+  },
+  {
+    path: '/opt-ad-view/:adId',
+    name: 'viewOptAd',
+    component: () => import('../views/Card/OptCardView.vue'),
+    props: true
+  },
+  {
+    path: '/lost-and-found-view/:adId',
+    name: 'viewLafAd',
+    component: () => import('../views/Card/LostAndFoundView.vue'),
+    props: true
+  },
+  {
+    path: '/lost-and-found-create',
+    name: 'createLafAd',
+    component: () => import('../views/Card/LostAndFoundCreate.vue')
+  },
+  {
+    path: '/poster-create',
+    name: 'createPoster',
+    component: () => import('../views/Card/PosterCreate.vue')
+  },
+  {
+    path: '/poster-view/:id',
+    name: 'viewPoster',
+    component: () => import('../views/Card/PosterView.vue'),
+    props: true,
+  },
+  {
     path: '/ad/:mode',
     name: 'adCreate',
     component: () => import('../views/Card.vue'),

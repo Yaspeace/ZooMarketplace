@@ -31,7 +31,7 @@
                     <path d="M13.3891 13.3891L19 19M9.5 15C12.5376 15 15 12.5376 15 9.5C15 6.46243 12.5376 4 9.5 4C6.46243 4 4 6.46243 4 9.5C4 12.5376 6.46243 15 9.5 15Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             
-                <svg class="nav-filter-btn" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+                <svg @mouseenter="showFilters = true" @mouseleave="showFilters = false" class="nav-filter-btn" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
                     <line x1="-114.957155" y1="0" x2="110.080323" y2="0" transform="translate(114.957155 103.927009)" fill="none" stroke-width="40"/>
                     <line x1="-103.13" y1="0" x2="103.13" y2="0" transform="translate(408.87 103.927009)" fill="none" stroke-width="40"/>
                     <circle r="37.42" transform="translate(262.457478 103.927009)" fill="none" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
@@ -43,6 +43,8 @@
                     <line x1="-32.855" y1="0" x2="32.855" y2="0" transform="translate(479.145 397.460167)" fill="none" stroke-width="40"/>
                 </svg>
             </div>
+
+            <filters-modal class="filters-modal" :class="{'hidden': !showFilters}" />
         </div>
         <div class="nav-icons">
             <svg class="nav-icon icon-default" @click="$refs.cardCreateModal.show()" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
@@ -50,7 +52,7 @@
                 <line x1="0" y1="-91.980459" x2="0" y2="108.316756" transform="translate(150 142.226971)" fill="none" stroke="currentColor" stroke-width="40"/>
                 <line x1="-100.148607" y1="-0.19756" x2="100.148607" y2="0.19756" transform="translate(149.988721 150.19756)" fill="none" stroke="currentColor" stroke-width="40"/>
             </svg>
-            <svg v-if="$store.state.isBusiness" class="nav-icon icon-premium" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+            <svg v-if="$store.getters.isBusiness" @click="$refs.buisCardModal.show()" class="nav-icon icon-premium" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
                 <ellipse rx="150" ry="150" transform="translate(150 150)" fill="#d2dbed" stroke-width="0"/>
                 <line x1="0" y1="-91.980459" x2="0" y2="108.316756" transform="translate(150 141.831852)" fill="none" stroke="currentColor" stroke-width="40"/>
                 <line x1="-100.148607" y1="-0.19756" x2="100.148607" y2="0.19756" transform="translate(150 149.80244)" fill="none" stroke="currentColor" stroke-width="40"/>
@@ -86,16 +88,21 @@
         </div>
 
         <one-or-group ref="cardCreateModal" @clickOne="addAd('one')" @clickMany="addAd('many')" />
+        <card-type ref="buisCardModal" :type="$store.state.type" />
     </div>
 </template>
 
 <script>
 import OneOrGroup from './Modals/CardCreation/OneOrGroup.vue';
+import CardType from './Modals/CardCreation/CardType.vue';
+import FiltersModal from './Modals/FiltersModal.vue';
 
 export default {
     name: "Hat",
     components: {
         OneOrGroup,
+        CardType,
+        FiltersModal,
     },
     data() {
         return {
@@ -105,6 +112,7 @@ export default {
                 img: this.$store.state.avatar,
             },
             searchStr: '',
+            showFilters: false,
         }
     },
     created () {
@@ -121,7 +129,6 @@ export default {
             this.$http.get('/api/Authorize')
                 .then((responce) => {
                     this.account = responce.object;
-                    console.log(this.account);
                 });
         },
         addAd(mode) {
@@ -238,6 +245,7 @@ export default {
     display: flex;
     align-items: center;
     padding: 0px 10px 0px 10px;
+    position: relative;
 }
 
 .nav-search-bar {
@@ -372,5 +380,17 @@ export default {
 
 .nav-header-visible {
     top: 0px;
+}
+
+.filters-modal {
+    position: absolute;
+    width: 90vw;
+    z-index: 501;
+    top: 45px;
+    left: 10px;
+}
+
+.hidden {
+    display: none;
 }
 </style>

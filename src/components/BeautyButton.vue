@@ -1,6 +1,6 @@
 <template>
   <button :class="'btn btn-primary btn-' + look + (disabled ? ' disabled btn-' + look + '-disabled' : '')" v-on:click="$emit('click')" >
-    {{ text }}
+    <slot>{{ text }}</slot>
   </button>
 </template>
 

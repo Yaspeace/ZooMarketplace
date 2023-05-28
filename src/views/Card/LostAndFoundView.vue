@@ -18,7 +18,7 @@
                     <div class="card-title">{{ ad.title }}</div>
 
                     <div v-if="!isPhone && ad.account != $store.state.aid" class="phone-btn" @click="showPhone">
-                        Показать телефон продавца
+                        Показать телефон владельца
                     </div>
                     <div v-if="isPhone && ad.account != $store.state.aid" class="phone">{{ phone }}</div>
                     <div v-if="ad.account == $store.state.aid && $store.state.authorized" class="phone">
@@ -30,6 +30,10 @@
                 <div class="card-info-wrapper shadow">
                     <div>
                         <b>Дата публикации:</b> {{ ad.published == '' ? 'Не известна' : new Date(ad.published).toLocaleDateString('ru-RU') }}
+                    </div>
+
+                    <div>
+                        <b>№ чипа/клейма:</b> {{ ad.number == '' ? 'нет' : ad.number }}
                     </div>
 
                     <div>
@@ -48,27 +52,18 @@
                         <b>Возраст:</b> {{ ad.age }} {{ ageStr }}
                     </div>
 
-                    <div>
-                        <b>Стоимость{{ ad.type == 6 ? ' услуги' : '' }}:</b> {{ ad.price }} р.
-                    </div>
-
                     <div class="ad-desc">
                         <b>Описание:</b> {{ ad.description }}
                     </div>
                 </div>
-
-                <sub-card-view v-for="subCard in ad.subCards" :key="subCard.id" :card="subCard" style="width: 100%" />
             </div>
             <div class="btns-right" v-if="ad.account != $store.state.aid">
-                <beauty-button class="right-button" look="primary" text="Оставить отзыв" />
-                <beauty-button class="right-button" look="secondary" text="Добавить в избранное" @click="addToFavorites" v-if="!ad.isLiked" />
-                <beauty-button class="right-button" look="secondary" text="Убрать из избранного" @click="removeFromFavorites" v-else />
-                <beauty-button v-if="ad.type == 3" class="right-button" look="secondary" text="Забронировать" />
+                <beauty-button v-if="ad.type == 4" class="right-button" look="primary" text="Сообщить о нахождении" />
+                <beauty-button v-if="ad.type == 5" class="right-button" look="primary" text="Сообщить о пропаже" />
                 <card-seller :accId="ad.account" style="width: 70%" />
             </div>
             <div class="btns-right" v-else>
                 <beauty-button class="right-button" look="primary" text="Редактировать" />
-                <beauty-button class="right-button" look="secondary" text="Продвижение" @click="adPay" />
                 <beauty-button v-if="ad.state == 0" class="right-button" look="primary" text="Опубликовать" @click="setAdState(1)" />
                 <beauty-button v-else class="right-button" look="primary" text="Снять с публикации" @click="setAdState(0)" />
             </div>
@@ -87,7 +82,6 @@ import CustomFooter from '@/components/CustomFooter.vue';
 import BeautyButton from '@/components/BeautyButton.vue';
 import PhotoCarousel from '@/components/PhotoCarousel.vue';
 import CardSeller from '@/components/AdCards/CardSeller.vue';
-import SubCardView from '@/components/AdCards/Card/SubCardView.vue';
 
 export default {
     components: { 
@@ -96,9 +90,8 @@ export default {
         CustomFooter,
         PhotoCarousel,
         CardSeller,
-        SubCardView,
     },
-    name: "CardView",
+    name: "LostAndFoundView",
     props: {
         adId: Number|String,
     },
@@ -122,7 +115,8 @@ export default {
                 category: 0,
                 image: 0,
                 isLiked: false,
-                subCards: []
+                subCards: [],
+                number: 'нет'
             },
             ageStr: '',
             imagePath: '',

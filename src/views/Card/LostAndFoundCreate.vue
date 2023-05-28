@@ -29,9 +29,23 @@
                     
                 </div>
 
+                <div class="card-price-inp">
+                    № чипа/клейма:
+                    <input v-model="ad.number" class="card-inp"/>
+                </div>
+
                 <input placeholder="Заголовок..." class="ad-title-input" v-model="ad.title" />
 
                 <textarea rows="5" class="ad-desc-input" placeholder="Описание..." v-model="ad.description"></textarea>
+
+                <model-list-select
+                    :list="types"
+                    v-model="ad.type"
+                    option-value="id"
+                    :custom-text="(type) => type.name"
+                    placeholder="Тип..."
+                    class="list-sel">
+                </model-list-select>
 
                 <model-list-select
                     :list="categories"
@@ -62,44 +76,14 @@
                     class="list-sel">
                 </model-list-select>
 
-                <div class="platform shadow" style="width: 100%; max-width: 500px;">
-                    <div style="display: flex" class="amount-wrapper">
-                        <div>Количество самцов:</div>
-                        <input class="amount-input" v-mask="'######'" v-model="ad.amountMale" size="6" />
-                        <div class="amount-arrows">
-                            <beauty-button look="primary" class="arrow-btn" @click="ad.amountMale += 1">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
-                                    <line x1="50" y1="-25" x2="-75" y2="50" transform="translate(105 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
-                                    <line x1="-50" y1="-25" x2="75" y2="50" transform="translate(195 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
-                                </svg>
-                            </beauty-button>
-                            <beauty-button look="primary" class="arrow-btn" @click="ad.amountMale -= 1">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
-                                    <line x1="50" y1="-25" x2="-75" y2="50" transform="translate(220 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
-                                    <line x1="-50" y1="-25" x2="75" y2="50" transform="translate(80 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
-                                </svg>
-                            </beauty-button>
-                        </div>
-                    </div>
-                    <div class="amount-wrapper" style="display: flex;margin-top: 10px;">
-                        <div>Количество самок:</div>
-                        <input class="amount-input" v-mask="'######'" v-model="ad.amountFemale" size="6" />
-                        <div class="amount-arrows">
-                            <beauty-button look="primary" class="arrow-btn" @click="ad.amountFemale += 1">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
-                                    <line x1="50" y1="-25" x2="-75" y2="50" transform="translate(105 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
-                                    <line x1="-50" y1="-25" x2="75" y2="50" transform="translate(195 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
-                                </svg>
-                            </beauty-button>
-                            <beauty-button look="primary" class="arrow-btn" @click="ad.amountFemale -= 1">
-                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
-                                    <line x1="50" y1="-25" x2="-75" y2="50" transform="translate(220 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
-                                    <line x1="-50" y1="-25" x2="75" y2="50" transform="translate(80 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
-                                </svg>
-                            </beauty-button>
-                        </div>
-                    </div>
-                </div>
+                <model-list-select
+                    :list="sexes"
+                    v-model="ad.sex"
+                    option-value="id"
+                    :custom-text="(item) => item.name"
+                    placeholder="Пол..."
+                    class="list-sel">
+                </model-list-select>
 
                 <div style="width: 100%;max-width: 500px;">
                     Возраст:
@@ -110,12 +94,7 @@
                             <option value="1">Лет</option>
                         </select>
                     </div>
-                </div>
-
-                <div class="card-price-inp">
-                    Стоимость (за шт.):
-                    <input v-model="ad.price" v-mask="'#######'" class="card-inp"/> р.
-                </div>
+                </div>               
             </div>
             <div class="btns-right">
                 <beauty-button class="right-button" look="primary" text="Сохранить" @click="saveAd(0)" />
@@ -140,7 +119,6 @@ import { ModelListSelect } from 'vue-search-select';
 import "vue-search-select/dist/VueSearchSelect.css"
 import {mask} from 'vue-the-mask';
 import PhotoCarousel from '@/components/PhotoCarousel.vue';
-import CardSeller from '@/components/AdCards/CardSeller.vue';
 import { append } from '@/js/arrays';
 
 export default {
@@ -151,9 +129,8 @@ export default {
         CustomFooter,
         ModelListSelect,
         PhotoCarousel,
-        CardSeller,
     },
-    name: "OptCardCreate",
+    name: "LostAndFoundCreate",
     directives: {
         mask,
     },
@@ -176,8 +153,7 @@ export default {
                 category: 0,
                 image: 0,
                 isLiked: false,
-                amountMale: 0,
-                amountFemale: 0
+                number: ''
             },
             image: '',
             breeds: [],
@@ -201,10 +177,11 @@ export default {
                 }
             ],
             subImages: [],
-            subcards: [],
+            types: [],
         }
     },
     created() {
+        this.setTypes();
         this.$http.get('/api/Categories', { params: { parentId: 0 } })
             .then((resp) => this.categories = resp.data.results)
             .catch((err) => console.log(err));
@@ -240,35 +217,10 @@ export default {
             this.ad.category = this.curSubCategory == 0 ? this.currentCategory : this.curSubCategory;
             this.$http.post('/api/Cards', this.ad)
                 .then((resp) => {
-                    if(this.$refs.subcardComponents && this.$refs.subcardComponents.length > 0) {
-                        this.$refs.subcardComponents.forEach((subCard) => {
-                            this.saveSubAd(resp.data.object.id, subCard.getValue());
-                        });
-                    }
                     this.saveAdImages(resp.data.object.id, [this.image, ...this.subImages])
                     this.$router.back();
                 })
                 .catch((err) => console.log(err));
-        },
-        saveSubAd(parentId, subAd) {
-            this.$http.post('/api/Cards', {
-                title: subAd.title,
-                description: subAd.description,
-                price: subAd.price,
-                sex: subAd.sex,
-                parent: parentId
-            })
-            .then((resp) => this.saveAdImages(resp.data.object.id, subAd.images))
-            .catch((err) => console.log(err));
-        },
-        addSubAd() {
-            this.subcards = append(this.subcards, this.subcards.length);
-        },
-        removeSub(index) {
-            let tmpArr = [];
-            for(let i = 0; i < index; i++) tmpArr.push(this.subcards[i]);
-            for(let i = index + 1; i < this.subcards.length; i++) tmpArr.push(this.subcards[i]);
-            this.subcards = tmpArr;
         },
         saveAdImages(adId, srcs) {
             srcs.forEach((src, index) => {
@@ -285,6 +237,14 @@ export default {
         },
         addSubImage(image) {
             this.subImages = append(this.subImages, image);
+        },
+        setTypes() {
+            this.$http.get('/api/Types')
+            .then((resp) => this.types = resp.data.results
+                .filter((x) =>
+                    x.id == 4 ||
+                    x.id == 5))
+            .catch((err) => console.log(err));
         }
     },
     watch: {
@@ -305,10 +265,6 @@ export default {
 </script>
 
 <style scoped>
-input:focus {
-    outline: none;
-}
-
 .main-wrapper {
     position: relative;    
 }
@@ -340,13 +296,6 @@ input:focus {
     gap: 20px;
     justify-content: flex-start;
     align-items: center;
-}
-
-.platform {
-    background: var(--color-info-light);
-    border-radius: 14px;
-    padding: 20px;
-    box-sizing: border-box;
 }
 
 .lalign {
@@ -417,13 +366,6 @@ input:focus {
     border-radius: 5px;
     resize: none;
     max-width: 500px;
-}
-
-.amount-input {
-    border: none !important;
-    border-radius: 5px;
-    height: 2em;
-    max-width: 6em;
 }
 
 .right-button {
@@ -507,33 +449,6 @@ input:focus {
     width: 25px;
     height: 25px;
     cursor: pointer;
-}
-
-.amount-wrapper {
-    display: flex;
-    align-items: center;
-    height: 2em;
-    gap: 10px;
-}
-
-.amount-arrows {
-    display: flex;
-    flex-direction:column;
-    justify-content: space-around;
-    width:7%;
-    height: 100%;
-}
-
-.arrow-btn {
-    height: 35%;
-    width: 100%;
-    padding:0px 5px;
-    font-size:initial
-}
-
-.arrow-btn > svg {
-    height: 100%;
-    aspect-ratio: 1/1;
 }
 
 @media screen and (max-width: 700px) {

@@ -4,7 +4,7 @@
             <h2>Выберите формат объявления</h2>
             <beauty-button class="btn" look="primary" text="Одно" @click="emit('clickOne')" />
             <beauty-button class="btn" look="primary" text="Несколько" @click="emit('clickMany')" />
-            <beauty-button class="btn" look="primary" text="Потеряшка" @click="emit('clickLost')" />
+            <beauty-button class="btn" look="primary" text="Потеряшка" @click="$router.push('/lost-and-found-create')" />
         </div>
     </div>
   </template>
@@ -64,6 +64,6 @@
   }
   
   .btn {
-      width: 45%;
+      width: 80%;
   }
   </style>

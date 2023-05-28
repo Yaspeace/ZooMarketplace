@@ -8,21 +8,25 @@ export default new Vuex.Store({
     authorized: false,
     avatar: "",
     aid: 0,
-    isBusiness: false,
+    type: 0,
   },
-  getters: {},
+  getters: {
+    isBusiness(state) {
+      return state.type > 1;
+    }
+  },
   mutations: {
     login(state, payload) {
       state.authorized = true;
       state.avatar = payload.avatar;
       state.aid = payload.aid;
-      state.isBusiness = payload.isBusiness;
+      state.type = payload.type;
     },
     logout(state) {
       state.authorized = false;
       state.avatar = "";
       state.aid = 0;
-      state.isBusiness = false;
+      state.type = 0;
     },
   },
   actions: {
@@ -32,7 +36,7 @@ export default new Vuex.Store({
         commit('login', {
           avatar: `https://${acc.avatar.host}${acc.avatar.route}`,
           aid: acc.id,
-          isBusiness: acc.type > 1
+          type: acc.type
         });
       } catch (error) {
         commit('logout');
@@ -51,7 +55,7 @@ export default new Vuex.Store({
                 .finally(() => commit('login', {
                   avatar: image,
                   aid: acc.data.object.id,
-                  isBusiness: acc.data.object.type > 1
+                  type: acc.data.object.type
                 }));
             });
         });
