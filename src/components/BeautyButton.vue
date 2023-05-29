@@ -34,35 +34,66 @@ export default {
 }
 
 .btn-primary {
-  background: linear-gradient(to bottom left, #3ae93a, #028d47);
+  /* background: linear-gradient(to top right, #5e02a0, #685ac7); */
+  background: linear-gradient(to top right, #452c8a, #735ff7);
 }
 
 .btn-primary:hover {
-  background: linear-gradient(to top right, #238823, #015a2e);
+  background: linear-gradient(to top right, #250164, #322491);
 }
 
 .btn-primary:active {
-  background: #3caa3c;
-  /* padding: 2px; */
-  /* font-size: 0.8em; */
+  background:#6A5ACD;
+  /*padding: 8px;*/
+  /*font-size: 19px;*/
   color: #252531;
 }
 
 .btn-secondary {
-  background: linear-gradient(to top right, #ff0000, #f8b706);
+  background: linear-gradient(to top right, #008080, #25cac2);
 }
 
 .btn-secondary:hover {
-  background: linear-gradient(to top right, #b40c0c, #fda744);
+  background: linear-gradient(to top right, #014747, #1da29c);
 }
 
 .btn-secondary:active {
-  background: #ff4500;
-  /* padding: 8px; */
-  /* font-size: 19px; */
+  background: #14a19a;
+  /*padding: 8px;*/
+  /*font-size: 19px;*/
   color: #252531;
 }
 
+.btn-accept {
+  background: linear-gradient(to top right, #028d47, #3ae93a );
+}
+
+.btn-accept:hover {
+  background: linear-gradient(to top right, #015a2e, #238823);
+}
+
+.btn-accept:active {
+  background: #3caa3c;
+  /*padding: 8px;*/
+  /*font-size: 19px;*/
+  color: #252531;
+}
+
+.btn-reject {
+  background: linear-gradient(to top right, #ff0000, #f8b706);
+}
+
+.btn-reject:hover {
+  background: linear-gradient(to top right, #b40c0c, #fda744);
+}
+
+.btn-reject:active {
+  background: #ff4500;
+  /*padding: 8px;*/
+  /*font-size: 19px;*/
+  color: #252531;
+}
+ 
 .btn-warning {
   background: linear-gradient(to top right, #ff0000, #fd6428);
 }
@@ -73,8 +104,8 @@ export default {
 
 .btn-warning:active {
   background: #ff0000;
-  /* padding: 8px; */
-  /* font-size: 19px; */
+  /*padding: 8px;*/
+  /*font-size: 19px;*/
   color: #252531;
 }
 
@@ -85,14 +116,22 @@ export default {
 }
 
 .btn-primary-disabled {
-  background: linear-gradient(to bottom left, #ace9ac, #2e8a5c);
+  background: linear-gradient(to top right, #5626cf, #4843c7);
 }
 
 .btn-secondary-disabled {
-  background: linear-gradient(to top right, #fd7171, #eecc6e);
+  background: linear-gradient(to top right, #02b0b3, #6bc8ca);
 }
 
-.btn-warning-disabled {
-  background: linear-gradient(to top right, #fd6c6c, #f5a687);;
+.btn-accept-disabled {
+  background: linear-gradient(to top right, #2e8a5c, #ace9ac);
 }
+
+.btn-reject-disabled {
+  background: linear-gradient(to top right, #fd7171, #eecc6e);
+}
+.btn-warning-disabled {
+  background: linear-gradient(to top right, #fd6c6c, #f5a687);
+}
+
 </style>
