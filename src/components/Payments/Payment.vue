@@ -1,10 +1,10 @@
 <template>
-    <div class="main row">
+    <div class="main row" @click="$event.stopPropagation()">
         <div class="col-75">
             <div class="container">
                 <div class="row">
                     <div class="col-50">
-                        <h3>Оплата</h3>
+                        <h3>Реквизиты банковской карты</h3>
                         <label for="ccnum">Номер карты*</label>
                         <input 
                           type="text" 
@@ -40,18 +40,11 @@
                           v-model="cardData.name.value"
                           :class="cardData.name.isValid? '' : 'invalid'">
                     </div>
-
-                    <div class="col-50">
-                        <h3>Контактная информация</h3>
-                        <label for="fname">Ваше имя (полное)</label>
-                        <input type="text" placeholder="Иванов Иван Иванович" v-model="cardData.fio.value"
-                          :class="cardData.fio.isValid? '' : 'invalid'">
-                        <label for="email">Почта*</label>
-                        <input type="text" placeholder="example@mail.ru" v-model="cardData.mail.value"
-                          :class="cardData.mail.isValid? '' : 'invalid'" v-on:input="makeValid(cardData.mail)">
-                    </div>
                 </div>
-                <input type="submit" value="Оплатить" class="btn" @click="pay">
+                <div class="row" style="width: 100%;justify-content: space-between;">
+                  <input type="submit" value="Подтвердить" class="btn" @click="pay" />
+                  <input type="submit" value="Отмена" class="btn" @click="$emit('cancel', $event)" />
+                </div>
             </div>
         </div>
     </div>
@@ -62,7 +55,6 @@ import {mask} from 'vue-the-mask';
 
 export default {
     name: "Payment",
-    props: ['adId'],
     data() {
       return {
         namePrevVal: '',
@@ -84,14 +76,6 @@ export default {
             value: '',
             isValid: true
           },
-          fio: {
-            value: '',
-            isValid: true
-          },
-          mail: {
-            value: '',
-            isValid: true
-          }
         },
       }
     },
@@ -99,7 +83,7 @@ export default {
         mask,
     },
     methods: {
-        pay() {
+        pay(event) {
           let isValid = true;
           if(this.cardData.number.value.length != 19) {
             this.cardData.number.isValid = false;
@@ -116,17 +100,14 @@ export default {
             isValid = false;
           }
 
-          if(!this.cardData.mail.value.toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
-            this.cardData.mail.isValid = false;
-            isValid = false;
-          }
-
           if(isValid) {
-            this.$http.put('/api/Cards/' + this.adId, {
-                isPaid: true
-            })
-            .then(this.$router.back())
-            .catch((err) => console.log(err));
+            event.cardData = {
+              number: this.cardData.number.value,
+              months: this.cardData.months.value,
+              cvv: this.cardData.cvv.value,
+              name: this.cardData.name.value
+            };
+            this.$emit('done', event);
           }
         },
         toUpper(e) {
@@ -163,6 +144,7 @@ export default {
 <style scoped>
 .main {
   padding-top: 50px;
+  box-sizing: border-box;
 }
 .row {
   display: -ms-flexbox; /* IE10 */
@@ -170,11 +152,6 @@ export default {
   flex-direction: row;
   -ms-flex-wrap: wrap; /* IE10 */
   flex-wrap: wrap;
-}
-
-.col-25 {
-  -ms-flex: 25%; /* IE10 */
-  flex: 25%;
 }
 
 .col-50 {
@@ -227,7 +204,7 @@ label {
   padding: 12px;
   margin: 10px 0;
   border: none;
-  width: 100%;
+  width: 40%;
   border-radius: 3px;
   cursor: pointer;
   font-size: 17px;

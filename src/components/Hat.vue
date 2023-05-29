@@ -24,14 +24,14 @@
         </div>
 
         <div class="nav-search">
-            <div id="search-form" class="nav-search-bar" method="get" action="[[~[[*id]]]]">
+            <div id="search-form" class="nav-search-bar">
                 <input class="nav-search-input" placeholder="Поиск" maxlength="200" v-model="searchStr" />
                 
                 <svg @click="searchClick" id="search-submit" class="nav-search-button" viewBox="0 0 24 24" fill="none">
                     <path d="M13.3891 13.3891L19 19M9.5 15C12.5376 15 15 12.5376 15 9.5C15 6.46243 12.5376 4 9.5 4C6.46243 4 4 6.46243 4 9.5C4 12.5376 6.46243 15 9.5 15Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             
-                <svg @mouseenter="showFilters = true" @mouseleave="showFilters = false" class="nav-filter-btn" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+                <svg @click="showFilters = !showFilters" class="nav-filter-btn" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
                     <line x1="-114.957155" y1="0" x2="110.080323" y2="0" transform="translate(114.957155 103.927009)" fill="none" stroke-width="40"/>
                     <line x1="-103.13" y1="0" x2="103.13" y2="0" transform="translate(408.87 103.927009)" fill="none" stroke-width="40"/>
                     <circle r="37.42" transform="translate(262.457478 103.927009)" fill="none" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
@@ -44,7 +44,7 @@
                 </svg>
             </div>
 
-            <filters-modal class="filters-modal" :class="{'hidden': !showFilters}" />
+            <filters-modal class="filters-modal shadow" :class="{'hidden': !showFilters}" />
         </div>
         <div class="nav-icons">
             <svg class="nav-icon icon-default" @click="$refs.cardCreateModal.show()" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">

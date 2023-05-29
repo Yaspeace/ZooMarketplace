@@ -3,7 +3,7 @@
     <div class="ad-img-wrapper">
         <img class="ad-img" :src="this.$http.defaults.baseURL + imagePath"/>
         <div class="ad-date" v-if="this.ad.state != 4">
-            {{ ad.date }}
+            {{ new Date(ad.published).toLocaleDateString('ru-RU') }}
         </div>
         <svg 
         @click="heartClick" :class="'ad-heart' + (ad.isLiked ? ' pressed' : '')" 

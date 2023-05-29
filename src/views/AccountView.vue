@@ -55,6 +55,7 @@ export default {
             this.$router.push('/');
         },
         initSelfAcc() {
+            this.loaded = false;
             this.$http.get('/api/Session/Account')
             .then((resp) => {
                 this.account = resp.data.object;
@@ -63,6 +64,7 @@ export default {
             .catch((err) => console.log(err));
         },
         initOtherAcc(aid) {
+            this.loaded = false;
             this.$http.get('/api/Account/' + aid)
             .then((resp) => {
                 this.account = resp.data;
@@ -75,6 +77,8 @@ export default {
         '$store.state.aid': function() {
             if(this.accId == null || this.accId <= 0) {
                 this.initSelfAcc();
+            } else {
+                this.initOtherAcc(this.accId);
             }
         }
     }

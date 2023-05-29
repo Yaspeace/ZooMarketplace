@@ -11,11 +11,6 @@
         {{ account.phone }}
     </div>
     <div>
-        <a v-if="isSelf" href="#">
-            Добавить способ связи...
-        </a>
-    </div>
-    <div>
         Рейтинг: {{ account.rate }}
     </div>
 </div>

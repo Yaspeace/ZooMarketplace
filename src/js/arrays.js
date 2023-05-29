@@ -5,8 +5,10 @@
  * @returns New instance of array.
  */
 export function append(arr, item) {
+    if(arr == null || item == null) return arr;
+
     if(item instanceof Array) {
-        return [...arr, ...item];
+        return item.length > 0 ? [...arr, ...item] : arr;
     } else {
         return [...arr, item];
     }
@@ -18,4 +20,8 @@ export function appendFront(arr, item) {
     } else {
         return [item, ...arr];
     }
+}
+
+export function removeByIndex(array, index) {
+    return array.filter((_, i) => i != index);
 }

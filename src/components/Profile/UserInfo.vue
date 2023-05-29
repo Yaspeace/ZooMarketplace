@@ -1,14 +1,17 @@
 <template>
   <div class="main shadow">
+    <payments ref="payments" :accId="$store.state.aid" />
+
     <div class="upper" v-if="isSelf">
         <AccountList class="acc-list" :userId="account.user" />
-        <Offer class="offer" />
+        <offer v-if="$store.state.type == 1" class="offer" />
+        <business-offer v-else :subEnd="account.subEnd" :subId="account.subId" class="offer" />
     </div>
     
     <div class="mid-btns" v-if="isSelf">
-        <div class="mid-btn">
+        <div class="mid-btn" @click="$refs.payments.show()">
             <img src="@/assets/staticimages/free-icon-statistics-7147801.png" />
-            Моя статистика
+            Мои реквизиты
         </div>
         <router-link to="/moderation" class="mid-btn moderation-btn" v-if="isModer" >
             Модерация
@@ -17,13 +20,18 @@
     
     
     <AccountAds class="ads" :isSelf="isSelf" :accId="account.id" />
+
+    <card-tabs v-if="isSelf" class="ads" header="Забронированные" :tabs="reservedTab" />
   </div>
 </template>
 
 <script>
 import AccountList from './AccountList.vue';
 import Offer from './Offer.vue';
+import BusinessOffer from './BusinessOffer.vue';
 import AccountAds from './AccountAds.vue';
+import CardTabs from '../AdCards/CardTabs.vue';
+import Payments from './Payments.vue';
 
 export default {
     name: 'UserInfo',
@@ -31,11 +39,20 @@ export default {
     components: {
         AccountList,
         Offer,
+        BusinessOffer,
         AccountAds,
+        CardTabs,
+        Payments,
     },
     data() {
         return {
             isModer: false,
+            reservedTab: [{
+                name: 'Бронь',
+                emptyStr: 'Нет забронированных',
+                ads: []
+            }],
+            showPayments: false
         }
     },
     created() {
@@ -68,6 +85,7 @@ export default {
 
 .offer {
     width: 40%;
+    align-self: stretch;
 }
 
 .mid-btns {

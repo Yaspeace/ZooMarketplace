@@ -36,8 +36,8 @@
                         <line x1="-100.148607" y1="-0.19756" x2="100.148607" y2="0.19756" transform="translate(150 149.80244)" fill="none" stroke="currentColor" stroke-width="40"/>
                         <polygon points="0,-38.648839 9.086887,-12.507027 36.75723,-11.943148 14.702892,4.777259 22.717217,31.267567 0,15.459535 -22.717217,31.267567 -14.702892,4.777259 -36.75723,-11.943148 -9.086887,-12.507027 0,-38.648839" transform="translate(218.32794 84.159176)" fill="currentColor" stroke-width="0"/>
                     </svg>
-                    <span>Добавить</span>
-                    <span>(премиум)</span>
+                    <span class="nav-icon-lbl">Добавить</span>
+                    <span class="nav-icon-lbl">(премиум)</span>
                 </div>
                 <div class="nav-icon-wrapper" @click="$router.push('/chat')">
                     <svg class="nav-icon icon-default" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
