@@ -60,7 +60,7 @@
             <div class="btns-right" v-if="ad.account != $store.state.aid">
                 <beauty-button v-if="ad.type == 4" class="right-button" look="primary" text="Сообщить о нахождении" />
                 <beauty-button v-if="ad.type == 5" class="right-button" look="primary" text="Сообщить о пропаже" />
-                <card-seller :accId="ad.account" style="width: 70%" />
+                <card-seller :accId="ad.account" class="card-seller" />
             </div>
             <div class="btns-right" v-else>
                 <beauty-button class="right-button" look="primary" text="Редактировать" />
@@ -360,6 +360,10 @@ export default {
     font-size: 18px;
 }
 
+.card-seller {
+    width: 70%;
+}
+
 .footer-img-wrapper {
     width: 100%;
     height: 300px;
@@ -406,7 +410,9 @@ export default {
     .right-button {
         width: 100%;
     }
-    
+    .card-seller {
+        width: 100%;
+    }
 }
 
 @media screen and (max-width: 768px) {

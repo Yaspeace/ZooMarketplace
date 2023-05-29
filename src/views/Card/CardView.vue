@@ -64,7 +64,7 @@
                 <beauty-button class="right-button" look="secondary" text="Добавить в избранное" @click="addToFavorites" v-if="!ad.isLiked" />
                 <beauty-button class="right-button" look="secondary" text="Убрать из избранного" @click="removeFromFavorites" v-else />
                 <beauty-button v-if="ad.type == 3" class="right-button" look="secondary" text="Забронировать" />
-                <card-seller :accId="ad.account" style="width: 70%" />
+                <card-seller :accId="ad.account" class="card-seller" />
             </div>
             <div class="btns-right" v-else>
                 <beauty-button class="right-button" look="primary" text="Редактировать" />
@@ -366,6 +366,10 @@ export default {
     font-size: 18px;
 }
 
+.card-seller {
+    width: 70%;
+}
+
 .footer-img-wrapper {
     width: 100%;
     height: 300px;
@@ -412,7 +416,9 @@ export default {
     .right-button {
         width: 100%;
     }
-    
+    .card-seller {
+        width: 100%;
+    }
 }
 
 @media screen and (max-width: 768px) {
