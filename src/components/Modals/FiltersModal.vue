@@ -36,15 +36,6 @@
         </div>
 
         <div>
-            <h3>Категория продавца</h3>
-            <div class="filters-block">
-                <div v-for="x in accTypes" :key="x.id">
-                    <input type="checkbox" /><label>{{ x.name }}</label>
-                </div>
-            </div>
-        </div>
-
-        <div>
             <h3>Пол</h3>
             <div class="filters-block">
                 <div><input type="radio" :value="0" v-model="sex" /><label>Не важно</label></div>
@@ -87,7 +78,6 @@ export default {
             categories: [],
             breeds: [],
             adTypes: [],
-            accTypes: [],
             sex: 0,
             ageFrom: '',
             ageTo: '',
@@ -97,7 +87,6 @@ export default {
         this.getCategories();
         this.getBreeds();
         this.getAdTypes();
-        this.getAccTypes();
     },
     methods: {
         getCategories() {
@@ -115,11 +104,6 @@ export default {
             .then((resp) => this.adTypes = resp.data.results)
             .catch((err) => console.log(err));
         },
-        getAccTypes() {
-            this.$http.get('/api/Account/Types')
-            .then((resp) => this.accTypes = resp.data)
-            .catch((err) => console.log(err));
-        }
     }
 }
 </script>

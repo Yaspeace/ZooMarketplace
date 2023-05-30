@@ -5,18 +5,33 @@
     <div id="content">
 
       <div class="top-bar">
-        <div class="sort-input" @click="showOptions = !showOptions">
-          <div>Сортировать по: Дата публикации</div>
-          <svg style="width: 25px;padding-left: 15px;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
-              <line x1="50" y1="-25" x2="-75" y2="50" transform="translate(220 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
-              <line x1="-50" y1="-25" x2="75" y2="50" transform="translate(80 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
-          </svg>
-          <div class="options" :class="{'hidden': !showOptions }">
-            <div>Дата публикации</div>
-            <div>Сначала дешевле</div>
-            <div>Сначала дороже</div>
+        <div class="top-filters" style="">
+          <div class="sort-input" @click="showOptions1 = !showOptions1">
+            <div>Сортировать по: Дата публикации</div>
+            <svg style="width: 25px;padding-left: 15px;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+                <line x1="50" y1="-25" x2="-75" y2="50" transform="translate(220 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
+                <line x1="-50" y1="-25" x2="75" y2="50" transform="translate(80 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
+            </svg>
+            <div class="options" :class="{'hidden': !showOptions1 }">
+              <div>Дата публикации</div>
+              <div>Сначала дешевле</div>
+              <div>Сначала дороже</div>
+            </div>
+          </div>
+          <div class="sort-input" @click="showOptions2 = !showOptions2">
+            <div>Выбрать продавцов</div>
+            <svg style="width: 25px;padding-left: 15px;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+                <line x1="50" y1="-25" x2="-75" y2="50" transform="translate(220 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
+                <line x1="-50" y1="-25" x2="75" y2="50" transform="translate(80 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
+            </svg>
+            <div class="options" :class="{'hidden': !showOptions2 }">
+              <div v-for="x in accTypes" :key="x.id">
+                <input type="checkbox" @click="$event.stopPropagation()" /><label>{{ x.name }}</label>
+              </div>
+            </div>
           </div>
         </div>
+        
         <div class="tab-btns">
           <div :class="{'active': curTab == 0}" @click="curTab = 0">Объявления</div>
           <div :class="{'active': curTab == 1}" @click="curTab = 1">Потеряшки</div>
@@ -53,7 +68,9 @@ export default {
       ads: [],
       toShow: this.getShowingCardsNum(),
       curTab: 0,
-      showOptions: false
+      showOptions1: false,
+      showOptions2: false,
+      accTypes: [],
     }
   },
   components: {
@@ -69,6 +86,7 @@ export default {
     window.addEventListener('resize', this.resize);
     this.getPaidAds();
     this.getAds();
+    this.getAccTypes();
   },
   destroyed () {
     window.removeEventListener('resize', this.resize);
@@ -96,6 +114,11 @@ export default {
       if(window.innerWidth >= 1440) return 3;
       if(window.innerWidth >= 1000) return 2;
       return 1;
+    },
+    getAccTypes() {
+        this.$http.get('/api/Account/Types')
+        .then((resp) => this.accTypes = resp.data)
+        .catch((err) => console.log(err));
     },
     resize() {
       this.toShow = this.getShowingCardsNum();
@@ -158,6 +181,11 @@ export default {
   width: 100%;
   padding: 25px;
   box-sizing: border-box;
+}
+.top-filters {
+  display: flex;
+  gap: 15px;
+  align-items: center;
 }
 
 .sort-input {
@@ -253,6 +281,11 @@ export default {
     flex-direction: column-reverse;
     justify-content: flex-start;
     gap: 25px;
+  }
+
+  .top-filters {
+    flex-direction: column;
+    gap: 7px;
   }
 }
 
