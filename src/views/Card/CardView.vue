@@ -60,9 +60,9 @@
                 <sub-card-view v-for="subCard in ad.subCards" :key="subCard.id" :card="subCard" style="width: 100%" />
             </div>
             <div class="btns-right" v-if="ad.account != $store.state.aid">
-                <beauty-button class="right-button" look="primary" text="Оставить отзыв" />
-                <beauty-button class="right-button" look="secondary" text="Добавить в избранное" @click="addToFavorites" v-if="!ad.isLiked" />
-                <beauty-button class="right-button" look="secondary" text="Убрать из избранного" @click="removeFromFavorites" v-else />
+                <beauty-button class="right-button" look="primary" text="Добавить в избранное" @click="addToFavorites" v-if="!ad.isLiked" />
+                <beauty-button class="right-button" look="primary" text="Убрать из избранного" @click="removeFromFavorites" v-else />
+                <beauty-button class="right-button" look="secondary" text="Написать сообщение" />
                 <beauty-button v-if="ad.type == 3" class="right-button" look="secondary" text="Забронировать" />
                 <card-seller :accId="ad.account" class="card-seller" />
             </div>

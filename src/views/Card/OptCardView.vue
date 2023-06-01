@@ -40,10 +40,6 @@
                     </div>
 
                     <div>
-                        <b>Пол:</b> {{ sexes.find(x => x.id == ad.sex).name }}
-                    </div>
-
-                    <div>
                         <b>Возраст:</b> {{ ad.age }} {{ ageStr }}
                     </div>
 
@@ -162,20 +158,6 @@ export default {
             imagePath: '',
             breedName: '',
             categoryName: '',
-            sexes: [
-                {
-                    id: 0,
-                    name: 'Не определен'
-                },
-                {
-                    id: 1,
-                    name: 'Самец'
-                },
-                {
-                    id: 2,
-                    name: 'Самка'
-                }
-            ],
             isPhone: false,
             phone: '+7(911)111-11-11',
             subImages: []
