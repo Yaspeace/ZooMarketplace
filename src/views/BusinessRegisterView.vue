@@ -170,7 +170,7 @@
                         aid: resp.data.object.id,
                         type: resp.data.object.type,
                     });
-                    this.$router.push('/account/' + this.$store.state.aid);
+                    this.$router.push('/account');
                 })
                 .catch((err) => console.log(err));
 

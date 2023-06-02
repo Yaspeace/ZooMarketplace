@@ -142,6 +142,7 @@ import {mask} from 'vue-the-mask';
 import PhotoCarousel from '@/components/PhotoCarousel.vue';
 import CardSeller from '@/components/AdCards/CardSeller.vue';
 import { append } from '@/js/arrays';
+import CardAmounts from '@/components/AdCards/Card/CardAmounts.vue';
 
 export default {
     components: { 
@@ -152,6 +153,7 @@ export default {
         ModelListSelect,
         PhotoCarousel,
         CardSeller,
+        CardAmounts,
     },
     name: "OptCardCreate",
     directives: {

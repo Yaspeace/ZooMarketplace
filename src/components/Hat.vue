@@ -1,5 +1,5 @@
 <template>
-  <div :class="'nav' + (scrolling ? '' : ' nav-header-visible')">
+  <div class="shadow" :class="'nav' + (scrolling ? '' : ' nav-header-visible')">
         <router-link to="/" class="nav-header"> 
             <img src="@/assets/staticimages/mmlogo.png" class="nav-logo-img" />
             <div class="nav-title">

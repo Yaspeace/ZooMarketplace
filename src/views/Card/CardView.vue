@@ -62,7 +62,7 @@
             <div class="btns-right" v-if="ad.account != $store.state.aid">
                 <beauty-button class="right-button" look="primary" text="Добавить в избранное" @click="addToFavorites" v-if="!ad.isLiked" />
                 <beauty-button class="right-button" look="primary" text="Убрать из избранного" @click="removeFromFavorites" v-else />
-                <beauty-button class="right-button" look="secondary" text="Написать сообщение" />
+                <beauty-button class="right-button" look="secondary" text="Написать сообщение" @click="startChat" />
                 <beauty-button v-if="ad.type == 3" class="right-button" look="secondary" text="Забронировать" />
                 <card-seller :accId="ad.account" class="card-seller" />
             </div>
@@ -149,7 +149,8 @@ export default {
                 id: 0,
                 name: 'Не определено',
                 enumName: ''
-            }
+            },
+            chatId: 0
         }
     },
     created() {
@@ -176,6 +177,7 @@ export default {
                             }
                         }
                     };
+                    this.getChat();
                     this.initType(this.ad.type);
                     this.initBreed(this.ad.breed);
                     this.initCategory(this.ad.category);
@@ -249,6 +251,26 @@ export default {
                 this.$http.get('/api/Images', {params: {ad: this.ad.id, isMain: false}})
                 .then((resp) => this.subImages = resp.data.results.map((x) => 'https://myshmarket.site' + x.route))
                 .catch((err) => console.log(err));
+            }
+        },
+        getChat() {
+            this.$http.get('/api/Chats?ad=' + this.ad.id)
+            .then((resp) => {
+                if(resp.data && resp.data.results && resp.data.results.length > 0) {
+                    this.chatId = resp.data.results[0].id;
+                }
+            })
+            .catch((err) => console.log(err));
+        },
+        startChat() {
+            if(this.chatId == 0) {
+                this.$http.post('/api/Chats', { accounts: [this.$store.state.aid, this.ad.account], ad: this.ad.id })
+                .then((resp) => {
+                    this.$router.push('/chat/' + resp.data.object.id);
+                })
+                .catch((err) => console.log(err));
+            } else {
+                this.$router.push('/chat/' + this.chatId);
             }
         }
     },

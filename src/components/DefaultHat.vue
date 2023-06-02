@@ -1,5 +1,5 @@
 <template>
-    <div :class="'nav' + (scrolling ? '' : ' nav-header-visible')">
+    <div class="shadow" :class="'nav' + (scrolling ? '' : ' nav-header-visible')">
         <div class="sub-nav subnav-upper">
             <div class="nav-header">
                 <router-link to="/">

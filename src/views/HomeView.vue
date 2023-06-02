@@ -270,12 +270,6 @@ export default {
   border-top-left-radius: 14px;
 }
 
-@media screen and (max-width: 700px) {
-  .footer-img {
-    width: 100%;
-  }
-}
-
 @media screen and (max-width: 720px) {
   .top-bar {
     flex-direction: column-reverse;
@@ -286,6 +280,10 @@ export default {
   .top-filters {
     flex-direction: column;
     gap: 7px;
+  }
+
+    .footer-img {
+    width: 100%;
   }
 }
 

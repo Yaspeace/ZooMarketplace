@@ -18,6 +18,7 @@
                 show-search="false"
                 show-add-room="false"
                 :menu-actions="JSON.stringify([
+                    {name: 'openAd', title: 'Перейти к объявлению'},
                     {name: 'denotify', title: 'Убрать уведомления'},
                     {name: 'complain', title: 'Пожаловаться на собеседника'}])"
                 @send-message="msgSend($event.detail[0])"
@@ -36,7 +37,7 @@
                         background: 'var(--color-info-semilight)'
                     }
                 })"
-                room-id="1"
+                :room-id="chatId"
             />
         </div>
     </div>
@@ -168,9 +169,9 @@ export default {
         mapChat(chat) {
             const acc = chat.accounts.find((x) => x.id != this.$store.state.aid);
             return {
-                roomId: chat.id,
-                roomName: this.getUsername(acc),
-                avatar: 'https://myshmarket.site' + acc?.avatar?.route,
+                roomId: chat.id.toString(),
+                roomName: this.getUsername(acc, chat),
+                avatar: 'https://myshmarket.site' + chat.card.mainImage.imageObj.route, //acc?.avatar?.route,
                 users: chat.accounts.map(this.mapUser),
                 lastMessage: this.mapMessage(chat.id, chat.lastMessage)
             }
@@ -184,6 +185,8 @@ export default {
             }
         },
         mapMessage(chatId, msg) {
+            if(!msg) return null;
+
             const msgDate = new Date(msg.date);
             const chat = this.chats.find((x) => x.id == chatId);
             const u = chat.accounts.find((x) => x.id == msg.sender);
@@ -199,11 +202,11 @@ export default {
                 seen: msg.seen == '1',
             }
         },
-        getUsername(user) {
+        getUsername(user, chat) {
             if(!user) {
                 return '?';
             } else {
-                return user.family + ' ' + user.name;
+                return user.family + ' ' + user.name + ', ' + chat.card.title;
             }
         },
         seeMessages(messages) {
@@ -227,6 +230,10 @@ export default {
                     break;
                 case 'complain':
                     console.log('Жалоба! ' + roomId);
+                    break;
+                case 'openAd':
+                    const adId = this.chats.find((x) => x.id == roomId).ad;
+                    this.$router.push('/ad-view/' + adId);
                     break;
             }
         }
