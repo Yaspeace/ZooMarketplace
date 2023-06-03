@@ -1,7 +1,7 @@
 <template>
     <VueSlickCarousel v-bind="carouselSettings">
         <div v-for="ad in ads" :key="ad.id" class="carousel-ad-wrapper">
-          <AdCard :ad="ad" :liked="false" class="carousel-ad" :key="ad.id" />
+          <small-card :ad="ad" class="carousel-ad" :key="ad.id" />
         </div>
         <template #prevArrow>
           <div class="custom-arrow-prev"></div>
@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import AdCard from './AdCard.vue';
-import VueSlickCarousel from 'vue-slick-carousel'
-import 'vue-slick-carousel/dist/vue-slick-carousel.css'
-import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
+import VueSlickCarousel from 'vue-slick-carousel';
+import 'vue-slick-carousel/dist/vue-slick-carousel.css';
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
+import SmallCard from './SmallCard.vue';
 
 export default {
     name: "AdCardCarousel",
@@ -25,8 +25,8 @@ export default {
       toShow: Number
     },
     components: {
-        AdCard,
         VueSlickCarousel,
+        SmallCard,
     },
     data() {
         return {

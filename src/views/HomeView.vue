@@ -33,14 +33,20 @@
         </div>
         
         <div class="tab-btns">
-          <div :class="{'active': curTab == 0}" @click="curTab = 0">Объявления</div>
-          <div :class="{'active': curTab == 1}" @click="curTab = 1">Потеряшки</div>
-          <div :class="{'active': curTab == 2}" @click="curTab = 2">Афиши</div>
+          <div :class="{'active': curTab == 0}" @click="changeTab(0)">Объявления</div>
+          <div :class="{'active': curTab == 1}" @click="changeTab(1)">Потеряшки</div>
+          <div :class="{'active': curTab == 2}" @click="changeTab(2)">Афиши</div>
         </div>
       </div>
 
       <AdCardCarousel v-if="paidAds.length > 0" :ads="paidAds" :toShow="toShow" class="carousel" />
-      <AdCardGrid v-if="ads.length > 0" :ads="ads" style="padding-top: 50px;padding-bottom: 50px;" />
+
+      <pulse-loader v-if="isLoading" color="var(--color-primary)" class="spinner" />
+      
+      <AdCardGrid v-if="ads.length > 0" :ads="ads" style="padding-top: 50px;padding-bottom: 50px;" :total-ads="total" :ads-per-page="adsPerPage" @changePage="changePage" />
+        <div v-if="this.ads.length == 0 && this.paidAds.length == 0 && !isLoading">
+          По вашему запросу не найдено ни одного объявления!
+        </div>
     </div>
 
     <CustomFooter />
@@ -51,14 +57,13 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
 import BeautyButton from "@/components/BeautyButton.vue";
 import Hat from '@/components/Hat.vue';
 import CustomFooter from '@/components/CustomFooter.vue';
 import AdCardCarousel from '@/components/AdCards/AdCardCarousel.vue';
 import AdCardGrid from "@/components/AdCards/AdCardGrid.vue";
 import ChatShortList from "@/components/Chats/ChatShortList.vue";
+import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 
 export default {
   name: "HomeView",
@@ -71,20 +76,23 @@ export default {
       showOptions1: false,
       showOptions2: false,
       accTypes: [],
+      isLoading: true,
+      total: 0,
+      adsPerPage: 12,
+      searchStr: ''
     }
   },
   components: {
-    HelloWorld,
     BeautyButton,
     Hat,
     CustomFooter,
     AdCardCarousel,
     AdCardGrid,
     ChatShortList,
+    PulseLoader,
   },
   created() {
     window.addEventListener('resize', this.resize);
-    this.getPaidAds();
     this.getAds();
     this.getAccTypes();
   },
@@ -92,23 +100,46 @@ export default {
     window.removeEventListener('resize', this.resize);
   },
   methods: {
-    getPaidAds() {
-      this.$http.get('/api/Cards?state=2&paid=true')
+    getPaidAds(search) {
+      let req = '/api/Cards?state=2&paid=true&limit=30&types=1,2,3,6';
+      if(search && search.length > 0) req += '&search=' + search;
+      this.$http.get(req)
         .then((resp) => this.paidAds = resp.data.results)
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
+        .finally(() => this.isLoading = false);
     },
-    getAds() {
-      this.$http.get('/api/Cards?state=2&paid=false')
-        .then((resp) => this.ads = resp.data.results)
-        .catch((err) => console.log(err));
+    getAds(search = null, page = 1) {
+      this.isLoading = true;
+      this.getPaidAds(search);
+      let req = `/api/Cards?state=2&limit=${this.adsPerPage}&start=${this.adsPerPage * (page - 1)}&types=1,2,3,6`;
+      if(search && search.length > 0) req += '&search=' + search;
+      this.$http.get(req)
+        .then((resp) => {
+          this.ads = resp.data.results;
+          this.total = resp.data.total;
+        })
+        .catch((err) => console.log(err))
+        .finally(() => this.isLoading = false);
+    },
+    getLaf(search = null, page = 1) {
+      this.isLoading = true;
+      let req = `/api/Cards?state=2&limit=${this.adsPerPage}&start=${this.adsPerPage * (page - 1)}&types=4,5`;
+      if(search && search.length > 0) req += '&search=' + search;
+      this.$http.get(req)
+      .then((resp) => {
+        this.ads = resp.data.results;
+        this.total = resp.data.total;
+      })
+      .catch((err) => console.log(err))
+      .finally(() => this.isLoading = false);
     },
     search(searchStr) {
-      this.$http.get('/api/Cards?state=2&paid=false&search=' + searchStr)
-        .then((resp) => this.ads = resp.data.results)
-        .catch((err) => console.log(err));
-      this.$http.get('/api/Cards?state=2&paid=true&search=' + searchStr)
-        .then((resp) => this.paidAds = resp.data.results)
-        .catch((err) => console.log(err));
+      this.searchStr = searchStr;
+      if(this.curTab == 0) {
+        this.getAds(searchStr);
+      } else if (this.curTab == 1) {
+        this.getLaf(searchStr);
+      }
     },
     getShowingCardsNum() {
       if(window.innerWidth >= 1440) return 3;
@@ -123,6 +154,23 @@ export default {
     resize() {
       this.toShow = this.getShowingCardsNum();
     },
+    changeTab(tab) {
+      this.ads = [];
+      this.paidAds = [];
+      this.curTab = tab;
+      if (tab == 0) {
+        this.getAds(this.searchStr);
+      } else if (tab == 1) {
+        this.getLaf(this.searchStr);
+      }
+    },
+    changePage(page) {
+      if(this.curTab == 0) {
+        this.getAds(this.searchStr, page);
+      } else if (this.curTab == 1) {
+        this.getLaf(this.searchStr, page)
+      }
+    }
   }
 };
 </script>
@@ -145,7 +193,6 @@ export default {
 
 .carousel {
   width: 100%;
-  /* background: rgb(233, 233, 93); */
   background: var(--color-secondary);
   padding: 15px;
   border-radius: 14px;

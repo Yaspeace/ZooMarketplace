@@ -1,22 +1,42 @@
 <template>
-  <div class="card-holder">
-    <AdCard v-for="ad in ads" :key="ad.id" :ad="ad" :liked="false" />
-  </div>
+    <div class="cards-wrapper">
+        <pages-list :total="pagesNum" :current="curPage" @changePage="curPage = $event;$emit('changePage', $event)" />
+        <div class="card-holder">
+            <small-card v-for="ad in ads" :key="ad.id" :ad="ad" />
+        </div>
+        <pages-list :total="pagesNum" :current="curPage" @changePage="curPage = $event;$emit('changePage', $event)" />
+    </div>
 </template>
 
 <script>
-import AdCard from './AdCard.vue';
+import SmallCard from './SmallCard.vue';
+import PagesList from '../PagesList.vue';
 
 export default {
     name: "AdCardGrid",
-    props: ["ads"],
+    props: ["ads", 'totalAds', 'adsPerPage'],
     components: {
-        AdCard,
+        SmallCard,
+        PagesList,
+    },
+    data() {
+        return {
+            curPage: 1,
+            pagesNum: Math.ceil(this.totalAds / this.adsPerPage)
+        }
     }
 }
 </script>
 
 <style scoped>
+.cards-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
 .card-holder {
     display: grid;
     grid-template-columns: repeat(4, 20%);
