@@ -65,6 +65,7 @@
                     v-model="inn.value"
                     class="login-input"
                     placeholder="ИНН организации"
+                    v-mask="'##########'"
                     :class="{'invalid': inn.invalid}"
                     @focus="inn.invalid = false;inn.errors = []"
                     v-tooltip.right="{
