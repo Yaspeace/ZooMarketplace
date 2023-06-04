@@ -18,7 +18,7 @@
                     Войти
                 </router-link>
             </div>
-            <div class="nav-city">
+            <div class="nav-city" @click="showMark2 = showMark1 ? !showMark2 : showMark2;showMark1 = !showMark1">
                 <img class="nav-pin" src="@/assets/staticimages/pin.png"/> <span class="nav-city-name">Белгород</span>
             </div>
         </div>
@@ -62,6 +62,7 @@
                 <ellipse rx="150" ry="150" transform="translate(150 150)" fill="#d2dbed" stroke-width="0"/>
                 <rect width="170.6634" height="117.626466" rx="20" ry="20" transform="matrix(.859378 0 0 0.973217 76.667814 79.12995)" fill="currentColor" stroke-width="0" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M161.191733,193.606026c23.256932,32.025978,35.637036,29.727148,35.637036,29.727148v-29.727148" transform="translate(4.637646-.374163)" fill="currentColor" stroke="#3f5787" stroke-width="0.6"/>
+                <ellipse v-if="showMark1" rx="35" ry="35" transform="translate(215 75)" fill="red" stroke-width="0"/>
             </svg>
             <svg class="nav-icon icon-default" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
                 <ellipse rx="150" ry="150" transform="translate(150 150)" fill="#d2dbed" stroke-width="0"/>
@@ -70,6 +71,7 @@
                 <line x1="-100.01291" y1="0.251922" x2="100.012911" y2="-0.251922" transform="translate(149.961495 199.964434)" fill="none" stroke="currentColor" stroke-width="3"/>
                 <path d="M49.948585,200.216356c0,0,27.536507-50.216356,27.536507-80.079724c44.461044,0,102.238123,0,146.699167,0c0,29.863368,26.63173,79.827802,26.63173,79.827802" transform="translate(.000001 0)" fill="currentColor" stroke="#3f5787" stroke-width="0.6"/>
                 <ellipse rx="44.202643" ry="22.294627" transform="matrix(.580086 0 0 1 150 200.216356)" fill="currentColor"/>
+                <ellipse v-if="showMark2" rx="35" ry="35" transform="translate(215 75)" fill="red" stroke-width="0"/>
             </svg>
             <svg @click="goToFavorites" class="nav-icon icon-red" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
                 <ellipse rx="150" ry="150" transform="translate(150 150)" fill="#d2dbed" stroke-width="0"/>
@@ -113,6 +115,8 @@ export default {
             },
             searchStr: '',
             showFilters: false,
+            showMark1: false,
+            showMark2: false
         }
     },
     created () {
