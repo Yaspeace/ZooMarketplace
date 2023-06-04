@@ -44,9 +44,11 @@
       <pulse-loader v-if="isLoading" color="var(--color-primary)" class="spinner" />
       
       <AdCardGrid v-if="ads.length > 0" :ads="ads" style="padding-top: 50px;padding-bottom: 50px;" :total-ads="total" :ads-per-page="adsPerPage" @changePage="changePage" />
-        <div v-if="this.ads.length == 0 && this.paidAds.length == 0 && !isLoading">
-          По вашему запросу не найдено ни одного объявления!
-        </div>
+      <poster-grid v-if="curTab == 2" style="padding-top: 50px; padding-bottom: 50px; width: 100%;" />
+
+      <div v-if="this.ads.length == 0 && this.paidAds.length == 0 && !isLoading">
+        По вашему запросу не найдено ни одного объявления!
+      </div>
     </div>
 
     <CustomFooter />
@@ -64,6 +66,7 @@ import AdCardCarousel from '@/components/AdCards/AdCardCarousel.vue';
 import AdCardGrid from "@/components/AdCards/AdCardGrid.vue";
 import ChatShortList from "@/components/Chats/ChatShortList.vue";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
+import PosterGrid from '@/components/Posters/PosterGrid.vue';
 
 export default {
   name: "HomeView",
@@ -78,7 +81,7 @@ export default {
       accTypes: [],
       isLoading: true,
       total: 0,
-      adsPerPage: 12,
+      adsPerPage: 12, // Должно быть 60
       searchStr: ''
     }
   },
@@ -88,6 +91,7 @@ export default {
     CustomFooter,
     AdCardCarousel,
     AdCardGrid,
+    PosterGrid,
     ChatShortList,
     PulseLoader,
   },
@@ -123,6 +127,7 @@ export default {
     },
     getLaf(search = null, page = 1) {
       this.isLoading = true;
+      this.getPaidAds();
       let req = `/api/Cards?state=2&limit=${this.adsPerPage}&start=${this.adsPerPage * (page - 1)}&types=4,5`;
       if(search && search.length > 0) req += '&search=' + search;
       this.$http.get(req)
@@ -156,7 +161,7 @@ export default {
     },
     changeTab(tab) {
       this.ads = [];
-      this.paidAds = [];
+      //this.paidAds = [];
       this.curTab = tab;
       if (tab == 0) {
         this.getAds(this.searchStr);
@@ -178,9 +183,9 @@ export default {
 <style scoped>
 #content {
   min-height: 100vh;
-  margin-top: 200px;
-  background: white;
-  padding: 8px;
+  /* margin-top: 200px; */
+  background: var(--color-secondary-light);
+  padding: 200px 8px 8px 8px;
 
   display: flex;
   flex-direction: column;
