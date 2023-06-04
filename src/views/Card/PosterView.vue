@@ -4,19 +4,18 @@
 
     <div class="main-content">
         <div class="poster-wrapper shadow">
-            <photo-carousel :srcs="images" style="width: 100%;" />
+            <photo-carousel :srcs="images" style="width: 90%;" />
 
             <beauty-button v-if="isSubscribed" look="primary" text="Отписаться от события" />
             <beauty-button v-else look="primary" text="Подписаться на событие" />
 
-            <h2>{{ poster.title }}</h2>
+            <h1>{{ poster.title }}</h1>
             <div>Уровень: {{ types.find((x) => x.id == poster.type).name }}</div>
             <div>Адрес: {{ poster.address }}</div>
             <div>Дата проведения: {{ poster.dateBegin.toLocaleDateString('ru-RU') }} - {{ poster.dateEnd.toLocaleDateString('ru-RU') }}</div>
-            <div>Время проведения: {{ `${poster.dateBegin.getHours()}:${poster.dateBegin.getMinutes()}` }}
-                - {{ `${poster.dateEnd.getHours()}:${poster.dateEnd.getMinutes()}` }}</div>
+            <div>Время проведения: {{ getTime(poster.dateBegin)}} - {{ getTime(poster.dateEnd) }}</div>
+            <div class="poster-desc">{{ poster.description }}</div>
             <card-seller :accId="poster.account" header="Организатор" style="width: 100%; max-width: 500px;background: var(--color-info-light)" />
-            <div style="width: 100%;text-align: left;">{{ poster.description }}</div>
         </div>
     </div>
 
@@ -50,18 +49,20 @@ export default {
         return {
             poster: {
                 id: this.id,
-                title: 'Выставка собак',
+                title: 'Всероссийская выставка-продажа РКФ среди доберманов',
                 type: 2,
-                address: 'ул. Пупкина-Залупкина, д.1, кв. 5',
-                dateBegin: new Date(),
-                dateEnd: new Date(),
+                address: 'г. Барнаул, ТРЦ "Орион"',
+                dateBegin: new Date('2023-04-01T10:00:00'),
+                dateEnd: new Date('2023-05-01T18:00:00'),
                 account: 5,
-                description: 'ывдажл оыв аоывждл аоывл оаывждла оыжвл оажывдлоаывоа дылвоа дылво дылво д аыов адл ыавоадвыло адлыво'
+                description: 'Тут короче многа букав про то какая это выставка собак и вообще пишу тут много чего вот короче да угу'
             },
             account: null,
             images: [
-                'https://myshmarket.site/assets/images/default_account.png',
-                'https://myshmarket.site/assets/images/uploaded/image38.png'
+                'https://myshmarket.site/assets/images/uploaded/image53.png',
+                'https://myshmarket.site/assets/images/uploaded/image57.png',
+                'https://myshmarket.site/assets/images/uploaded/image58.png',
+                'https://myshmarket.site/assets/images/uploaded/image59.png'
             ],
             isSubscribed: false,
             types: [
@@ -92,6 +93,9 @@ export default {
             this.$http.get('/api/Account/' + this.poster.account)
             .then((resp) => this.account = resp.data)
             .catch((err) => console.log(err));
+        },
+        getTime(date) {
+            return new Date(date).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit'});
         }
     }
 }
@@ -144,5 +148,13 @@ export default {
     width: 50%;
     max-width: 600px;
     height: 100%;
+}
+
+.poster-desc {
+    width: 100%;
+    padding: 0px 50px;
+    box-sizing: border-box;
+    font-size: 1.5em;
+    font-weight: bold;
 }
 </style>

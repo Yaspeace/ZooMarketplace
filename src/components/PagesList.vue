@@ -73,6 +73,7 @@ export default {
 }
 
 .page {
+    background: white;
     border: 1px solid gray;
     cursor: pointer;
     transition: .3s;

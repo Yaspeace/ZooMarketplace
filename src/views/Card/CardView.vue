@@ -40,7 +40,7 @@
                         <b>Порода:</b> <span>{{ (ad.breed == 0 ? 'Не указана' : breedName) }}</span>
                     </div>
 
-                    <div>
+                    <div v-if="ad.subCards.length == 0">
                         <b>Пол:</b> {{ sexes.find(x => x.id == ad.sex).name }}
                     </div>
 
@@ -48,7 +48,7 @@
                         <b>Возраст:</b> {{ ad.age }} {{ ageStr }}
                     </div>
 
-                    <div>
+                    <div v-if="ad.subCards.length == 0">
                         <b>Стоимость{{ ad.type == 6 ? ' услуги' : '' }}:</b> {{ ad.price }} р.
                     </div>
 

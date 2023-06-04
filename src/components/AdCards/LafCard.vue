@@ -44,7 +44,7 @@ export default {
 }
 
 .lost {
-    border: 5px solid red;
+    border: 5px solid #d11b14;
 }
 
 .found {
@@ -52,7 +52,7 @@ export default {
 }
 
 .color-lost {
-    color: red;
+    color: #d11b14;
 }
 
 .color-found {
