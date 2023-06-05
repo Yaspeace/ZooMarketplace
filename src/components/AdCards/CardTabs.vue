@@ -11,14 +11,15 @@
             >{{ tab.name }}</div>
         </div>
 
-        <AdCardCarousel v-if="tabs[currentTab].ads.length > 0"
-            :ads="tabs[currentTab].ads"
-            :toShow="toShow"
-            class="acc-ads-carousel"
-        />
-        <div v-else class="acc-no-ads">
-            {{ tabs[currentTab].emptyStr }}
+        <div v-if="tabs[currentTab].ads.length > 0" class="acc-cards">
+            <AdCardCarousel 
+                :ads="tabs[currentTab].ads"
+                :toShow="toShow"
+            />
+            <div class="go-to-all-btn" @click="$router.push(tabs[currentTab].route)">Показать все</div>
         </div>
+
+        <div v-else class="acc-no-ads">{{ tabs[currentTab].emptyStr }}</div>
     </div>
 </template>
 
@@ -32,7 +33,7 @@ export default {
     },
     props: [
         'header',
-        'tabs' // array of objects with "name", "emptyStr", and "ads"
+        'tabs' // array of objects with "name", "emptyStr", "route" and "ads"
     ],
     data() {
         return {
@@ -91,13 +92,6 @@ export default {
     font-weight: bold;
 }
 
-.acc-ads-carousel {
-    background-color: var(--color-info-dark);
-    border-bottom-left-radius: 14px;
-    border-bottom-right-radius: 14px;
-    padding: 15px 0px 15px 0px;
-}
-
 .acc-no-ads {
     background-color: var(--color-info-dark);
     border-bottom-left-radius: 14px;
@@ -106,5 +100,27 @@ export default {
     justify-content: center;
     align-items: center;
     height: 100px;
+}
+
+.acc-cards {
+    background-color: var(--color-info-dark);
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+    padding: 15px 0px 0px 0px;
+}
+
+.go-to-all-btn {
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    border: 1px solid grey;
+    border-bottom-right-radius: 14px;
+    border-bottom-left-radius: 14px;
+    background: var(--color-info-light);
+    transition: .3s;
+}
+
+.go-to-all-btn:hover {
+    background: var(--color-info);
 }
 </style>

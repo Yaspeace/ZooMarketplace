@@ -50,7 +50,8 @@ export default {
             reservedTab: [{
                 name: 'Бронь',
                 emptyStr: 'Нет забронированных',
-                ads: []
+                ads: [],
+                route: '/all-cards/ads/reserved'
             }],
             showPayments: false
         }

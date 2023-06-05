@@ -119,6 +119,12 @@ const routes = [
     name: 'chat',
     component: () => import('../views/ChatView.vue'),
     props: true
+  },
+  {
+    path: '/all-cards/:mode/:submode?',
+    name: 'all-cards',
+    component: () => import('../views/AllCards.vue'),
+    props: true
   }
 ];
 

@@ -49,24 +49,24 @@ export default {
                 this.tabs = append(this.tabs, {
                     name: 'Активные',
                     emptyStr: 'Нет активных объявлений!',
-                    ads: activeAds.data.results
+                    ads: activeAds.data.results,
+                    route: '/all-cards/ads/active'
                 });
 
                 if(this.isSelf) {
-                    const archiveAds1 = (await this.$http.get(`/api/Cards?account=${this.accId}&state=0`)).data.results;
-                    const archiveAds2 = (await this.$http.get(`/api/Cards?account=${this.accId}&state=1`)).data.results;
-                    const archiveAds3 = (await this.$http.get(`/api/Cards?account=${this.accId}&state=3`)).data.results;
 
                     this.tabs = append(this.tabs, {
                         name: 'Архив',
                         emptyStr: 'Нет архивных объявлений!',
-                        ads: [...archiveAds1, ...archiveAds2, ...archiveAds3]
+                        ads: (await this.$http.get(`/api/Cards?account=${this.accId}&state=0,1,3`)).data.results,
+                        route: '/all-cards/ads/archive'
                     });
 
                     this.tabs = append(this.tabs, {
                         name: 'Продано',
                         emptyStr: 'Нет проданных объявлений!',
-                        ads: (await this.$http.get(`/api/Cards?account=${this.accId}&state=4`)).data.results
+                        ads: (await this.$http.get(`/api/Cards?account=${this.accId}&state=4`)).data.results,
+                        route: '/all-cards/ads/sold'
                     })
                 }
 

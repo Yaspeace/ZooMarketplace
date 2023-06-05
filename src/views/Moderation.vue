@@ -13,10 +13,11 @@
                 @titleClick="adTitleClick(ad)"
                 @imgClick="adImgClick(ad)"
                 @allow="removeFromArr(ad)"
-                @deny="removeFromArr(ad)" />
+                @deny="removeFromArr(ad)"
+            />
         </div>
         <div :class="'moder-profile shadow' + (isModStart ? ' collapsed' : '')">
-            <router-link class="profile-item profile-avatar" v-if="!isModStart" :to="{ name: 'account', params: { accId: $store.state.aid } }">
+            <router-link class="profile-item profile-avatar" v-if="!isModStart" to="/account">
                 <img :src="$store.state.avatar" class="profile-avatar-img" />
                 <h3>{{ account.family }} {{ account.name }}</h3>
             </router-link>
