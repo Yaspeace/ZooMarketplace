@@ -1,6 +1,6 @@
 <template>
     <div>
-        <hat @search="seach" />
+        <hat @search="seach" :mode="0" />
 
         <div class="content">
             <h1>Ваши избранные объявления</h1>

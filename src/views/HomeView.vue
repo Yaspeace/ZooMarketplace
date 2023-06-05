@@ -1,12 +1,12 @@
 <template>
   <div class="home">
-    <Hat @search="search" />
+    <Hat @search="search" :mode="curTab" />
 
     <div id="content">
 
       <div class="top-bar">
         <div class="top-filters" style="">
-          <div class="sort-input" @click="showOptions1 = !showOptions1">
+          <div v-if="curTab == 0" class="sort-input" @click="showOptions1 = !showOptions1">
             <div>Сортировать по: Дата публикации</div>
             <svg style="width: 25px;padding-left: 15px;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
                 <line x1="50" y1="-25" x2="-75" y2="50" transform="translate(220 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
@@ -18,18 +18,32 @@
               <div>Сначала дороже</div>
             </div>
           </div>
+          <div v-if="curTab == 2" class="sort-input" @click="showOptions1 = !showOptions1">
+            <div>Сортировать по: Дата публикации</div>
+            <svg style="width: 25px;padding-left: 15px;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+                <line x1="50" y1="-25" x2="-75" y2="50" transform="translate(220 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
+                <line x1="-50" y1="-25" x2="75" y2="50" transform="translate(80 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
+            </svg>
+            <div class="options" :class="{'hidden': !showOptions1 }">
+              <div>Дата публикации</div>
+              <div>Дата начала</div>
+              <div>Дата окончания</div>
+            </div>
+          </div>
+
           <div class="sort-input" @click="showOptions2 = !showOptions2">
-            <div>Выбрать продавцов</div>
+            <div>Выбрать {{ curTab == 0 ? 'продавцов' : curTab == 1 ? 'владельцев' : 'организаторов' }}</div>
             <svg style="width: 25px;padding-left: 15px;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
                 <line x1="50" y1="-25" x2="-75" y2="50" transform="translate(220 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
                 <line x1="-50" y1="-25" x2="75" y2="50" transform="translate(80 137.5)" fill="none" stroke="currentColor" stroke-width="20"/>
             </svg>
             <div class="options" :class="{'hidden': !showOptions2 }">
-              <div v-for="x in accTypes" :key="x.id">
+              <div v-for="x in accountTypes" :key="x.id">
                 <input type="checkbox" @click="$event.stopPropagation()" /><label>{{ x.name }}</label>
               </div>
             </div>
           </div>
+          
         </div>
         
         <div class="tab-btns">
@@ -174,6 +188,15 @@ export default {
         this.getAds(this.searchStr, page);
       } else if (this.curTab == 1) {
         this.getLaf(this.searchStr, page)
+      }
+    }
+  },
+  computed: {
+    accountTypes: function() {
+      if(this.curTab == 2) {
+        return this.accTypes.filter((x) => x.id != 1);
+      } else {
+        return this.accTypes;
       }
     }
   }

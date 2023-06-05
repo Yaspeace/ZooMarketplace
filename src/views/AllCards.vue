@@ -1,6 +1,6 @@
 <template>
     <div>
-        <hat @search="search" />
+        <hat @search="search" :mode="0" />
 
         <div class="content">
             <h1>{{ header }}</h1>

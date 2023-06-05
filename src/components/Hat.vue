@@ -44,7 +44,7 @@
                 </svg>
             </div>
 
-            <filters-modal class="filters-modal shadow" :class="{'hidden': !showFilters}" />
+            <filters-modal class="filters-modal shadow" :class="{'hidden': !showFilters}" :mode="mode" />
         </div>
         <div class="nav-icons">
             <svg class="nav-icon icon-default" @click="$refs.cardCreateModal.show()" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
@@ -101,6 +101,7 @@ import FiltersModal from './Modals/FiltersModal.vue';
 
 export default {
     name: "Hat",
+    props: ['mode'],
     components: {
         OneOrGroup,
         CardType,

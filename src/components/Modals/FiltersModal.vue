@@ -8,7 +8,7 @@
             <div><input type="checkbox" /><label>По России</label></div>
         </div>
 
-        <div>
+        <div v-if="mode != 2">
             <h3>Категория животного</h3>
             <div class="filters-block">
                 <div v-for="x in categories" :key="x.id">
@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <div>
+        <div v-if="mode != 2">
             <h3>Порода</h3>
             <div class="filters-block">
                 <div v-for="x in breeds" :key="x.id">
@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <div>
+        <div v-if="mode != 2">
             <h3>Цель поиска</h3>
             <div class="filters-block">
                 <div v-for="x in adTypes" :key="x.id">
@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        <div>
+        <div v-if="mode != 2">
             <h3>Пол</h3>
             <div class="filters-block">
                 <div><input type="radio" :value="0" v-model="sex" /><label>Не важно</label></div>
@@ -44,16 +44,33 @@
             </div>
         </div>
 
-        <div>
+        <div v-if="mode != 2">
             <h3>Возраст</h3>
             <div>От <input v-model="ageFrom" size="4" v-mask="'###'"/> лет</div>
             <div>До <input v-model="ageTo" size="4" v-mask="'###'"/> лет</div>
         </div>
 
-        <div>
+        <div v-if="mode == 0">
             <h3>Стоимость</h3>
             <div>От <input v-model="ageFrom" size="4" v-mask="'######'"/> р</div>
             <div>До <input v-model="ageTo" size="4" v-mask="'######'"/> р</div>
+        </div>
+
+        <div v-if="mode == 1">
+            <h3>Потеряшки</h3>
+            <div><input type="checkbox" :value="0" v-model="withoutChip" /><label>Без чипа/клейма</label></div>
+        </div>
+
+        <div v-if="mode == 2">
+            <h3>Уровень мероприятия</h3>
+            <div v-for="x in levels" :key="x.id">
+                <input type="checkbox" /><label>{{ x.name }}</label>
+            </div>
+        </div>
+
+        <div v-if="mode == 2">
+            <h3>На дату</h3>
+            <date-picker v-model="posterDate" />
         </div>
     </div>
 
@@ -64,11 +81,15 @@
 <script>
 import BeautyButton from '../BeautyButton.vue';
 import {mask} from 'vue-the-mask';
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
 
 export default {
     name: 'FiltersModals',
+    props: ['mode'],
     components: {
         BeautyButton,
+        DatePicker,
     },
     directives: {
         mask,
@@ -81,6 +102,26 @@ export default {
             sex: 0,
             ageFrom: '',
             ageTo: '',
+            withoutChip: false,
+            levels: [
+                {
+                    id: 1,
+                    name: 'Городское'
+                },
+                {
+                    id: 2,
+                    name: 'Региональное'
+                },
+                {
+                    id: 3,
+                    name: 'Всероссийское'
+                },
+                {
+                    id: 4,
+                    name: 'Международное'
+                }
+            ],
+            posterDate: null,
         }
     },
     created() {
@@ -101,9 +142,24 @@ export default {
         },
         getAdTypes() {
             this.$http.get('/api/Types')
-            .then((resp) => this.adTypes = resp.data.results)
+            .then((resp) => {
+                let types = resp.data.results;
+                if(this.mode == 0) {
+                    this.adTypes = types.filter((x) => x.id != 4 && x.id != 5);
+                } else {
+                    this.adTypes = types.filter((x) => x.id == 4 || x.id == 5);
+                }
+                
+            })
             .catch((err) => console.log(err));
         },
+    },
+    watch: {
+        mode: function() {
+            this.getCategories();
+            this.getBreeds();
+            this.getAdTypes();
+        }
     }
 }
 </script>
