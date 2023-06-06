@@ -48,6 +48,10 @@
                         <b>Возраст:</b> {{ ad.age }} {{ ageStr }}
                     </div>
 
+                    <div>
+                        <b>Адрес:</b> {{ ad.address }}
+                    </div>
+
                     <div v-if="!ad.subCards || ad.subCards.length == 0">
                         <b>Стоимость{{ ad.type == 6 ? ' услуги' : '' }}:</b> {{ ad.price }} р.
                     </div>

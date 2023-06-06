@@ -44,6 +44,10 @@
                     </div>
 
                     <div>
+                        <b>Адрес:</b> {{ ad.address }}
+                    </div>
+
+                    <div>
                         <b>Стоимость:</b> {{ ad.price }} р./шт.
                     </div>
 

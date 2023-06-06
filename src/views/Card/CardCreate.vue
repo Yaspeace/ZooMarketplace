@@ -81,6 +81,17 @@
                     class="list-sel">
                 </model-list-select>
 
+                <autocomplete
+                    :options="addressOptions"
+                    v-model="ad.address"
+                    option-value="value"
+                    :custom-text="(item) => item.value"
+                    placeholder="Адрес..."
+                    class="list-sel"
+                    :delay="5"
+                    @searchchange="getAddressOptions2"
+                />
+
                 <div style="width: 100%;max-width: 500px;">
                     Возраст:
                     <div class="age-input">
@@ -130,6 +141,8 @@ import PhotoCarousel from '@/components/PhotoCarousel.vue';
 import CardSeller from '@/components/AdCards/CardSeller.vue';
 import SubCard from '@/components/AdCards/Card/SubCard.vue';
 import { append } from '@/js/arrays';
+import axios from 'axios';
+import Autocomplete from '@/components/Autocomplete.vue';
 
 export default {
     components: { 
@@ -141,6 +154,7 @@ export default {
         PhotoCarousel,
         CardSeller,
         SubCard,
+        Autocomplete,
     },
     name: "CardCreate",
     props: {
@@ -168,6 +182,7 @@ export default {
                 category: 0,
                 image: 0,
                 isLiked: false,
+                address: '',
             },
             image: '',
             breeds: [],
@@ -193,6 +208,10 @@ export default {
             subImages: [],
             subcards: [],
             types: [],
+
+            addressOptions: [],
+            canGetAddresses: true,
+            delay: 5,
         }
     },
     created() {
@@ -286,6 +305,44 @@ export default {
                     x.id == 2 ||
                     (this.$store.state.type == 3 && x.id == 3) ||
                     (this.$store.state.type == 2 && x.id == 6)))
+            .catch((err) => console.log(err));
+        },
+        getAddressOptions(search) {
+            if(this.canGetAddresses && search && search.length > 3) {
+                axios.post('https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
+                    {
+                        query: search
+                    },
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json",
+                            "Authorization": "Token 5145892da167bd20ebfc23dbcfe43f22604a188b"
+                        }
+                    }
+                )
+                .then((resp) => {
+                    this.addressOptions = resp.data.suggestions;
+                    this.canGetAddresses = false;
+                    setTimeout(() => this.canGetAddresses = true, this.delay * 1000);
+                })
+                .catch((err) => console.log(err));
+            }
+        },
+        getAddressOptions2(search) {
+            axios.post('https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
+                {
+                    query: search
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "Authorization": "Token 5145892da167bd20ebfc23dbcfe43f22604a188b"
+                    }
+                }
+            )
+            .then((resp) => this.addressOptions = resp.data.suggestions)
             .catch((err) => console.log(err));
         }
     },

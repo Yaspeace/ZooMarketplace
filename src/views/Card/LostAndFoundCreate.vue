@@ -85,6 +85,17 @@
                     class="list-sel">
                 </model-list-select>
 
+                <autocomplete
+                    :options="addressOptions"
+                    v-model="ad.address"
+                    option-value="value"
+                    :custom-text="(item) => item.value"
+                    placeholder="Адрес..."
+                    class="list-sel"
+                    :delay="5"
+                    @searchchange="getAddressOptions"
+                />
+
                 <div style="width: 100%;max-width: 500px;">
                     Возраст:
                     <div class="age-input">
@@ -120,6 +131,8 @@ import "vue-search-select/dist/VueSearchSelect.css"
 import {mask} from 'vue-the-mask';
 import PhotoCarousel from '@/components/PhotoCarousel.vue';
 import { append } from '@/js/arrays';
+import Autocomplete from '@/components/Autocomplete.vue';
+import axios from 'axios';
 
 export default {
     components: { 
@@ -129,6 +142,7 @@ export default {
         CustomFooter,
         ModelListSelect,
         PhotoCarousel,
+        Autocomplete,
     },
     name: "LostAndFoundCreate",
     directives: {
@@ -153,7 +167,8 @@ export default {
                 category: 0,
                 image: 0,
                 isLiked: false,
-                number: ''
+                number: '',
+                address: '',
             },
             image: '',
             breeds: [],
@@ -178,6 +193,7 @@ export default {
             ],
             subImages: [],
             types: [],
+            addressOptions: [],
         }
     },
     created() {
@@ -244,6 +260,22 @@ export default {
                 .filter((x) =>
                     x.id == 4 ||
                     x.id == 5))
+            .catch((err) => console.log(err));
+        },
+        getAddressOptions(search) {
+            axios.post('https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
+                {
+                    query: search
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "Authorization": "Token 5145892da167bd20ebfc23dbcfe43f22604a188b"
+                    }
+                }
+            )
+            .then((resp) => this.addressOptions = resp.data.suggestions)
             .catch((err) => console.log(err));
         }
     },

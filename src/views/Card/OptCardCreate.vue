@@ -62,6 +62,17 @@
                     class="list-sel">
                 </model-list-select>
 
+                <autocomplete
+                    :options="addressOptions"
+                    v-model="ad.address"
+                    option-value="value"
+                    :custom-text="(item) => item.value"
+                    placeholder="Адрес..."
+                    class="list-sel"
+                    :delay="5"
+                    @searchchange="getAddressOptions"
+                />
+
                 <div class="platform shadow" style="width: 100%; max-width: 500px;">
                     <div style="display: flex" class="amount-wrapper">
                         <div>Количество самцов:</div>
@@ -143,6 +154,8 @@ import PhotoCarousel from '@/components/PhotoCarousel.vue';
 import CardSeller from '@/components/AdCards/CardSeller.vue';
 import { append } from '@/js/arrays';
 import CardAmounts from '@/components/AdCards/Card/CardAmounts.vue';
+import Autocomplete from '@/components/Autocomplete.vue';
+import axios from 'axios';
 
 export default {
     components: { 
@@ -154,6 +167,7 @@ export default {
         PhotoCarousel,
         CardSeller,
         CardAmounts,
+        Autocomplete,
     },
     name: "OptCardCreate",
     directives: {
@@ -179,7 +193,8 @@ export default {
                 image: 0,
                 isLiked: false,
                 amountMale: 0,
-                amountFemale: 0
+                amountFemale: 0,
+                address: '',
             },
             image: '',
             breeds: [],
@@ -204,6 +219,7 @@ export default {
             ],
             subImages: [],
             subcards: [],
+            addressOptions: [],
         }
     },
     created() {
@@ -287,6 +303,22 @@ export default {
         },
         addSubImage(image) {
             this.subImages = append(this.subImages, image);
+        },
+        getAddressOptions(search) {
+            axios.post('https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
+                {
+                    query: search
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "Authorization": "Token 5145892da167bd20ebfc23dbcfe43f22604a188b"
+                    }
+                }
+            )
+            .then((resp) => this.addressOptions = resp.data.suggestions)
+            .catch((err) => console.log(err));
         }
     },
     watch: {

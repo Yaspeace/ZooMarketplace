@@ -52,6 +52,10 @@
                         <b>Возраст:</b> {{ ad.age }} {{ ageStr }}
                     </div>
 
+                    <div>
+                        <b>Адрес:</b> {{ ad.address }}
+                    </div>
+
                     <div class="ad-desc">
                         <b>Описание:</b> {{ ad.description }}
                     </div>

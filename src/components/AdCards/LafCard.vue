@@ -5,6 +5,7 @@
     
     <div class="laf-title" @click="$router.push('/lost-and-found-view/' + ad.id)"><b>{{ ad.title }}</b></div>
     <div>№ чипа/клейма: <b>{{ ad.number }}</b></div>
+    <div>Адрес: <b>{{ ad.address }}</b></div>
   </div>
 </template>
 

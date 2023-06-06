@@ -23,10 +23,16 @@
                     class="list-sel">
                 </model-list-select>
 
-                <div class="card-price-inp">
-                    Адрес:
-                    <input v-model="poster.address" class="card-inp"/>
-                </div>
+                <autocomplete
+                    :options="addressOptions"
+                    v-model="poster.address"
+                    option-value="value"
+                    :custom-text="(item) => item.value"
+                    placeholder="Адрес..."
+                    class="list-sel"
+                    :delay="5"
+                    @searchchange="getAddressOptions"
+                />
                 
                 <div class="card-price-inp">
                     Дата проведения:
@@ -66,6 +72,8 @@ import PhotoCarousel from '@/components/PhotoCarousel.vue';
 import { append } from '@/js/arrays';
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
+import Autocomplete from '@/components/Autocomplete.vue';
+import axios from 'axios';
 
 export default {
     components: { 
@@ -76,6 +84,7 @@ export default {
         ModelListSelect,
         PhotoCarousel,
         DatePicker,
+        Autocomplete,
     },
     name: "PosterCreate",
     directives: {
@@ -119,6 +128,7 @@ export default {
                     name: 'Международное'
                 }
             ],
+            addressOptions: [],
         }
     },
     created() {
@@ -181,6 +191,22 @@ export default {
         addSubImage(image) {
             this.subImages = append(this.subImages, image);
         },
+        getAddressOptions(search) {
+            axios.post('https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
+                {
+                    query: search
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "Authorization": "Token 5145892da167bd20ebfc23dbcfe43f22604a188b"
+                    }
+                }
+            )
+            .then((resp) => this.addressOptions = resp.data.suggestions)
+            .catch((err) => console.log(err));
+        }
     },
 }
 </script>
