@@ -249,7 +249,7 @@ export default {
             .catch((err) => console.log(err));
         },
         getSubImages() {
-            if(this.ad.subCards.length > 0) {
+            if(this.ad.subCards && this.ad.subCards.length > 0) {
                 this.subImages = this.ad.subCards.map((x) => 'https://myshmarket.site' + x.images[0].route);
             } else {
                 this.$http.get('/api/Images', {params: {ad: this.ad.id, isMain: false}})
