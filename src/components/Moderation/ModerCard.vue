@@ -14,11 +14,11 @@
             </div>
 
             <div class="mod-btns">
-                <beauty-button look="primary" text="Опубликовать" class="moder-btn btn-upper" @click="allowAd" />
-                <beauty-button look="secondary" text="Вернуть" class="moder-btn btn-upper" @click="denyAd" />
+                <beauty-button look="accept" text="Опубликовать" class="moder-btn btn-upper" @click="allowAd" />
+                <beauty-button look="reject" text="Вернуть" class="moder-btn btn-upper" @click="denyAd" />
             </div>
             <div class="mod-btns">
-                <beauty-button look="warning" text="Блок пользователя" class="moder-btn" />
+                <beauty-button look="warning" text="Блок пользователя" class="moder-btn" @click="blockUser" />
             </div>
         </div>
     </div>
@@ -62,6 +62,13 @@ export default {
                 state: 0
             })
             .then((resp) => this.$emit('deny', resp.data.object))
+            .catch((err) => console.log(err));
+        },
+        blockUser() {
+            this.$http.put('/api/Account/' + this.ad.account, {
+                warnReason: 3
+            })
+            .then(() => this.$emit('afterBlock', this.ad))
             .catch((err) => console.log(err));
         }
     }

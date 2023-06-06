@@ -7,7 +7,8 @@
         <div class="moder-start" v-if="!isModStart">
             <beauty-button look="primary" :text="'Начать модерацию' + chosenModeStr" class="btn-big" @click="startMod" :disabled="chosenMode == 0" />
         </div>
-        <div v-else class="moder-cards">
+        
+        <div v-if="isModStart && chosenMode == 1" class="moder-cards">
             <moder-card v-for="ad in ads" :key="ad.id" 
                 :ad="ad"
                 @titleClick="adTitleClick(ad)"
@@ -16,6 +17,14 @@
                 @deny="removeFromArr(ad)"
             />
         </div>
+        <div v-if="isModStart && chosenMode == 3" class="moder-cards">
+            <moder-user-card v-for="acc in accounts" :key="acc.id"
+                :card="acc"
+                @imgClick="adImgClick"
+            />
+        </div>
+
+
         <div :class="'moder-profile shadow' + (isModStart ? ' collapsed' : '')">
             <router-link class="profile-item profile-avatar" v-if="!isModStart" to="/account">
                 <img :src="$store.state.avatar" class="profile-avatar-img" />
@@ -46,6 +55,7 @@ import BeautyButton from '@/components/BeautyButton.vue';
 import ModerCard from '@/components/Moderation/ModerCard.vue';
 import ModalWindow from '@/components/Modals/ModalWindow.vue';
 import ModalImageView from '@/components/Modals/ModalImageView.vue';
+import ModerUserCard from '@/components/Moderation/ModerUserCard.vue';
 
 export default {
     name: 'Moderation',
@@ -54,6 +64,7 @@ export default {
         ModerCard,
         ModalWindow,
         ModalImageView,
+        ModerUserCard,
     },
     data() {
         return {
@@ -77,12 +88,10 @@ export default {
             isAds: false,
             isPosters: false,
             isUsers: false,
+            accounts: [],
         }
     },
     created() {
-        // if(!this.$store.state.authorized) {
-        //     this.$router.push({name: 'login', params: {register: 'false'}});
-        // }
         this.checkPermissions();        
     },
     methods: {
@@ -125,18 +134,29 @@ export default {
         pushToArr(limit) {
             let tmpArr = [];
             this.ads.forEach((ad) => tmpArr.push(ad));
-            this.$http.get('/api/Cards?state=1&limit=' + limit)
-            .then((resp) => {
-                if(resp.data.results.length > 0) {
-                    resp.data.results.forEach(x => tmpArr.push(x));
-                    this.ads = tmpArr;
-                }
-            })
-            .catch((err) => console.log(err));
+
+            if (this.chosenMode == 1) {
+                this.$http.get('/api/Cards?state=1&limit=' + limit)
+                .then((resp) => {
+                    if(resp.data.results.length > 0) {
+                        resp.data.results.forEach(x => tmpArr.push(x));
+                        this.ads = tmpArr;
+                    }
+                })
+                .catch((err) => console.log(err));
+            } else {
+                this.$http.get('/api/Account?warnReason=1,2,3&limit=' + limit)
+                .then((resp) => this.accounts = resp.data)
+                .catch((err) => console.log(err));
+            }
         },
         removeFromArr(ad) {
             this.ads = this.ads.filter(x => x.id != ad.id);
             if(this.ads.length == 0) this.isModStart = false;
+        },
+        removeAcc(acc) {
+            this.accounts = this.accounts.filter((x) => x.id != acc.id);
+            if(this.accounts.length == 0) this.isModStart = false;
         },
         checkPermissions() {
             this.$http.get('/api/Authorize')
@@ -207,8 +227,8 @@ export default {
 
 .moder-cards {
     display: grid;
-    grid-template-columns: repeat(3, 30%);
-    grid-template-rows: repeat(2, 50%);
+    grid-template-columns: repeat(4, 22%);
+    grid-template-rows: repeat(3, 50%);
     justify-content: space-around;
     align-content: space-between;
     row-gap: 10px;
@@ -269,8 +289,8 @@ export default {
 
 @media screen  and (max-width: 1650px) {
     .moder-cards {
-        grid-template-columns: repeat(2, 45%);
-        grid-template-rows: repeat(3, 75vh);
+        grid-template-columns: repeat(3, 30%);
+        grid-template-rows: repeat(3, 50%);
     }
 }
 
