@@ -76,7 +76,7 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    height: 25%;
+    height: 35%;
 }
 
 .mod-btns {
@@ -98,7 +98,6 @@ export default {
     font-size: 24px;
     cursor: pointer;
     width: 100%;
-    height: 2.5em;
     text-align: center;
 
     text-overflow: ellipsis;
