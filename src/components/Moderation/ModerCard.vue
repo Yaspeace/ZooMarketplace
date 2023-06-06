@@ -120,7 +120,7 @@ export default {
 }
 
 .btn-upper {
-    width: 40%;
+    width: 45%;
 }
 
 .mod-card-title {
